@@ -1,0 +1,78 @@
+html,
+body {
+  height: auto;
+  width: 100%;
+  background-image: url(../images/form-wizard-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.topSeparation {
+  height: 56px;
+}
+
+.cardCont {
+  margin-top: 2em;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputData {
+  width: 11em;
+  color: grey;
+  margin-right: 1em;
+}
+
+.options {
+  display: flex;
+}
+
+th,
+td {
+  text-align: center;
+}
+
+.but {
+  width: 3.5em;
+  height: 2.7em;
+}
+
+.modalWindow {
+  background-color: rgba(168, 168, 168, 0.24);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputData {
+  width: 14em;
+  color: grey;
+  margin-right: 1em;
+}
+
+.dataCont {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.butCont {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.but {
+  width: 6.8em;
+}

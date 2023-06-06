@@ -1,0 +1,186 @@
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url(../fonts/poppins/Poppins-Regular.ttf);
+}
+
+body {
+  background-image: url(../images/form-wizard-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.formCont {
+  min-height: 92.5vh;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 60px;
+}
+
+.formIndividual {
+  width: 80%;
+  height: 50em;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid #c3c6ca;
+  background-color: #fff;
+}
+
+.formColumn {
+  width: 30%;
+  height: 95%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.topSeparation {
+  height: 56px;
+}
+
+.imgCont {
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  background-image: url(../images/team.png);
+  background-size: cover;
+}
+
+.formInput {
+  height: 30px;
+  border: none;
+  border-bottom-color: currentcolor;
+  border-bottom-style: none;
+  border-bottom-width: medium;
+  border-bottom: 1px solid #333;
+  width: 100%;
+  background: none;
+  font-weight: 600;
+  border-radius: none;
+}
+
+input {
+  font-family: "Poppins-Regular";
+  font-size: 13px;
+  color: #333;
+  outline: none;
+  margin-bottom: 1.5em;
+}
+
+.sendForm {
+  width: 7em;
+  height: 3em;
+  background: #4d4d4d;
+  font-family: "Poppins-Regular";
+  color: white;
+  border: 0;
+  line-height: normal;
+  overflow: visible;
+}
+
+label {
+  font-family: "Poppins-Regular";
+}
+
+.cardCont {
+  width: 25rem;
+  height: 6em;
+  padding-bottom: 0px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  flex-direction: unset;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.statusCont {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  width: 80%;
+  height: 3em;
+  margin-bottom: 19.5px;
+  margin-top: 30.5px;
+  border-bottom: 1px solid black;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background-color: white;
+  padding-left: 0.5em;
+  font-family: "Poppins-Regular";
+}
+
+.statusImg {
+  margin-top: 19px;
+  width: 14%;
+  height: 2.5em;
+  background-image: url(../images/power.png);
+  background-size: cover;
+}
+
+.statusImg:nth-child(2) {
+  background-image: url(../images/pSleep.png);
+}
+
+.statusImg:nth-child(3) {
+  background-image: url(../images/power-on.png);
+}
+
+.modalCont {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #9b9b9bbb;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardModal {
+  width: 40%;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
+.contModal {
+  width: 100%;
+  height: 33%;
+
+  display: flex;
+  align-items: center;
+}
+
+.contModal:nth-child(2) {
+  height: 20em;
+  justify-content: space-around;
+  flex-direction: column;
+  border-top: 1px solid rgb(168, 168, 168);
+  border-bottom: 1px solid rgb(168, 168, 168);
+}
+
+.contModal:nth-child(3) {
+  justify-content: flex-end;
+}
+
+.selectData {
+  width: 100%;
+  height: 30px;
+  border-bottom: 1px solid black;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background-color: white;
+  padding-left: 0.5em;
+  margin-bottom: 19.5px;
+}

@@ -1,0 +1,45 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-image: url(../images/form-wizard-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.cardCont {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  height: 65%;
+  justify-content: space-around;
+}
+
+.optionCont {
+  display: flex;
+}
+
+.iconCont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+}
+
+.inputCont {
+  width: 100%;
+}
+
+.butCont {
+  height: 25%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}

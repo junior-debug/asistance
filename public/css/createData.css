@@ -1,0 +1,30 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-image: url(../images/form-wizard-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.topSeparation {
+  height: 56px;
+}
+
+.cardCont {
+  margin-top: 2em;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputData {
+  width: 11em;
+  color: grey;
+  margin-right: 1em;
+}
+
+.options {
+  display: flex;
+}

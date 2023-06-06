@@ -1,0 +1,137 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 200;
+  background-image: url(../images/form-wizard-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.collectonme {
+  margin-left: 1em;
+  margin-right: 1em;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  height: 75%;
+}
+
+.dataUser {
+  width: 20%;
+}
+
+.tableMonth {
+  width: 80%;
+}
+
+.days {
+  width: 12em;
+  height: 2em;
+  text-align: center;
+  color: white;
+  border: 1px solid rgba(128, 128, 128, 0.342);
+}
+
+.titleDays {
+  border-bottom: 0px;
+}
+
+.week {
+  display: flex;
+}
+
+.monthCont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.menu {
+  width: 100%;
+  height: 17%;
+  display: flex;
+  flex-direction: column;
+}
+
+.opt {
+  display: flex;
+  margin-top: 0.5em;
+  width: 95%;
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+.dataDays {
+  text-align: center;
+}
+
+td {
+  text-align: center;
+}
+
+.topSeparation {
+  height: 7%;
+}
+
+.calendaryCont {
+  display: flex;
+  width: 2300px;
+  height: auto;
+}
+
+.headData {
+  height: 6em;
+  border: 1px solid black;
+}
+
+.monthDays {
+  text-align: center;
+}
+
+.cardCont {
+  width: 100%;
+  height: 6em;
+}
+
+.inputData {
+  width: 11em;
+  color: grey;
+  margin-right: 1em;
+}
+
+.chosen-select {
+  width: 11em;
+  color: grey;
+  margin-right: 1em;
+}
+
+.chosen-container {
+  width: 20em;
+}
+
+.labelPayroll {
+  color: #818181;
+  margin-right: 2%;
+}
+
+.payrollsCont {
+  width: 70%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.filterCont {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-left: 1px solid #ccc;
+}

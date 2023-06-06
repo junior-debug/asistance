@@ -1,0 +1,48 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-image: url(../images/form-wizard-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.cardCont {
+  margin-top: 2em;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.topSeparation {
+  height: 56px;
+}
+
+.options {
+  display: flex;
+}
+
+.warning {
+  background-color: #f44336;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.success {
+  background-color: #5cb85c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.inputData {
+  width: 11em;
+  color: grey;
+  margin-right: 1em;
+}

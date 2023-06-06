@@ -1,0 +1,123 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-image: url(../images/form-wizard-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.notice {
+  position: absolute;
+  width: 60%;
+  height: 10em;
+  border-radius: 15px;
+  background: #fff;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.topSeparation {
+  height: 56px;
+}
+
+.cardCont {
+  margin-top: 2em;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputData {
+  width: 11em;
+  color: grey;
+  margin-right: 1em;
+}
+
+.selectData {
+  width: 11em;
+  color: grey;
+  margin-right: 1em;
+}
+
+.dataCont {
+  display: flex;
+  flex-direction: column;
+}
+
+.warning {
+  background-color: #f44336;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.success {
+  background-color: #5cb85c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.top {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.data {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.modalJustification {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputsCont {
+  display: flex;
+  width: 100%;
+  height: 60%;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonsCont {
+  display: flex;
+  justify-content: end;
+}
+
+.buttonsCont:nth-child(2) {
+  justify-content: center;
+  align-items: center;
+}
+
+.titleCont {
+  width: 100%;
+  height: 4em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.IndividualInsert {
+  display: flex;
+}
+
+.someDays {
+  display: flex;
+}
