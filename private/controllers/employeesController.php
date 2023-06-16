@@ -352,10 +352,14 @@ if (empty($_SESSION)) {
                         $commentary
                     );
                 }
-
-
-
                 break;
+            case 'reintegrate':
+                $dateReintegrate = $_POST['dateReintegrate'];
+                $id = $_POST['id'];
+                $data = $conexion->reintegrate($dateReintegrate, $id);
+                echo json_encode($data);
+                break;
+                #------------------------------------------------------------------------------------
             default:
 
                 header('location:' . HTML_DIR . 'error.html');

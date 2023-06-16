@@ -30,3 +30,4 @@ function enableBut() {
 function setColor(id) {
   $(`#${id}`).css("color", "black");
 }
+

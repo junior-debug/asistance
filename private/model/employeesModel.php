@@ -254,4 +254,9 @@ class database
         }
         return $respuesta;
     }
+
+    public function reintegrate($dateReintegrate, $id)
+    {
+        $sql = $this->db->query("UPDATE empleados SET estatus = 'activo', fecha_reingreso = '$dateReintegrate' WHERE cedula = '$id'");
+    }
 }

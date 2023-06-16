@@ -863,6 +863,7 @@ function buildingCalendary(
 ) {
   const res = newRes;
   const today = newDate.getDate();
+
   for (let i = 0; i < res.length; i++) {
     $(`.tableAsistance${i}`).remove();
     let dischargeMonth = res[i].fecha_egreso;
@@ -871,12 +872,13 @@ function buildingCalendary(
     const initYear = res[i].fecha_ingreso.slice(0, 4);
     let notHired = null;
     let dayhired = null;
+    console.log(initYear)
     if (initMonth == selectedMonth && initYear == year) {
       notHired = initMonth;
       dayhired = res[i].fecha_ingreso.slice(8, 10);
     }
-    if (
-      res[i].estatus == "activo" ||
+    if ( 
+      res[i].estatus == "activo" && initMonth <= selectedMonth ||
       (res[i].estatus == "inactivo" && dischargeMonth >= selectedMonth)
     ) {
       $(`.day${i}`).remove();
