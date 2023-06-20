@@ -872,13 +872,14 @@ function buildingCalendary(
     const initYear = res[i].fecha_ingreso.slice(0, 4);
     let notHired = null;
     let dayhired = null;
-    console.log(initYear)
+    const dateConsult = year + '-' + selectedMonth + '-' + totalDaysMonth ;
+
     if (initMonth == selectedMonth && initYear == year) {
       notHired = initMonth;
       dayhired = res[i].fecha_ingreso.slice(8, 10);
     }
     if ( 
-      res[i].estatus == "activo" && initMonth <= selectedMonth ||
+      res[i].fecha_ingreso <= dateConsult && res[i].estatus == "activo" ||
       (res[i].estatus == "inactivo" && dischargeMonth >= selectedMonth)
     ) {
       $(`.day${i}`).remove();
