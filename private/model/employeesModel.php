@@ -41,7 +41,7 @@ class database
 
     public function queryEmployee($id)
     {
-        $sql = $this->db->query("SELECT * FROM empleados WHERE cedula = '$id'");
+        $sql = $this->db->query("SELECT * FROM empleados WHERE cedula = '$id' AND estatus = 'activo'");
         if ($this->db->rows($sql) > 0) {
             while ($data = $this->db->recorrer($sql)) {
                 $respuesta[] = $data;
@@ -84,7 +84,7 @@ class database
         $utilities,
         $status
     ) {
-        $sql = $this->db->query("UPDATE empleados SET empresa = '$business', nomina_cliente = '$payroll', cedula = '$id', fecha_nacimiento = '$birthDate', correo = '$email', nombre_apellido = '$name', fecha_ingreso = '$dateAdmission', fecha_egreso = '$disqualificationDate', finalizacion_contrato = '$dueDate', finalizacion_segundo_contrato = '$secondContract', finalizacion_tercer_contrato = '$thirdContract', cargo = '$position', unidad_organizativa = '$campus', turno = '$turn', rotacion = '$rotation', horario = '$workingHours', excepcion = '$exceptionLevel', ficha = '$file', banco = '$bank', tipo_cuenta = '$accType', numero_cuenta = '$accNumber', sueldo = '$salary', destreza = '$manualDexterity', direccion = '$address', telefono_1 = '$phone1', telefono_2 = '$phone2', tickets = '$feeding', bono = '$vacationBonus', utilidades = '$utilities', estatus = '$status' WHERE cedula = '$id'");
+        $sql = $this->db->query("UPDATE empleados SET empresa = '$business', nomina_cliente = '$payroll', cedula = '$id', fecha_nacimiento = '$birthDate', correo = '$email', nombre_apellido = '$name', fecha_ingreso = '$dateAdmission', fecha_egreso = '$disqualificationDate', finalizacion_contrato = '$dueDate', finalizacion_segundo_contrato = '$secondContract', finalizacion_tercer_contrato = '$thirdContract', cargo = '$position', unidad_organizativa = '$campus', turno = '$turn', rotacion = '$rotation', horario = '$workingHours', excepcion = '$exceptionLevel', ficha = '$file', banco = '$bank', tipo_cuenta = '$accType', numero_cuenta = '$accNumber', sueldo = '$salary', destreza = '$manualDexterity', direccion = '$address', telefono_1 = '$phone1', telefono_2 = '$phone2', tickets = '$feeding', bono = '$vacationBonus', utilidades = '$utilities', estatus = '$status' WHERE cedula = '$id' AND estatus = 'activo'");
     }
 
     public function discharge(
