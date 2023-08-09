@@ -269,8 +269,8 @@ function setIdDays(dayPosition, firstDayWeek) {
   }
 }
 
-function newRotTwo(first, second, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso) {
-  for (let i = 0; i < totalDaysMonth; i++) {
+function newRotTwo(first, second, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
+  for (let i = dateChange; i < totalDaysMonth; i++) {
     if (dayPosition[i].id == first || dayPosition[i].id == second) {
       dayPosition[i].textContent = "DL";
     }
@@ -328,28 +328,28 @@ function newRotTwo(first, second, dayPosition, totalDaysMonth, today, selectedMo
   }
 }
 
-function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso) {
+function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
   switch (newRot) {
     case "L-V":
-      newRotTwo("sab", "dom", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      newRotTwo("sab", "dom", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "M-S":
-      newRotTwo("dom", "lun", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      newRotTwo("dom", "lun", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "M-D":
-      newRotTwo("lun", "mar", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      newRotTwo("lun", "mar", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "J-L":
-      newRotTwo("mar", "mie", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      newRotTwo("mar", "mie", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "V-M":
-      newRotTwo("mie", "jue", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      newRotTwo("mie", "jue", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "S-MI":
-      newRotTwo("jue", "vie", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      newRotTwo("jue", "vie", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "D-J":
-      newRotTwo("vie", "sab", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      newRotTwo("vie", "sab", dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
   }
 }
@@ -366,9 +366,16 @@ function twoDays(
   id, 
   notHired, 
   dayhired, 
-  fecha_egreso) {
+  fecha_egreso,
+  dateChange = null) {
   if (newRot) {
-    newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+    for (let i = 0; i < dateChange; i++) {
+      dayPosition[i].textContent = "";
+      if (dayPosition[i].id == first || dayPosition[i].id == second) {
+        dayPosition[i].textContent = "DL";
+      }
+    }
+    newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
     return;
   } else {
     for (let i = 0; i < totalDaysMonth; i++) {
@@ -507,6 +514,8 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, esta
   }
 }
 
+// twoHolidays( oldRotation, dayPosition, totalDaysMonth, rotacion, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+
 function twoHolidays(rotacion, 
   dayPosition, 
   totalDaysMonth, 
@@ -517,28 +526,29 @@ function twoHolidays(rotacion,
   id, 
   notHired, 
   dayhired,
-  fecha_egreso) {
+  fecha_egreso,
+  dateChange = null,) {
   switch (rotacion) {
     case "L-V":
-      twoDays("sab", "dom", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      twoDays("sab", "dom", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "M-S":
-      twoDays("dom", "lun", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      twoDays("dom", "lun", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "M-D":
-      twoDays("lun", "mar", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      twoDays("lun", "mar", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "J-L":
-      twoDays("mar", "mie", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      twoDays("mar", "mie", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "V-M":
-      twoDays("mie", "jue", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      twoDays("mie", "jue", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "S-MI":
-      twoDays("jue", "vie", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      twoDays("jue", "vie", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
     case "D-J":
-      twoDays("vie", "sab", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      twoDays("vie", "sab", dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
       break;
   }
 }
@@ -771,6 +781,8 @@ function rotationLog(
             let rotation = data[i].rotacion;
             rotation = rotation.split("-");
             let oldRotation = data[i].antigua_rotacion;
+            let dateChange = data[i].fecha;
+            dateChange = dateChange.split("-")[2];
             holyDays(
               rotation,
               rotacion,
@@ -783,7 +795,8 @@ function rotationLog(
               id, 
               notHired, 
               dayhired, 
-              fecha_egreso
+              fecha_egreso,
+              dateChange
             );
           }
         }
@@ -804,7 +817,8 @@ function holyDays(
   id,
   notHired,
   dayhired,
-  fecha_egreso = null
+  fecha_egreso = null,
+  dateChange =null
 ) {
   if (oldRotation == "") {
     if (rotation.length == 2) {
@@ -813,10 +827,11 @@ function holyDays(
       fourHolidays( rotation, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
     }
   } else if (oldRotation != "") {
+    console.log(id, oldRotation, rotacion)
     if (rotation.length == 2) {
-      twoHolidays( oldRotation, dayPosition, totalDaysMonth, rotacion, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      twoHolidays( oldRotation, dayPosition, totalDaysMonth, rotacion, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
     } else if (rotation.length > 2) {
-      fourHolidays(rotation, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso);
+      fourHolidays(rotation, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange);
     }
   }
 }
