@@ -212,7 +212,7 @@ function newRotTwo(first, second, dayPosition, totalDaysMonth, today, selectedMo
 }
 
 function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
-  if (newRot.length == 2) {
+  if (newRot.length == 3 && typeof newRot == 'string') {
     switch (newRot) {
       case 'L-V':
         newRotTwo('sab', 'dom', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
@@ -236,7 +236,7 @@ function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, 
         newRotTwo('vie', 'sab', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
     }
-  } else if (newRot.length > 2) {
+  } else {
     threeDays(newRot, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
   }
 }
