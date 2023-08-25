@@ -243,13 +243,15 @@ function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, 
 
 function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null) {
   if (newRot) {
-    for (let i = 0; i < dateChange; i++) {
+    const dateData = parseInt(dateChange) - 1
+    console.log(dateData)
+    for (let i = 0; i < dateData; i++) {
       dayPosition[i].textContent = ''
       if (dayPosition[i].id == first || dayPosition[i].id == second) {
         dayPosition[i].textContent = 'DL'
       }
     }
-    newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+    newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateData)
     return
   } else {
     for (let i = 0; i < totalDaysMonth; i++) {
