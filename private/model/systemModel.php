@@ -54,8 +54,25 @@ class database
         return $respuesta;
     }
 
+    public function logJustificacionM($user, $payRoll, $opt, $now)
+    {   
+                        // Imprimir el valor de payRoll usando echo
+                        echo "El valor de payRoll es: " . $opt;
+        $sql = $this->db->query("INSERT INTO log_changes (nombre, fecha_cambio, cambio, justificacion, empleado) VALUES ('$user', '$now', '', '$opt' , '$payRoll')");
+    }
+
+    public function logJustificacion($user, $id, $opt, $now)
+    {   
+        $sql = $this->db->query("INSERT INTO log_changes (nombre, fecha_cambio, cambio, justificacion, empleado) VALUES ('$user', '$now', '', '$opt' , '$id')");
+    }
+
+    public function logChanges($user, $id, $selecData, $now)
+    {   
+        $sql = $this->db->query("INSERT INTO log_changes (nombre, fecha_cambio, cambio, justificacion, empleado) VALUES ('$user', '$now', '$selecData', '' , '$id')");
+    }
+
     public function changeNomina($nomina, $oldPayroll, $reason, $dataDay, $id)
-    {
+    {   
         $sql = $this->db->query("INSERT INTO cambios (cedula, fecha, nomina, antigua_nomina, motivo) VALUES ('$id', '$dataDay', '$nomina', '$oldPayroll', '$reason')");
     }
 

@@ -138,6 +138,33 @@ if (isset($_GET['mode'])) {
             echo json_encode($data);
             #------------------------------------------------------------------------------------
             break;
+        case 'logChanges':
+            $id = $_POST['id'];
+            $selecData = $_POST['selecData'];
+            $now = $_POST['now'];
+            $user = $_SESSION['nombre'];
+            $data = $conexion->logChanges($user, $id, $selecData, $now);
+            echo json_encode($data);
+            #------------------------------------------------------------------------------------
+        break;
+        case 'logJustificacion':
+            $id = $_POST['id'];
+            $opt = $_POST['opt'];
+            $now = $_POST['now'];
+            $user = $_SESSION['nombre'];
+            $data = $conexion->logJustificacion($user, $id, $opt, $now);
+            echo json_encode($data);
+            #------------------------------------------------------------------------------------
+        break;
+        case 'logJustificacionM':
+            $payRoll = $_POST['payRoll'];
+            $opt = $_POST['opt'];
+            $now = $_POST['now'];
+            $user = $_SESSION['nombre'];
+            $data = $conexion->logJustificacionM($user, $payRoll, $opt, $now);
+            echo json_encode($data);
+            #------------------------------------------------------------------------------------
+        break;
         default:
             header('location:' . HTML_DIR . 'error.html');
             break;

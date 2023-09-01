@@ -3,7 +3,6 @@
 
 <link rel="stylesheet" href="public/css/changeRotation.css">
 <div class="topSeparation"></div>
-
 <div class="cardCont">
     <div class="card" style="width: 90%;top: 1em;">
         <div class="card-body">

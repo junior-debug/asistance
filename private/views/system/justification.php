@@ -41,8 +41,8 @@
             <div style="display: flex;">
                 <select class="form-select selectData" id="insertOption" onchange="typeOption(value)">
                     <option value="" selected disabled value="">Tipo justificacion </option>
-                    <option value="1">Individual</option>
-                    <option value="2">Masiva</option>
+                    <option value="individual">Individual</option>
+                    <option value="masiva">Masiva</option>
                 </select>
                 <div class="IndividualInsert" id="IndividualInsert" style="display: none;">
                     <input type="text" id="id" class="form-control inputData" placeholder="Cedula" aria-label="Cedula" aria-describedby="basic-addon1">

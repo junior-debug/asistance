@@ -55,17 +55,7 @@ function payrollUpdate(value, id, update) {
   })
 }
 
-function sendQuery(
-  date,
-  nomina,
-  oldPayroll,
-  cargo,
-  oldPosition,
-  oldTurn,
-  turno,
-  oldRotation,
-  rotation
-) {
+function sendQuery(date, nomina, oldPayroll, cargo, oldPosition, oldTurn, turno, oldRotation, rotation) {
   const id = $('#id').val()
   const reason = $('#reason').val()
   $.ajax({
@@ -111,68 +101,20 @@ function validationQuery(array) {
     switch ($('#selectData').val()) {
       case 'nomina':
         const nomina = $('#nomina').val()
-        sendQuery(
-          date,
-          nomina,
-          nomina,
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          lastInt,
-          dataDayInt
-        )
+        sendQuery(date, nomina, nomina, '', '', '', '', '', '', lastInt, dataDayInt)
         break
       case 'cargo':
         const position = $('#cargo').val()
-        sendQuery(
-          date,
-          '',
-          '',
-          position,
-          position,
-          '',
-          '',
-          '',
-          '',
-          lastInt,
-          dataDayInt
-        )
+        sendQuery(date, '', '', position, position, '', '', '', '', lastInt, dataDayInt)
         break
       case 'turno':
         const turno = $('#turno').val()
-        sendQuery(
-          date,
-          '',
-          '',
-          '',
-          '',
-          turno,
-          turno,
-          '',
-          '',
-          lastInt,
-          dataDayInt
-        )
+        sendQuery(date, '', '', '', '', turno, turno, '', '', lastInt, dataDayInt)
         break
       case 'rotation':
         const rotation = $('#rotation').val()
         const oldRotation = $('#oldRotation').val()
-        sendQuery(
-          date,
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          oldRotation,
-          rotation,
-          lastInt,
-          dataDayInt
-        )
+        sendQuery(date, '', '', '', '', '', '', oldRotation, rotation, lastInt, dataDayInt)
         break
     }
     switch ($('#selectData').val()) {
@@ -199,140 +141,43 @@ function validationQuery(array) {
       switch ($('#selectData').val()) {
         case 'nomina':
           const oldPayroll = $('#oldPayroll').val()
-          sendQuery(
-            date,
-            '',
-            oldPayroll,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            lastInt,
-            dataDayInt
-          )
+          sendQuery(date, '', oldPayroll, '', '', '', '', '', '', lastInt, dataDayInt)
           break
         case 'cargo':
           const oldPosition = $('#position').val()
-          sendQuery(
-            date,
-            '',
-            '',
-            '',
-            oldPosition,
-            '',
-            '',
-            '',
-            '',
-            lastInt,
-            dataDayInt
-          )
+          sendQuery(date, '', '', '', oldPosition, '', '', '', '', lastInt, dataDayInt)
           break
         case 'turno':
           const oldTurn = $('#oldTurn').val()
-          sendQuery(
-            date,
-            '',
-            '',
-            '',
-            '',
-            oldTurn,
-            '',
-            '',
-            '',
-            lastInt,
-            dataDayInt
-          )
+          sendQuery(date, '', '', '', '', oldTurn, '', '', '', lastInt, dataDayInt)
           break
         case 'rotation':
           const oldRotation = $('#oldRotation').val()
-          sendQuery(
-            date,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            oldRotation,
-            '',
-            lastInt,
-            dataDayInt
-          )
+          sendQuery(date, '', '', '', '', '', '', oldRotation, '', lastInt, dataDayInt)
           break
       }
     } else if (i == dataDayInt - 1) {
       switch ($('#selectData').val()) {
         case 'nomina':
           const nomina = $('#nomina').val()
-          sendQuery(
-            date,
-            nomina,
-            nomina,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            lastInt,
-            dataDayInt
-          )
+          sendQuery(date, nomina, nomina, '', '', '', '', '', '', lastInt, dataDayInt)
           break
         case 'cargo':
           const position = $('#cargo').val()
-          sendQuery(
-            date,
-            '',
-            '',
-            position,
-            position,
-            '',
-            '',
-            '',
-            '',
-            lastInt,
-            dataDayInt
-          )
+          sendQuery(date, '', '', position, position, '', '', '', '', lastInt, dataDayInt)
           break
         case 'turno':
           const turno = $('#turno').val()
-          sendQuery(
-            date,
-            '',
-            '',
-            '',
-            '',
-            turno,
-            turno,
-            '',
-            '',
-            lastInt,
-            dataDayInt
-          )
+          sendQuery(date, '', '', '', '', turno, turno, '', '', lastInt, dataDayInt)
           break
         case 'rotation':
           const rotation = $('#rotation').val()
           const oldRotation = $('#oldRotation').val()
-          sendQuery(
-            date,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            oldRotation,
-            rotation,
-            lastInt,
-            dataDayInt
-          )
+          sendQuery(date, '', '', '', '', '', '', oldRotation, rotation, lastInt, dataDayInt)
           break
       }
     }
     if (i == dataDayInt - 1) {
-      console.log('nielto')
       const id = $('#id').val()
       switch ($('#selectData').val()) {
         case 'nomina':
@@ -355,11 +200,8 @@ function validationQuery(array) {
 }
 
 function validator(data) {
-  console.log(data)
   const array = []
   if (data == undefined || data == '') {
-    console.log('1')
-    console.log(array)
     array.push(0)
     validationQuery(array)
   } else if (data != undefined || data != '') {
@@ -368,16 +210,39 @@ function validator(data) {
       str = str[1]
       str = array.push(str)
       if (i + 1 == data.length) {
-        console.log('2')
-        console.log(array)
         validationQuery(array)
       }
     }
   }
 }
 
+function logChanges(id) {
+  const selecData = $('#selectData').val()
+  const now = new Date()
+  $.ajax({
+    type: 'POST',
+    url: `?view=sistema&mode=logChanges`,
+    dataType: 'json',
+    data: {
+      id: id,
+      selecData: selecData,
+      now: now,
+    },
+    statusCode: {
+      200: function (data) {},
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
+}
+
 function queryChanges(queryData) {
   const id = $('#id').val()
+  logChanges(id)
   $.ajax({
     type: 'POST',
     url: `?view=sistema&mode=${queryData}`,
@@ -395,11 +260,9 @@ function queryChanges(queryData) {
               for (let i = 0; i < data.length; i++) {
                 if (data[i].antigua_nomina == '' && data[i].nomina == '') {
                   if (i + 1 == data.length) {
-                    console.log('entro 1')
                     validator(undefined)
                   }
                 } else {
-                  console.log('entro 2')
                   validator(data)
                   return
                 }
@@ -413,11 +276,9 @@ function queryChanges(queryData) {
               for (let i = 0; i < data.length; i++) {
                 if (data[i].antiguo_cargo == '' && data[i].cargo == '') {
                   if (i + 1 == data.length) {
-                    console.log('entro 1')
                     validator(undefined)
                   }
                 } else {
-                  console.log('entro 2')
                   validator(data)
                   return
                 }
@@ -431,11 +292,9 @@ function queryChanges(queryData) {
               for (let i = 0; i < data.length; i++) {
                 if (data[i].antiguo_turno == '' && data[i].turno == '') {
                   if (i + 1 == data.length) {
-                    console.log('entro 1')
                     validator(undefined)
                   }
                 } else {
-                  console.log('entro 2')
                   validator(data)
                   return
                 }
@@ -449,11 +308,9 @@ function queryChanges(queryData) {
               for (let i = 0; i < data.length; i++) {
                 if (data[i].antigua_rotacion == '' && data[i].rotacion == '') {
                   if (i + 1 == data.length) {
-                    console.log('entro 1')
                     validator(undefined)
                   }
                 } else {
-                  console.log('entro 2')
                   validator(data)
                   return
                 }
