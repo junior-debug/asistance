@@ -244,7 +244,6 @@ function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, 
 function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null) {
   if (newRot) {
     const dateData = parseInt(dateChange) - 1
-    console.log(dateData)
     for (let i = 0; i < dateData; i++) {
       dayPosition[i].textContent = ''
       if (dayPosition[i].id == first || dayPosition[i].id == second) {
@@ -304,8 +303,8 @@ function twoHolidays(rotacion, dayPosition, totalDaysMonth, newRot = null, today
   }
 }
 
-function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null) {
-  if (dateChange == null) {
+function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null, oldRotation = null) {
+  if (dateChange == null && oldRotation == null) {
     if (days.length == 3) {
       for (let i = 0; i < totalDaysMonth; i++) {
         if (dayPosition[i].id != days[0] && dayPosition[i].id != days[1] && dayPosition[i].id != days[2]) {
@@ -319,7 +318,7 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, esta
         }
       }
     }
-  } else {
+  } else if (dateChange != null && oldRotation == null) {
     if (days.length == 3) {
       for (let i = dateChange; i < totalDaysMonth; i++) {
         if (dayPosition[i].id != days[0] && dayPosition[i].id != days[1] && dayPosition[i].id != days[2]) {
@@ -333,6 +332,49 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, esta
         }
       }
     }
+  } else if (dateChange != null && oldRotation != null) {
+    let oldDays = []
+    for (let i = 0; i < oldRotation.length; i++) {
+      switch (oldRotation[i]) {
+        case 'L':
+          oldDays.push('lun')
+          break
+        case 'M':
+          oldDays.push('mar')
+          break
+        case 'MI':
+          oldDays.push('mie')
+          break
+        case 'J':
+          oldDays.push('jue')
+          break
+        case 'V':
+          oldDays.push('vie')
+          break
+        case 'S':
+          oldDays.push('sab')
+          break
+        case 'D':
+          oldDays.push('dom')
+          break
+      }
+    }
+    console.log(oldDays)
+    const dateData = parseInt(dateChange) - 1
+    if (oldDays.length == 3) {
+      for (let i = 0; i < dateData; i++) {
+        if (dayPosition[i].id != oldDays[0] && dayPosition[i].id != oldDays[1] && dayPosition[i].id != oldDays[2]) {
+          dayPosition[i].textContent = 'DL'
+        }
+      }
+    } else if (oldDays.length == 4) {
+      for (let i = 0; i < dateData; i++) {
+        if (dayPosition[i].id != oldDays[0] && dayPosition[i].id != oldDays[1] && dayPosition[i].id != oldDays[2] && dayPosition[i].id != oldDays[3]) {
+          dayPosition[i].textContent = 'DL'
+        }
+      }
+    }
+    newRotation(totalDaysMonth, days, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateData)
   }
 
   if (selectedMonth == month) {
@@ -383,9 +425,10 @@ function fourHolidays(oldRotation, rotation, dayPosition, totalDaysMonth, today,
   if (oldRotation == null) {
     threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso)
   } else if (oldRotation != null) {
-    if (oldRotation.length == 3) {
+    if (oldRotation.length >= 3 && oldRotation.length < 5) {
       twoHolidays(oldRotation, dayPosition, totalDaysMonth, days, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
-    } else if (oldRotation.length > 3) {
+    } else if (oldRotation.length >= 5) {
+      threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange, oldRotation)
     }
   }
 }
