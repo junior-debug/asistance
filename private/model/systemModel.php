@@ -56,8 +56,6 @@ class database
 
     public function logJustificacionM($user, $payRoll, $opt, $now)
     {   
-                        // Imprimir el valor de payRoll usando echo
-                        echo "El valor de payRoll es: " . $opt;
         $sql = $this->db->query("INSERT INTO log_changes (nombre, fecha_cambio, cambio, justificacion, empleado) VALUES ('$user', '$now', '', '$opt' , '$payRoll')");
     }
 
