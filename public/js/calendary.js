@@ -533,7 +533,9 @@ function queryDays(id, dataDay, dayPosition, days, completMonth = null, status =
         }
         queryJustification(dates, dayPosition)
       } else {
+        console.log(status)
         if (status != null) {
+          console.log('entro1', id)
           const date = status.slice(8, 10)
           for (let x = 0; x < days; x++) {
             if (x >= date) {
@@ -543,9 +545,12 @@ function queryDays(id, dataDay, dayPosition, days, completMonth = null, status =
             }
           }
         } else {
+          console.log('entro2', id)
           for (let i = 0; i < days; i++) {
-            if (dayPosition[i].textContent == '') {
-              dayPosition[i].textContent = 'E'
+            if (i < dayhired - 1) {
+              inAssitstant(dayPosition, i, days, completMonth, 'NC')
+            } else {
+              inAssitstant(dayPosition, i, days, completMonth, 'E')
             }
           }
         }
