@@ -114,6 +114,66 @@ $(document).ready(function () {
   })
 })
 
+// Segun el mes del input, llama a changeMonth()
+function selectMonth() {
+  $('#table tbody').empty()
+  const payRolls = pushOpt()
+  $('#month').html($('#selectMonth').val())
+
+  $('.monthDays').remove()
+  $('.titleDays').remove()
+  $('tbody tr').remove()
+  switch ($('#selectMonth').val()) {
+    case 'enero':
+      changeMonth(new Date(year, 1 - 1, 1).getDay(), new Date(year, 1, 0).getDate(), '01', payRolls)
+      break
+    case 'febrero':
+      changeMonth(new Date(year, 2 - 1, 1).getDay(), new Date(year, 2, 0).getDate(), '02', payRolls)
+      break
+    case 'marzo':
+      changeMonth(new Date(year, 3 - 1, 1).getDay(), new Date(year, 3, 0).getDate(), '03', payRolls)
+      break
+    case 'abril':
+      changeMonth(new Date(year, 4 - 1, 1).getDay(), new Date(year, 4, 0).getDate(), '04', payRolls)
+      break
+    case 'mayo':
+      changeMonth(new Date(year, 5 - 1, 1).getDay(), new Date(year, 5, 0).getDate(), '05', payRolls)
+      break
+    case 'junio':
+      changeMonth(new Date(year, 6 - 1, 1).getDay(), new Date(year, 6, 0).getDate(), '06', payRolls)
+      break
+    case 'julio':
+      changeMonth(new Date(year, 7 - 1, 1).getDay(), new Date(year, 7, 0).getDate(), '07', payRolls)
+      break
+    case 'agosto':
+      changeMonth(new Date(year, 8 - 1, 1).getDay(), new Date(year, 8, 0).getDate(), '08', payRolls)
+      break
+    case 'septiembre':
+      changeMonth(new Date(year, 9 - 1, 1).getDay(), new Date(year, 9, 0).getDate(), '09', payRolls)
+      break
+    case 'octubre':
+      changeMonth(new Date(year, 10 - 1, 1).getDay(), new Date(year, 10, 0).getDate(), '10', payRolls)
+      break
+    case 'noviembre':
+      changeMonth(new Date(year, 11 - 1, 1).getDay(), new Date(year, 11, 0).getDate(), '11', payRolls)
+      break
+    case 'diciembre':
+      changeMonth(new Date(year, 12 - 1, 1).getDay(), new Date(year, 12, 0).getDate(), '12', payRolls)
+      break
+  }
+}
+
+// Obtiene payRolls
+function pushOpt() {
+  const arrayData = []
+  const data = $('.selected')
+  for (let i = 0; i < data.length; i++) {
+    arrayData.push(data[i].lastChild.innerText)
+  }
+  return arrayData
+}
+
+// Contruye los dias del mes en la tabla, y llama a queryCalendary()
 function changeMonth(firstDayWeek, totalDaysMonth, selectedMonth, payRolls) {
   let weekIterator = firstDayWeek - 1
   for (let i = 0; i < totalDaysMonth; i++) {
@@ -131,53 +191,84 @@ function changeMonth(firstDayWeek, totalDaysMonth, selectedMonth, payRolls) {
   queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls)
 }
 
-function selectMonth() {
-  $('#table tbody').empty()
-  const payRolls = pushOpt()
-  $('#month').html($('#selectMonth').val())
+// Consulta a BD segun los parametros del usuario.
+function queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls) {
+  const newQuery = buildQuery(payRolls)
 
-  $('.monthDays').remove()
-  $('.titleDays').remove()
-  $('tbody tr').remove()
-
-  switch ($('#selectMonth').val()) {
-    case 'enero':
-      changeMonth(new Date(year, 1 - 1, 1).getDay(), new Date(year, 1, 0).getDate(), 01, payRolls)
-      break
-    case 'febrero':
-      changeMonth(new Date(year, 2 - 1, 1).getDay(), new Date(year, 2, 0).getDate(), 02, payRolls)
-      break
-    case 'marzo':
-      changeMonth(new Date(year, 3 - 1, 1).getDay(), new Date(year, 3, 0).getDate(), 03, payRolls)
-      break
-    case 'abril':
-      changeMonth(new Date(year, 4 - 1, 1).getDay(), new Date(year, 4, 0).getDate(), 04, payRolls)
-      break
-    case 'mayo':
-      changeMonth(new Date(year, 5 - 1, 1).getDay(), new Date(year, 5, 0).getDate(), 05, payRolls)
-      break
-    case 'junio':
-      changeMonth(new Date(year, 6 - 1, 1).getDay(), new Date(year, 6, 0).getDate(), 06, payRolls)
-      break
-    case 'julio':
-      changeMonth(new Date(year, 7 - 1, 1).getDay(), new Date(year, 7, 0).getDate(), 07, payRolls)
-      break
-    case 'agosto':
-      changeMonth(new Date(year, 8 - 1, 1).getDay(), new Date(year, 8, 0).getDate(), 08, payRolls)
-      break
-    case 'septiembre':
-      changeMonth(new Date(year, 9 - 1, 1).getDay(), new Date(year, 9, 0).getDate(), 09, payRolls)
-      break
-    case 'octubre':
-      changeMonth(new Date(year, 10 - 1, 1).getDay(), new Date(year, 10, 0).getDate(), 10, payRolls)
-      break
-    case 'noviembre':
-      changeMonth(new Date(year, 11 - 1, 1).getDay(), new Date(year, 11, 0).getDate(), 11, payRolls)
-      break
-    case 'diciembre':
-      changeMonth(new Date(year, 12 - 1, 1).getDay(), new Date(year, 12, 0).getDate(), 12, payRolls)
-      break
+  // Validacion de input
+  if (newQuery == 0) {
+    alert('seleccione nomina')
+    return
   }
+
+  $('#gif').show()
+  $('.calendaryCont').hide()
+  $('#calendar').show('slow')
+
+  // Consulta al controller con caso asistanceData
+  $.ajax({
+    url: '?view=calendary&mode=asistanceData',
+    type: 'post',
+    dataType: 'json',
+    data: {
+      newQuery: newQuery,
+    },
+    statusCode: {
+      200: function (data) {
+        const classSelect = $('.select-all')
+        let res = data
+        if (selectedMonth < 10) {
+          selectedMonth = '0' + selectedMonth
+        }
+        if (classSelect[0].classList[1] == 'selected') {
+          console.log();
+          payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMonth, true)
+        } else {
+          payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMonth)
+        }
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
+}
+
+function payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMonth, allPayrolls = null) {
+  $.ajax({
+    url: '?view=calendary&mode=payrollChanges',
+    type: 'post',
+    dataType: 'json',
+    data: {},
+    statusCode: {
+      200: function (data) {
+        if (allPayrolls == true) {
+          buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth)
+          gif(120000)
+        } else {
+          for (let i = 0; i < data.length; i++) {
+            if ((data[i].nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth) || (data[i].antigua_nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth)) {
+              gif(30000)
+              validationData(data, selectedMonth, payRolls, res, firstDayWeek, totalDaysMonth)
+              return
+            } else if (i + 1 == data.length) {
+              gif(30000)
+              buildingCalendary(res, selectedMonth, firstDayWeek, totalDaysMonth)
+            }
+          }
+        }
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
 }
 
 function setIdDays(dayPosition, firstDayWeek) {
@@ -212,7 +303,7 @@ function newRotTwo(first, second, dayPosition, totalDaysMonth, today, selectedMo
 }
 
 function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
-  if (newRot.length == 3 && typeof newRot == 'string') {
+  if (typeof newRot == 'string') {
     switch (newRot) {
       case 'L-V':
         newRotTwo('sab', 'dom', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
@@ -359,7 +450,7 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, esta
           break
       }
     }
-    console.log(oldDays)
+    
     const dateData = parseInt(dateChange) - 1
     if (oldDays.length == 3) {
       for (let i = 0; i < dateData; i++) {
@@ -634,8 +725,10 @@ function holyDays(rotation, rotacion, dayPosition, totalDaysMonth, oldRotation, 
     }
   } else if (oldRotation != '') {
     if (rotation.length == 2) {
+      // console.log("1", id, rotation);
       twoHolidays(oldRotation, dayPosition, totalDaysMonth, rotacion, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
     } else if (rotation.length > 2) {
+      // console.log("2", id, rotation);
       fourHolidays(oldRotation, rotation, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
     }
   }
@@ -821,79 +914,6 @@ function buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth) {
   }
 }
 
-function payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMonth, allPayrolls = null) {
-  $.ajax({
-    url: '?view=calendary&mode=payrollChanges',
-    type: 'post',
-    dataType: 'json',
-    data: {},
-    statusCode: {
-      200: function (data) {
-        if (allPayrolls == true) {
-          buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth)
-          gif(120000)
-        } else {
-          for (let i = 0; i < data.length; i++) {
-            if ((data[i].nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth) || (data[i].antigua_nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth)) {
-              gif(30000)
-              validationData(data, selectedMonth, payRolls, res, firstDayWeek, totalDaysMonth)
-              return
-            } else if (i + 1 == data.length) {
-              gif(30000)
-              buildingCalendary(res, selectedMonth, firstDayWeek, totalDaysMonth)
-            }
-          }
-        }
-      },
-      400: function () {
-        alert('Error en la solicitud')
-      },
-      500: function () {
-        alert('Error en el Servidor')
-      },
-    },
-  })
-}
-
-function queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls) {
-  const newQuery = buildQuery(payRolls)
-  if (newQuery == 0) {
-    alert('seleccione nomina')
-    return
-  }
-  $('#gif').show()
-  $('.calendaryCont').hide()
-  $('#calendar').show('slow')
-  $.ajax({
-    url: '?view=calendary&mode=asistanceData',
-    type: 'post',
-    dataType: 'json',
-    data: {
-      newQuery: newQuery,
-    },
-    statusCode: {
-      200: function (data) {
-        const classSelect = $('.select-all')
-        let res = data
-        if (selectedMonth < 10) {
-          selectedMonth = '0' + selectedMonth
-        }
-        if (classSelect[0].classList[1] == 'selected') {
-          payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMonth, true)
-        } else {
-          payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMonth)
-        }
-      },
-      400: function () {
-        alert('Error en la solicitud')
-      },
-      500: function () {
-        alert('Error en el Servidor')
-      },
-    },
-  })
-}
-
 function download() {
   $('#table').table2excel({
     exclude: '.noExl',
@@ -943,13 +963,4 @@ function userData(requestDate, id) {
       },
     },
   })
-}
-
-function pushOpt() {
-  const arrayData = []
-  const data = $('.selected')
-  for (let i = 0; i < data.length; i++) {
-    arrayData.push(data[i].lastChild.innerText)
-  }
-  return arrayData
 }
