@@ -45,10 +45,10 @@
                     <th rowspan="2" class="dataDays ">nomina</th>
                     <th rowspan="2" class="dataDays">cedula</th>
                     <th rowspan="2" class="dataDays">ficha</th>
-                    <th rowspan="2" class="dataDays dataDaysName">nombres - apellidos</th>
+                    <th rowspan="2" class="dataDays dataDaysWidth">nombres - apellidos</th>
                     <th rowspan="2" class="dataDays">f.ingreso</th>
                     <th rowspan="2" class="dataDays">f.contrato</th>
-                    <th rowspan="2" class="dataDays">cargo</th>
+                    <th rowspan="2" class="dataDays dataDaysWidth">cargo</th>
                     <th rowspan="2" class="dataDays">turno</th>
                     <th rowspan="2" class="dataDays">rotacion</th>
                 </tr>
