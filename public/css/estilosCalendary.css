@@ -71,6 +71,11 @@ body {
   text-align: center;
 }
 
+.dataDaysName {
+  background-color: red;
+  min-width: 250px;
+}
+
 td {
   text-align: center;
 }
