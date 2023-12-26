@@ -123,42 +123,45 @@ function selectMonth() {
   $('.monthDays').remove()
   $('.titleDays').remove()
   $('tbody tr').remove()
+
+  const selectedYear = $('#selectYear').val()
+
   switch ($('#selectMonth').val()) {
     case 'enero':
-      changeMonth(new Date(year, 1 - 1, 1).getDay(), new Date(year, 1, 0).getDate(), '01', payRolls)
+      changeMonth(new Date(year, 1 - 1, 1).getDay(), new Date(year, 1, 0).getDate(), 1, payRolls, selectedYear)
       break
     case 'febrero':
-      changeMonth(new Date(year, 2 - 1, 1).getDay(), new Date(year, 2, 0).getDate(), '02', payRolls)
+      changeMonth(new Date(year, 2 - 1, 1).getDay(), new Date(year, 2, 0).getDate(), 2, payRolls, selectedYear)
       break
     case 'marzo':
-      changeMonth(new Date(year, 3 - 1, 1).getDay(), new Date(year, 3, 0).getDate(), '03', payRolls)
+      changeMonth(new Date(year, 3 - 1, 1).getDay(), new Date(year, 3, 0).getDate(), 3, payRolls, selectedYear)
       break
     case 'abril':
-      changeMonth(new Date(year, 4 - 1, 1).getDay(), new Date(year, 4, 0).getDate(), '04', payRolls)
+      changeMonth(new Date(year, 4 - 1, 1).getDay(), new Date(year, 4, 0).getDate(), 4, payRolls, selectedYear)
       break
     case 'mayo':
-      changeMonth(new Date(year, 5 - 1, 1).getDay(), new Date(year, 5, 0).getDate(), '05', payRolls)
+      changeMonth(new Date(year, 5 - 1, 1).getDay(), new Date(year, 5, 0).getDate(), 5, payRolls, selectedYear)
       break
     case 'junio':
-      changeMonth(new Date(year, 6 - 1, 1).getDay(), new Date(year, 6, 0).getDate(), '06', payRolls)
+      changeMonth(new Date(year, 6 - 1, 1).getDay(), new Date(year, 6, 0).getDate(), 6, payRolls, selectedYear)
       break
     case 'julio':
-      changeMonth(new Date(year, 7 - 1, 1).getDay(), new Date(year, 7, 0).getDate(), '07', payRolls)
+      changeMonth(new Date(year, 7 - 1, 1).getDay(), new Date(year, 7, 0).getDate(), 7, payRolls, selectedYear)
       break
     case 'agosto':
-      changeMonth(new Date(year, 8 - 1, 1).getDay(), new Date(year, 8, 0).getDate(), '08', payRolls)
+      changeMonth(new Date(year, 8 - 1, 1).getDay(), new Date(year, 8, 0).getDate(), 8, payRolls, selectedYear)
       break
     case 'septiembre':
-      changeMonth(new Date(year, 9 - 1, 1).getDay(), new Date(year, 9, 0).getDate(), '09', payRolls)
+      changeMonth(new Date(year, 9 - 1, 1).getDay(), new Date(year, 9, 0).getDate(), 9, payRolls, selectedYear)
       break
     case 'octubre':
-      changeMonth(new Date(year, 10 - 1, 1).getDay(), new Date(year, 10, 0).getDate(), '10', payRolls)
+      changeMonth(new Date(year, 10 - 1, 1).getDay(), new Date(year, 10, 0).getDate(), 10, payRolls, selectedYear)
       break
     case 'noviembre':
-      changeMonth(new Date(year, 11 - 1, 1).getDay(), new Date(year, 11, 0).getDate(), '11', payRolls)
+      changeMonth(new Date(year, 11 - 1, 1).getDay(), new Date(year, 11, 0).getDate(), 11, payRolls, selectedYear)
       break
     case 'diciembre':
-      changeMonth(new Date(year, 12 - 1, 1).getDay(), new Date(year, 12, 0).getDate(), '12', payRolls)
+      changeMonth(new Date(year, 12 - 1, 1).getDay(), new Date(year, 12, 0).getDate(), 12, payRolls, selectedYear)
       break
   }
 }
@@ -174,7 +177,7 @@ function pushOpt() {
 }
 
 // Contruye los dias del mes en la tabla, y llama a queryCalendary()
-function changeMonth(firstDayWeek, totalDaysMonth, selectedMonth, payRolls) {
+function changeMonth(firstDayWeek, totalDaysMonth, selectedMonth, payRolls, selectedYear) {
   let weekIterator = firstDayWeek - 1
   for (let i = 0; i < totalDaysMonth; i++) {
     $('#day-labels').append('<th class="titleDays"></th>')
@@ -188,11 +191,12 @@ function changeMonth(firstDayWeek, totalDaysMonth, selectedMonth, payRolls) {
     weekIterator++
     titleDays[i].textContent = week[weekIterator]
   }
-  queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls)
+  // Consulta a BD segun los parametros del usuario.
+  queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls, selectedYear)
 }
 
 // Consulta a BD segun los parametros del usuario.
-function queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls) {
+function queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls, selectedYear) {
   const newQuery = buildQuery(payRolls)
 
   // Validacion de input
@@ -220,11 +224,11 @@ function queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls) {
         if (selectedMonth < 10) {
           selectedMonth = '0' + selectedMonth
         }
+        // console.log("classSelect", classSelect[0].classList[1]);
         if (classSelect[0].classList[1] == 'selected') {
-          console.log();
-          payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMonth, true)
+          payRollChanges(res, selectedMonth, selectedYear, payRolls, firstDayWeek, totalDaysMonth, true)
         } else {
-          payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMonth)
+          payRollChanges(res, selectedMonth, selectedYear, payRolls, firstDayWeek, totalDaysMonth)
         }
       },
       400: function () {
@@ -237,7 +241,8 @@ function queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls) {
   })
 }
 
-function payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMonth, allPayrolls = null) {
+// Consulta la nomina si tiene cambios.
+function payRollChanges(res, selectedMonth, selectedYear, payRolls, firstDayWeek, totalDaysMonth, allPayrolls = null) {
   $.ajax({
     url: '?view=calendary&mode=payrollChanges',
     type: 'post',
@@ -245,18 +250,27 @@ function payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMon
     data: {},
     statusCode: {
       200: function (data) {
+        // console.log("allPayrolls", allPayrolls);
         if (allPayrolls == true) {
-          buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth)
+          buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth, selectedYear)
           gif(120000)
         } else {
+          
+          // console.log("payrollChanges data", "data")
+
           for (let i = 0; i < data.length; i++) {
             if ((data[i].nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth) || (data[i].antigua_nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth)) {
+              // console.log("validation data");
+              
               gif(30000)
-              validationData(data, selectedMonth, payRolls, res, firstDayWeek, totalDaysMonth)
+              validationData(data, selectedMonth, selectedYear, payRolls, res, firstDayWeek, totalDaysMonth)
               return
-            } else if (i + 1 == data.length) {
+            } 
+            else if (i + 1 == data.length) {
+              // console.log("if building calendary", selectedYear);
+              
               gif(30000)
-              buildingCalendary(res, selectedMonth, firstDayWeek, totalDaysMonth)
+              buildingCalendary(res, selectedMonth, selectedYear, firstDayWeek, totalDaysMonth)
             }
           }
         }
@@ -271,6 +285,7 @@ function payRollChanges(res, selectedMonth, payRolls, firstDayWeek, totalDaysMon
   })
 }
 
+// Setea los dias
 function setIdDays(dayPosition, firstDayWeek) {
   let weekIterator = firstDayWeek - 1
   for (let i = 0; i < $('.dataDay').length; i++) {
@@ -279,21 +294,94 @@ function setIdDays(dayPosition, firstDayWeek) {
   }
 }
 
-function newRotTwo(first, second, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
+function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, totalDaysMonth, userChanges = false) {
+  const res = newRes
+  const today = newDate.getDate()
+
+  for (let i = 0; i < res.length; i++) {
+    $(`.tableAsistance${i}`).remove()
+
+    const initMonth = res[i].fecha_ingreso.slice(5, 7)
+    const initYear = res[i].fecha_ingreso.slice(0, 4)
+
+    let notHired = null
+    let dayhired = null
+
+    const dateConsult = selectedYear + '-' + selectedMonth + '-' + totalDaysMonth
+
+    // Si el año y mes en el que fue contratado es el actual.
+    if (initMonth == selectedMonth && initYear == year) {
+      // Mes en el que ingreso
+      notHired = initMonth
+      // Dia en el que ingreso
+      dayhired = res[i].fecha_ingreso.slice(8, 10)
+    }
+
+    if (
+      (res[i].fecha_ingreso <= dateConsult && res[i].estatus == 'activo') 
+      ||
+      (res[i].fecha_egreso >= dateConsult && res[i].estatus == 'inactivo')
+    ){
+      $(`.day${i}`).remove()
+      let id = res[i].cedula
+      let dayPosition = ''
+
+      // console.log("userChanges", userChanges);
+      if (userChanges == false) {
+        $('#tableBody').append(
+          `<tr class='tableAsistance${i}'><td id="payRoll${i}">${res[i].nomina_cliente}</td><td>${res[i].cedula}</td><td>${res[i].ficha}</td><td>${res[i].nombre_apellido}</td><td>${res[i].fecha_ingreso}</td><td>${res[i].finalizacion_contrato}</td><td id="position${i}">${res[i].cargo}</td><td id="turn${i}">${res[i].turno}</td><td id="rotation${i}">${res[i].rotacion}</td></tr>`
+        )
+        for (let x = 0; x < $('.dataDay').length; x++) {
+          $(`.tableAsistance${i}`).append(`<td class ="day${i}" style="border: 1px solid rgba(128, 128, 128, 0.342);text-align: center;"></td>`)
+        }
+        dayPosition = document.getElementsByClassName(`day${i}`)
+      } 
+      else if (userChanges != false) {
+        $('#tableBody').append(
+          `<tr class='tableAsistance${userChanges}'><td id="payRoll${userChanges}">${res[i].nomina_cliente}</td><td>${res[i].cedula}</td><td>${res[i].ficha}</td><td>${res[i].nombre_apellido}</td><td>${res[i].fecha_ingreso}</td><td>${res[i].finalizacion_contrato}</td><td id="position${userChanges}">${res[i].cargo}</td><td id="turn${userChanges}">${res[i].turno}</td><td id="rotation${userChanges}">${res[i].rotacion}</td></tr>`
+        )
+        for (let x = 0; x < $('.dataDay').length; x++) {
+          $(`.tableAsistance${userChanges}`).append(`<td class ="day${userChanges}" style="border: 1px solid rgba(128, 128, 128, 0.342);text-align: center;"></td>`)
+        }
+        dayPosition = document.getElementsByClassName(`day${userChanges}`)
+      }
+
+      setIdDays(dayPosition, firstDayWeek)
+
+      // console.log("estatus_cambios", res[i].estatus_cambios);
+      if (res[i].estatus_cambios == 1) {
+        dataLog(id, selectedMonth, i)
+        rotationLog(id, selectedMonth, selectedYear, i, dayPosition, totalDaysMonth, res[i].rotacion, today, res[i].estatus, notHired, dayhired, res[i].fecha_egreso)
+      } 
+      else {
+        // console.log("res[i]", res[i]);
+        let rotacionString = res[i].rotacion
+        let rotacionArray = res[i].rotacion.split('-')
+        holyDays(rotacionArray, rotacionString, dayPosition, totalDaysMonth, '', today, selectedMonth, selectedYear, res[i].estatus, id, notHired, dayhired, res[i].fecha_egreso)
+      }
+    }
+  }
+}
+
+// Valida segun mes seleccionado y año seleccionado.
+function newRotTwo(first, second, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
   for (let i = dateChange; i < totalDaysMonth; i++) {
     if (dayPosition[i].id == first || dayPosition[i].id == second) {
       dayPosition[i].textContent = 'DL'
     }
   }
-  if (selectedMonth == month) {
-    let dataDay = `${year}-${selectedMonth}`
+
+  if (selectedMonth == month && selectedYear <= year) {
+    let dataDay = `${selectedYear}-${selectedMonth}`
     if (estatusCambios == 'inactivo') {
       queryDays(id, dataDay, dayPosition, today, null, fecha_egreso, notHired, dayhired)
     } else {
       queryDays(id, dataDay, dayPosition, today, null, null, notHired, dayhired)
     }
-  } else if (selectedMonth != month) {
-    let dataDay = `${year}-${selectedMonth}`
+  }
+  
+  if (selectedMonth != month && selectedYear <= year) {
+    let dataDay = `${selectedYear}-${selectedMonth}`
     if (estatusCambios == 'inactivo') {
       queryDays(id, dataDay, dayPosition, totalDaysMonth, true, fecha_egreso, notHired, dayhired)
     } else {
@@ -302,38 +390,45 @@ function newRotTwo(first, second, dayPosition, totalDaysMonth, today, selectedMo
   }
 }
 
-function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
+// Llama a newRotTwo
+function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
   if (typeof newRot == 'string') {
     switch (newRot) {
       case 'L-V':
-        newRotTwo('sab', 'dom', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+        newRotTwo('sab', 'dom', dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
       case 'M-S':
-        newRotTwo('dom', 'lun', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+        newRotTwo('dom', 'lun', dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
       case 'M-D':
-        newRotTwo('lun', 'mar', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+        newRotTwo('lun', 'mar', dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
       case 'J-L':
-        newRotTwo('mar', 'mie', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+        newRotTwo('mar', 'mie', dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
       case 'V-M':
-        newRotTwo('mie', 'jue', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+        newRotTwo('mie', 'jue', dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
       case 'S-MI':
-        newRotTwo('jue', 'vie', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+        newRotTwo('jue', 'vie', dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
       case 'D-J':
-        newRotTwo('vie', 'sab', dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+        newRotTwo('vie', 'sab', dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
     }
   } else {
-    threeDays(newRot, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+    threeDays(newRot, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
   }
 }
 
-function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null) {
+function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null) {
+  // **IMPORTANTE**
+  // Validado los casos donde para por el ELSE
+  // Validar caso donde newRot pase por el IF y llame a newRotation
+
+  // console.log("twoDays newRot", newRot)
   if (newRot) {
+    console.log("REVISAR CASO TWO HOLIDAYS twoDays NEWROOT TWO", newRot)
     const dateData = parseInt(dateChange) - 1
     for (let i = 0; i < dateData; i++) {
       dayPosition[i].textContent = ''
@@ -341,7 +436,7 @@ function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, toda
         dayPosition[i].textContent = 'DL'
       }
     }
-    newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateData)
+    newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateData)
     return
   } else {
     for (let i = 0; i < totalDaysMonth; i++) {
@@ -350,15 +445,21 @@ function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, toda
         dayPosition[i].textContent = 'DL'
       }
     }
-    if (selectedMonth == month) {
-      let dataDay = `${year}-${selectedMonth}`
+
+    // console.log("IF 1", selectedMonth == month && selectedYear <= year);
+    if (selectedMonth == month && selectedYear <= year) {
+      let dataDay = `${selectedYear}-${selectedMonth}`
+      // console.log(id, dataDay, dayPosition, totalDaysMonth, true, null, notHired, dayhired);
       if (estatusCambios == 'inactivo') {
         queryDays(id, dataDay, dayPosition, today, null, fecha_egreso, notHired, dayhired)
       } else {
         queryDays(id, dataDay, dayPosition, today, null, null, notHired, dayhired)
       }
-    } else if (selectedMonth != month) {
-      let dataDay = `${year}-${selectedMonth}`
+    }
+    
+    // console.log("IF 2", selectedMonth != month && selectedYear <= year)
+    if (selectedMonth != month && selectedYear <= year) {
+      let dataDay = `${selectedYear}-${selectedMonth}`
       if (estatusCambios == 'inactivo') {
         queryDays(id, dataDay, dayPosition, totalDaysMonth, true, fecha_egreso, notHired, dayhired)
       } else {
@@ -368,33 +469,36 @@ function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, toda
   }
 }
 
-function twoHolidays(rotacion, dayPosition, totalDaysMonth, newRot = null, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null) {
+// **IMPORTANTE**
+// Dentro de twoDays -- Validar caso donde newRot pase por el IF y llame a newRotation
+function twoHolidays(rotacion, dayPosition, totalDaysMonth, newRot = null, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null) {
+  // console.log("twoHolidays rotacion switch", rotacion);
   switch (rotacion) {
     case 'L-V':
-      twoDays('sab', 'dom', dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+      twoDays('sab', 'dom', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
       break
     case 'M-S':
-      twoDays('dom', 'lun', dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+      twoDays('dom', 'lun', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
       break
     case 'M-D':
-      twoDays('lun', 'mar', dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+      twoDays('lun', 'mar', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
       break
     case 'J-L':
-      twoDays('mar', 'mie', dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+      twoDays('mar', 'mie', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
       break
     case 'V-M':
-      twoDays('mie', 'jue', dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+      twoDays('mie', 'jue', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
       break
     case 'S-MI':
-      twoDays('jue', 'vie', dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+      twoDays('jue', 'vie', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
       break
     case 'D-J':
-      twoDays('vie', 'sab', dayPosition, totalDaysMonth, newRot, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+      twoDays('vie', 'sab', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
       break
   }
 }
 
-function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null, oldRotation = null) {
+function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null, oldRotation = null) {
   if (dateChange == null && oldRotation == null) {
     if (days.length == 3) {
       for (let i = 0; i < totalDaysMonth; i++) {
@@ -409,7 +513,9 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, esta
         }
       }
     }
-  } else if (dateChange != null && oldRotation == null) {
+  }
+
+  if (dateChange != null && oldRotation == null) {
     if (days.length == 3) {
       for (let i = dateChange; i < totalDaysMonth; i++) {
         if (dayPosition[i].id != days[0] && dayPosition[i].id != days[1] && dayPosition[i].id != days[2]) {
@@ -423,7 +529,9 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, esta
         }
       }
     }
-  } else if (dateChange != null && oldRotation != null) {
+  }
+
+  if (dateChange != null && oldRotation != null) {
     let oldDays = []
     for (let i = 0; i < oldRotation.length; i++) {
       switch (oldRotation[i]) {
@@ -468,15 +576,19 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, esta
     newRotation(totalDaysMonth, days, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateData)
   }
 
-  if (selectedMonth == month) {
-    let dataDay = `${year}-${selectedMonth}`
+  // console.log("threeDays IF 1", selectedMonth == month && selectedYear <= year)
+  if (selectedMonth == month && selectedYear <= year) {
+    let dataDay = `${selectedYear}-${selectedMonth}`
     if (estatusCambios == 'inactivo') {
       queryDays(id, dataDay, dayPosition, today, null, fecha_egreso, notHired, dayhired)
     } else {
       queryDays(id, dataDay, dayPosition, today, null, null, notHired, dayhired)
     }
-  } else if (selectedMonth != month) {
-    let dataDay = `${year}-${selectedMonth}`
+  }
+  
+  // console.log("threeDays IF 2", selectedMonth != month && selectedYear <= year)
+  if (selectedMonth != month && selectedYear <= year) {
+    let dataDay = `${selectedYear}-${selectedMonth}`
     if (estatusCambios == 'inactivo') {
       queryDays(id, dataDay, dayPosition, totalDaysMonth, true, fecha_egreso, notHired, dayhired)
     } else {
@@ -485,10 +597,12 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, esta
   }
 }
 
-function fourHolidays(oldRotation, rotation, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
+function fourHolidays(oldRotation, rotationArray, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
   let days = []
-  for (let i = 0; i < rotation.length; i++) {
-    switch (rotation[i]) {
+  
+  // console.log("fourHolidays rotation", rotationArray);
+  for (let i = 0; i < rotationArray.length; i++) {
+    switch (rotationArray[i]) {
       case 'L':
         days.push('lun')
         break
@@ -513,13 +627,17 @@ function fourHolidays(oldRotation, rotation, dayPosition, totalDaysMonth, today,
     }
   }
 
+  // console.log("fourHolidays oldRotation", oldRotation);
   if (oldRotation == null) {
-    threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso)
-  } else if (oldRotation != null) {
+    threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso)
+  }
+
+  if (oldRotation != null) {
     if (oldRotation.length >= 3 && oldRotation.length < 5) {
-      twoHolidays(oldRotation, dayPosition, totalDaysMonth, days, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
-    } else if (oldRotation.length >= 5) {
-      threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange, oldRotation)
+      twoHolidays(oldRotation, dayPosition, totalDaysMonth, days, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+    }
+    if (oldRotation.length >= 5) {
+      threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange, oldRotation)
     }
   }
 }
@@ -564,7 +682,17 @@ function assistant(dayPosition, x) {
   }
 }
 
-function queryDays(id, dataDay, dayPosition, days, completMonth = null, status = null, notHired, dayhired = null) {
+// Coloca los valores en el calendario segun sus datos
+function queryDays(
+  id, 
+  dataDay, 
+  dayPosition, 
+  days, 
+  completMonth = null, 
+  status = null, 
+  notHired, 
+  dayhired = null
+) {
   $.ajax({
     type: 'POST',
     url: '?view=calendary&mode=asistance',
@@ -624,9 +752,7 @@ function queryDays(id, dataDay, dayPosition, days, completMonth = null, status =
         }
         queryJustification(dates, dayPosition)
       } else {
-        console.log(status)
         if (status != null) {
-          console.log('entro1', id)
           const date = status.slice(8, 10)
           for (let x = 0; x < days; x++) {
             if (x >= date) {
@@ -636,7 +762,6 @@ function queryDays(id, dataDay, dayPosition, days, completMonth = null, status =
             }
           }
         } else {
-          console.log('entro2', id)
           for (let i = 0; i < days; i++) {
             if (i < dayhired - 1) {
               inAssitstant(dayPosition, i, days, completMonth, 'NC')
@@ -650,6 +775,7 @@ function queryDays(id, dataDay, dayPosition, days, completMonth = null, status =
   })
 }
 
+// ???
 function dataLog(id, selectedMonth, x) {
   $.ajax({
     type: 'POST',
@@ -673,8 +799,9 @@ function dataLog(id, selectedMonth, x) {
   })
 }
 
-function rotationLog(id, selectedMonth, iterator, dayPosition, totalDaysMonth, oldRot, today, estatusCambios, notHired, dayhired, fecha_egreso) {
-  const date = year + '-' + selectedMonth
+// ???
+function rotationLog(id, selectedMonth, selectedYear, iterator, dayPosition, totalDaysMonth, oldRot, today, estatusCambios, notHired, dayhired, fecha_egreso) {
+  const date = selectedYear + '-' + selectedMonth
   $.ajax({
     type: 'POST',
     url: '?view=calendary&mode=rotationLog',
@@ -685,7 +812,7 @@ function rotationLog(id, selectedMonth, iterator, dayPosition, totalDaysMonth, o
         let rotacion = oldRot
         let rotation = oldRot
         rotation = rotation.split('-')
-        holyDays(rotation, rotacion, dayPosition, totalDaysMonth, '', today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso)
+        holyDays(rotation, rotacion, dayPosition, totalDaysMonth, '', today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso)
       } else {
         for (let i = 0; i < data.length; i++) {
           if (data[i].rotacion == '' && data[i].antigua_rotacion == '') {
@@ -693,13 +820,13 @@ function rotationLog(id, selectedMonth, iterator, dayPosition, totalDaysMonth, o
             let rotacion = oldRot
             let rotation = oldRot
             rotation = rotation.split('-')
-            holyDays(rotation, rotacion, dayPosition, totalDaysMonth, '', today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso)
+            holyDays(rotation, rotacion, dayPosition, totalDaysMonth, '', today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso)
           } else if (data[i].rotacion == '' && data[i].antigua_rotacion != '') {
             $(`#rotation${iterator}`).text(`${data[i].antigua_rotacion}`)
             let rotacion = data[i].antigua_rotacion
             let rotation = data[i].antigua_rotacion
             rotation = rotation.split('-')
-            holyDays(rotation, rotacion, dayPosition, totalDaysMonth, '', today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso)
+            holyDays(rotation, rotacion, dayPosition, totalDaysMonth, '', today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso)
           } else if (data[i].rotacion != '' && data[i].antigua_rotacion != '') {
             $(`#rotation${iterator}`).text(`${data[i].rotacion}`)
             let rotacion = data[i].rotacion
@@ -708,7 +835,7 @@ function rotationLog(id, selectedMonth, iterator, dayPosition, totalDaysMonth, o
             let oldRotation = data[i].antigua_rotacion
             let dateChange = data[i].fecha
             dateChange = dateChange.split('-')[2]
-            holyDays(rotation, rotacion, dayPosition, totalDaysMonth, oldRotation, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+            holyDays(rotation, rotacion, dayPosition, totalDaysMonth, oldRotation, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
           }
         }
       }
@@ -716,24 +843,30 @@ function rotationLog(id, selectedMonth, iterator, dayPosition, totalDaysMonth, o
   })
 }
 
-function holyDays(rotation, rotacion, dayPosition, totalDaysMonth, oldRotation, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso = null, dateChange = null) {
+// Segun la rotacion llama a twoHolidays() o fourHolidays()
+function holyDays(rotationArray, rotacionString, dayPosition, totalDaysMonth, oldRotation, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso = null, dateChange = null) {
+  
+  // console.log("oldRotation", oldRotation)
   if (oldRotation == '') {
-    if (rotation.length == 2) {
-      twoHolidays(rotacion, dayPosition, totalDaysMonth, null, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso)
-    } else if (rotation.length > 2) {
-      fourHolidays(null, rotation, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso)
+    // console.log("rotationArray length", rotationArray.length);
+    if (rotationArray.length == 2) {
+      twoHolidays(rotacionString, dayPosition, totalDaysMonth, null, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso)
+    } 
+    if (rotationArray.length > 2) {
+      fourHolidays(null, rotationArray, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso)
     }
-  } else if (oldRotation != '') {
-    if (rotation.length == 2) {
-      // console.log("1", id, rotation);
-      twoHolidays(oldRotation, dayPosition, totalDaysMonth, rotacion, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+  } 
+  
+  if (oldRotation != '') {
+    if (rotationArray.length == 2) {
+      twoHolidays(oldRotation, dayPosition, totalDaysMonth, rotacionString, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
     } else if (rotation.length > 2) {
-      // console.log("2", id, rotation);
-      fourHolidays(oldRotation, rotation, dayPosition, totalDaysMonth, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
+      fourHolidays(oldRotation, rotationArray, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
     }
   }
 }
 
+// Reproduce el gif
 function gif(time) {
   setTimeout(function () {
     $('#gif').hide()
@@ -741,6 +874,8 @@ function gif(time) {
   }, time)
 }
 
+// return
+// SELECT * FROM empleados WHERE nomina_cliente = 'ASISTENTES'
 function buildQuery(payRolls) {
   if (payRolls.length == 0) {
     return 0
@@ -761,61 +896,15 @@ function buildQuery(payRolls) {
   }
 }
 
-function buildingCalendary(newRes, selectedMonth, firstDayWeek, totalDaysMonth, userChanges = false) {
-  const res = newRes
-  const today = newDate.getDate()
-
-  for (let i = 0; i < res.length; i++) {
-    $(`.tableAsistance${i}`).remove()
-    let dischargeMonth = res[i].fecha_egreso
-    dischargeMonth = dischargeMonth.slice(5, 7)
-    const initMonth = res[i].fecha_ingreso.slice(5, 7)
-    const initYear = res[i].fecha_ingreso.slice(0, 4)
-    let notHired = null
-    let dayhired = null
-    const dateConsult = year + '-' + selectedMonth + '-' + totalDaysMonth
-
-    if (initMonth == selectedMonth && initYear == year) {
-      notHired = initMonth
-      dayhired = res[i].fecha_ingreso.slice(8, 10)
-    }
-    if ((res[i].fecha_ingreso <= dateConsult && res[i].estatus == 'activo') || (res[i].estatus == 'inactivo' && dischargeMonth >= selectedMonth)) {
-      $(`.day${i}`).remove()
-      let id = res[i].cedula
-      let dayPosition = ''
-      if (userChanges == false) {
-        $('#tableBody').append(
-          `<tr class='tableAsistance${i}'><td id="payRoll${i}">${res[i].nomina_cliente}</td><td>${res[i].cedula}</td><td>${res[i].ficha}</td><td>${res[i].nombre_apellido}</td><td>${res[i].fecha_ingreso}</td><td>${res[i].finalizacion_contrato}</td><td id="position${i}">${res[i].cargo}</td><td id="turn${i}">${res[i].turno}</td><td id="rotation${i}">${res[i].rotacion}</td></tr>`
-        )
-        for (let x = 0; x < $('.dataDay').length; x++) {
-          $(`.tableAsistance${i}`).append(`<td class ="day${i}" style="border: 1px solid rgba(128, 128, 128, 0.342);text-align: center;"></td>`)
-        }
-        dayPosition = document.getElementsByClassName(`day${i}`)
-      } else if (userChanges != false) {
-        $('#tableBody').append(
-          `<tr class='tableAsistance${userChanges}'><td id="payRoll${userChanges}">${res[i].nomina_cliente}</td><td>${res[i].cedula}</td><td>${res[i].ficha}</td><td>${res[i].nombre_apellido}</td><td>${res[i].fecha_ingreso}</td><td>${res[i].finalizacion_contrato}</td><td id="position${userChanges}">${res[i].cargo}</td><td id="turn${userChanges}">${res[i].turno}</td><td id="rotation${userChanges}">${res[i].rotacion}</td></tr>`
-        )
-        for (let x = 0; x < $('.dataDay').length; x++) {
-          $(`.tableAsistance${userChanges}`).append(`<td class ="day${userChanges}" style="border: 1px solid rgba(128, 128, 128, 0.342);text-align: center;"></td>`)
-        }
-        dayPosition = document.getElementsByClassName(`day${userChanges}`)
-      }
-
-      setIdDays(dayPosition, firstDayWeek)
-      if (res[i].estatus_cambios == 1) {
-        dataLog(id, selectedMonth, i)
-        rotationLog(id, selectedMonth, i, dayPosition, totalDaysMonth, res[i].rotacion, today, res[i].estatus, notHired, dayhired, res[i].fecha_egreso)
-      } else {
-        let rotacion = res[i].rotacion
-        let rotation = res[i].rotacion
-        rotation = rotation.split('-')
-        holyDays(rotation, rotacion, dayPosition, totalDaysMonth, '', today, selectedMonth, res[i].estatus, id, notHired, dayhired, res[i].fecha_egreso)
-      }
-    }
-  }
+// Valida si la consulta aplica segun fecha de ingreso y egreso.
+function fechaValida(dateConsult, fechaIngreso, fechaEgreso, estatus){
+  const firstRule = estatus == 'activo' && fechaIngreso <= dateConsult
+  const secondRule = estatus == 'inactivo' && fechaEgreso >= dateConsult
+  return firstRule || secondRule
 }
 
-function userWithChanges(id, selectedMonth, lastPayroll, dataDate, firstDayWeek, totalDaysMonth) {
+// Consulta los datos de userData y llama buildingCalendary
+function userWithChanges(id, selectedMonth, selectedYear, lastPayroll, dataMonth, dataYear, firstDayWeek, totalDaysMonth) {
   $.ajax({
     url: '?view=calendary&mode=userData',
     type: 'post',
@@ -826,7 +915,7 @@ function userWithChanges(id, selectedMonth, lastPayroll, dataDate, firstDayWeek,
     statusCode: {
       200: function (data) {
         for (let y = 0; y < data.length; y++) {
-          if (data[y].nomina_cliente != lastPayroll && selectedMonth == dataDate) {
+          if (data[y].nomina_cliente != lastPayroll && selectedMonth == dataMonth && selectedYear == dataYear) {
             const newObject = [
               {
                 id: data[y].id,
@@ -864,7 +953,7 @@ function userWithChanges(id, selectedMonth, lastPayroll, dataDate, firstDayWeek,
               },
             ]
             if (y + 1 == data.length) {
-              buildingCalendary(newObject, selectedMonth, firstDayWeek, totalDaysMonth, id)
+              buildingCalendary(newObject, selectedMonth, selectedYear, firstDayWeek, totalDaysMonth, id)
             }
           }
         }
@@ -879,37 +968,40 @@ function userWithChanges(id, selectedMonth, lastPayroll, dataDate, firstDayWeek,
   })
 }
 
-function validationData(data, selectedMonth, payRolls, res, firstDayWeek, totalDaysMonth) {
+// Valida la data y segun llama al userWithChanges o buildingCalendary
+function validationData(data, selectedMonth, selectedYear, payRolls, res, firstDayWeek, totalDaysMonth) {
   if (data != false) {
     for (let i = 0; i < data.length; i++) {
       let lastPayroll = data[i].antigua_nomina
-      let dataDate = data[i].fecha.slice(5, 7)
+      let dataMonth = data[i].fecha.slice(5, 7)
+      let dataYear = data[i].fecha.slice(0, 4)
       let id = data[i].cedula
       for (let x = 0; x < payRolls.length; x++) {
-        if (payRolls[x] == lastPayroll && selectedMonth == dataDate) {
-          userWithChanges(id, selectedMonth, lastPayroll, dataDate, firstDayWeek, totalDaysMonth)
+        if (payRolls[x] == lastPayroll && selectedMonth == dataMonth && selectedYear == dataYear) {
+          userWithChanges(id, selectedMonth, selectedYear, lastPayroll, dataMonth, dataYear, firstDayWeek, totalDaysMonth)
         }
       }
       if (i == data.length - 1) {
-        buildingCalendary(res, selectedMonth, firstDayWeek, totalDaysMonth)
+        buildingCalendary(res, selectedMonth, selectedYear, firstDayWeek, totalDaysMonth)
       }
     }
   } else {
-    buildingCalendary(res, selectedMonth, firstDayWeek, totalDaysMonth)
+    buildingCalendary(res, selectedMonth, selectedYear, firstDayWeek, totalDaysMonth)
   }
 }
 
-function buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth) {
+// Construye el buildJson y llama buildingCalendary
+function buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth, selectedYear) {
   for (let i = 0; i < res.length; i++) {
     if (res[i].estatus_cambios == 1) {
       for (let y = 0; y < data.length; y++) {
-        if (selectedMonth == data[y].fecha.slice(5, 7) && data[y].antigua_nomina != '' && data[y].nomina == '' && data[y].cedula == res[i].cedula) {
+        if (selectedMonth == data[y].fecha.slice(5, 7) && selectedYear == data[y].fecha.slice(0, 4) && data[y].antigua_nomina != '' && data[y].nomina == '' && data[y].cedula == res[i].cedula) {
           res[i].nomina_cliente = data[y].antigua_nomina
         }
       }
     }
     if (i + 1 == res.length) {
-      buildingCalendary(res, selectedMonth, firstDayWeek, totalDaysMonth)
+      buildingCalendary(res, selectedMonth, selectedYear, firstDayWeek, totalDaysMonth)
     }
   }
 }

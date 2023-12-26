@@ -5,8 +5,16 @@
 <div class="menu navbar navbar-expand-lg">
     <div class="opt" style="height: 3em;">
         <div class="payrollsCont">
+            <!-- Seleccione mes -->
             <select id="selectMonth" class="form-select inputData" style="height: 80%;margin-left: 5%;" name="select">
                 <option value="">Seleccione mes</option>
+            </select>
+
+            <!-- Seleccione ano -->
+            <select id="selectYear" class="form-select inputData" style="height: 80%;margin-left: 5%;" name="select">
+                <option value="2023">Seleccione año</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
             </select>
 
             <label for="search2" class="labelPayroll">Nomina</label>
