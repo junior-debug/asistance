@@ -12,7 +12,7 @@
 
             <!-- Seleccione ano -->
             <select id="selectYear" class="form-select inputData" style="height: 80%;margin-left: 5%;" name="select">
-                <option value="2023">Seleccione año</option>
+                <option value="2024">Seleccione año</option>
                 <option value="2023">2023</option>
                 <option value="2024">2024</option>
             </select>

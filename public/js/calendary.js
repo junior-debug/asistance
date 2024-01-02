@@ -45,20 +45,35 @@ const week = [
 ]
 const daysMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
 let newDate = new Date()
+
 const year = newDate.getFullYear()
 const month = newDate.getMonth() + 1
 
 $('#month').html(months[month])
+let selectedYear = $('#selectYear').val()
 
 const dataDays = document.getElementsByClassName('dataDay')
 const day = document.getElementsByClassName('day')
 
 function monthsSelect() {
-  for (let i = 1; i < month + 1; i++) {
-    $('#selectMonth').append(`<option value="${months[i].toLowerCase()}">${months[i]}</option>`)
+  selectedYear = $('#selectYear').val()
+  if(selectedYear == year){
+    $('#selectMonth').empty();
+    for (let i = 1; i < month + 1; i++) {
+      $('#selectMonth').append(`<option value="${months[i].toLowerCase()}">${months[i]}</option>`)
+    }
+  } else {
+    $('#selectMonth').empty();
+    for (let i = 1; i < months.length; i++) {
+      $('#selectMonth').append(`<option value="${months[i].toLowerCase()}">${months[i]}</option>`)
+    }
   }
 }
+
 monthsSelect()
+
+const selectedYearInput = document.querySelector("#selectYear");
+selectedYearInput.addEventListener("change", (e) => monthsSelect())
 
 function setSelected() {
   switch ($('#month').text()) {
@@ -89,8 +104,8 @@ function setSelected() {
     case 'Septiembre':
       $('#selectMonth option[value="septiembre"]').attr('selected', 'selected')
       break
-    case 'Octubro':
-      $('#selectMonth option[value="octubro"]').attr('selected', 'selected')
+    case 'Octubre':
+      $('#selectMonth option[value="octubre"]').attr('selected', 'selected')
       break
     case 'Noviembre':
       $('#selectMonth option[value="noviembre"]').attr('selected', 'selected')
@@ -123,8 +138,6 @@ function selectMonth() {
   $('.monthDays').remove()
   $('.titleDays').remove()
   $('tbody tr').remove()
-
-  const selectedYear = $('#selectYear').val()
 
   switch ($('#selectMonth').val()) {
     case 'enero':
@@ -447,13 +460,23 @@ function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, toda
     }
 
     // console.log("IF 1", selectedMonth == month && selectedYear <= year);
-    if (selectedMonth == month && selectedYear <= year) {
+    if (selectedMonth == month && selectedYear == year) {
       let dataDay = `${selectedYear}-${selectedMonth}`
       // console.log(id, dataDay, dayPosition, totalDaysMonth, true, null, notHired, dayhired);
       if (estatusCambios == 'inactivo') {
         queryDays(id, dataDay, dayPosition, today, null, fecha_egreso, notHired, dayhired)
       } else {
         queryDays(id, dataDay, dayPosition, today, null, null, notHired, dayhired)
+      }
+    }
+
+    if (selectedMonth == month && selectedYear < year) {
+      let dataDay = `${selectedYear}-${selectedMonth}`
+      // console.log(id, dataDay, dayPosition, totalDaysMonth, true, null, notHired, dayhired);
+      if (estatusCambios == 'inactivo') {
+        queryDays(id, dataDay, dayPosition, totalDaysMonth, true, fecha_egreso, notHired, dayhired)
+      } else {
+        queryDays(id, dataDay, dayPosition, totalDaysMonth, true, null, notHired, dayhired)
       }
     }
     
@@ -576,13 +599,23 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, sele
     newRotation(totalDaysMonth, days, dayPosition, today, selectedMonth, estatusCambios, id, notHired, dayhired, fecha_egreso, dateData)
   }
 
-  // console.log("threeDays IF 1", selectedMonth == month && selectedYear <= year)
-  if (selectedMonth == month && selectedYear <= year) {
+  if (selectedMonth == month && selectedYear == year) {
     let dataDay = `${selectedYear}-${selectedMonth}`
+    // console.log("threeDays IF 1", selectedMonth == month && selectedYear <= year)
     if (estatusCambios == 'inactivo') {
       queryDays(id, dataDay, dayPosition, today, null, fecha_egreso, notHired, dayhired)
     } else {
       queryDays(id, dataDay, dayPosition, today, null, null, notHired, dayhired)
+    }
+  }
+
+  if (selectedMonth == month && selectedYear < year) {
+    let dataDay = `${selectedYear}-${selectedMonth}`
+    // console.log(id, dataDay, dayPosition, totalDaysMonth, true, null, notHired, dayhired);
+    if (estatusCambios == 'inactivo') {
+      queryDays(id, dataDay, dayPosition, totalDaysMonth, true, fecha_egreso, notHired, dayhired)
+    } else {
+      queryDays(id, dataDay, dayPosition, totalDaysMonth, true, null, notHired, dayhired)
     }
   }
   
