@@ -141,40 +141,40 @@ function selectMonth() {
 
   switch ($('#selectMonth').val()) {
     case 'enero':
-      changeMonth(new Date(year, 1 - 1, 1).getDay(), new Date(year, 1, 0).getDate(), 1, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 1 - 1, 1).getDay(), new Date(selectedYear, 1, 0).getDate(), 1, payRolls, selectedYear)
       break
     case 'febrero':
-      changeMonth(new Date(year, 2 - 1, 1).getDay(), new Date(year, 2, 0).getDate(), 2, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 2 - 1, 1).getDay(), new Date(selectedYear, 2, 0).getDate(), 2, payRolls, selectedYear)
       break
     case 'marzo':
-      changeMonth(new Date(year, 3 - 1, 1).getDay(), new Date(year, 3, 0).getDate(), 3, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 3 - 1, 1).getDay(), new Date(selectedYear, 3, 0).getDate(), 3, payRolls, selectedYear)
       break
     case 'abril':
-      changeMonth(new Date(year, 4 - 1, 1).getDay(), new Date(year, 4, 0).getDate(), 4, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 4 - 1, 1).getDay(), new Date(selectedYear, 4, 0).getDate(), 4, payRolls, selectedYear)
       break
     case 'mayo':
-      changeMonth(new Date(year, 5 - 1, 1).getDay(), new Date(year, 5, 0).getDate(), 5, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 5 - 1, 1).getDay(), new Date(selectedYear, 5, 0).getDate(), 5, payRolls, selectedYear)
       break
     case 'junio':
-      changeMonth(new Date(year, 6 - 1, 1).getDay(), new Date(year, 6, 0).getDate(), 6, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 6 - 1, 1).getDay(), new Date(selectedYear, 6, 0).getDate(), 6, payRolls, selectedYear)
       break
     case 'julio':
-      changeMonth(new Date(year, 7 - 1, 1).getDay(), new Date(year, 7, 0).getDate(), 7, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 7 - 1, 1).getDay(), new Date(selectedYear, 7, 0).getDate(), 7, payRolls, selectedYear)
       break
     case 'agosto':
-      changeMonth(new Date(year, 8 - 1, 1).getDay(), new Date(year, 8, 0).getDate(), 8, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 8 - 1, 1).getDay(), new Date(selectedYear, 8, 0).getDate(), 8, payRolls, selectedYear)
       break
     case 'septiembre':
-      changeMonth(new Date(year, 9 - 1, 1).getDay(), new Date(year, 9, 0).getDate(), 9, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 9 - 1, 1).getDay(), new Date(selectedYear, 9, 0).getDate(), 9, payRolls, selectedYear)
       break
     case 'octubre':
-      changeMonth(new Date(year, 10 - 1, 1).getDay(), new Date(year, 10, 0).getDate(), 10, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 10 - 1, 1).getDay(), new Date(selectedYear, 10, 0).getDate(), 10, payRolls, selectedYear)
       break
     case 'noviembre':
-      changeMonth(new Date(year, 11 - 1, 1).getDay(), new Date(year, 11, 0).getDate(), 11, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 11 - 1, 1).getDay(), new Date(selectedYear, 11, 0).getDate(), 11, payRolls, selectedYear)
       break
     case 'diciembre':
-      changeMonth(new Date(year, 12 - 1, 1).getDay(), new Date(year, 12, 0).getDate(), 12, payRolls, selectedYear)
+      changeMonth(new Date(selectedYear, 12 - 1, 1).getDay(), new Date(selectedYear, 12, 0).getDate(), 12, payRolls, selectedYear)
       break
   }
 }
