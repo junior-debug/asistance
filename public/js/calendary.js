@@ -268,10 +268,10 @@ function payRollChanges(res, selectedMonth, selectedYear, payRolls, firstDayWeek
           buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth, selectedYear)
           gif(120000)
         } else {
-          
-          // console.log("payrollChanges data", "data")
-
           for (let i = 0; i < data.length; i++) {
+            
+            // console.log("data[i]", data[i]);
+            
             if ((data[i].nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth) || (data[i].antigua_nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth)) {
               // console.log("validation data");
               
@@ -311,6 +311,8 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
   const res = newRes
   const today = newDate.getDate()
 
+  // console.log("res", res);
+
   for (let i = 0; i < res.length; i++) {
     $(`.tableAsistance${i}`).remove()
 
@@ -321,9 +323,10 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
     let dayhired = null
 
     const dateConsult = selectedYear + '-' + selectedMonth + '-' + totalDaysMonth
+    const dateConsultEgreso = selectedYear + '-' + selectedMonth + '-' + "01"
 
     // Si el año y mes en el que fue contratado es el actual.
-    if (initMonth == selectedMonth && initYear == year) {
+    if (initMonth == selectedMonth && initYear == selectedYear) {
       // Mes en el que ingreso
       notHired = initMonth
       // Dia en el que ingreso
@@ -333,7 +336,7 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
     if (
       (res[i].fecha_ingreso <= dateConsult && res[i].estatus == 'activo') 
       ||
-      (res[i].fecha_egreso >= dateConsult && res[i].estatus == 'inactivo')
+      (res[i].fecha_egreso >= dateConsultEgreso && res[i].estatus == 'inactivo')
     ){
       $(`.day${i}`).remove()
       let id = res[i].cedula
@@ -441,7 +444,6 @@ function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, toda
 
   // console.log("twoDays newRot", newRot)
   if (newRot) {
-    console.log("REVISAR CASO TWO HOLIDAYS twoDays NEWROOT TWO", newRot)
     const dateData = parseInt(dateChange) - 1
     for (let i = 0; i < dateData; i++) {
       dayPosition[i].textContent = ''
@@ -1009,6 +1011,7 @@ function validationData(data, selectedMonth, selectedYear, payRolls, res, firstD
       let dataMonth = data[i].fecha.slice(5, 7)
       let dataYear = data[i].fecha.slice(0, 4)
       let id = data[i].cedula
+
       for (let x = 0; x < payRolls.length; x++) {
         if (payRolls[x] == lastPayroll && selectedMonth == dataMonth && selectedYear == dataYear) {
           userWithChanges(id, selectedMonth, selectedYear, lastPayroll, dataMonth, dataYear, firstDayWeek, totalDaysMonth)
