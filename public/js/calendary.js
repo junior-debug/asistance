@@ -265,24 +265,19 @@ function payRollChanges(res, selectedMonth, selectedYear, payRolls, firstDayWeek
       200: function (data) {
         // console.log("allPayrolls", allPayrolls);
         if (allPayrolls == true) {
+          console.log("ALL 2");
           buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth, selectedYear)
-          gif(120000)
+          gif(480000) // 8 Minutos
         } else {
           for (let i = 0; i < data.length; i++) {
             
-            // console.log("data[i]", data[i]);
-            
             if ((data[i].nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth) || (data[i].antigua_nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth)) {
-              // console.log("validation data");
-              
-              gif(30000)
+              gif(60000) // 1 Minuto
               validationData(data, selectedMonth, selectedYear, payRolls, res, firstDayWeek, totalDaysMonth)
               return
             } 
             else if (i + 1 == data.length) {
-              // console.log("if building calendary", selectedYear);
-              
-              gif(30000)
+              gif(60000) // 1 Minuto
               buildingCalendary(res, selectedMonth, selectedYear, firstDayWeek, totalDaysMonth)
             }
           }
@@ -364,13 +359,11 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
 
       setIdDays(dayPosition, firstDayWeek)
 
-      // console.log("estatus_cambios", res[i].estatus_cambios);
       if (res[i].estatus_cambios == 1) {
         dataLog(id, selectedMonth, i)
         rotationLog(id, selectedMonth, selectedYear, i, dayPosition, totalDaysMonth, res[i].rotacion, today, res[i].estatus, notHired, dayhired, res[i].fecha_egreso)
       } 
       else {
-        // console.log("res[i]", res[i]);
         let rotacionString = res[i].rotacion
         let rotacionArray = res[i].rotacion.split('-')
         holyDays(rotacionArray, rotacionString, dayPosition, totalDaysMonth, '', today, selectedMonth, selectedYear, res[i].estatus, id, notHired, dayhired, res[i].fecha_egreso)
@@ -717,37 +710,35 @@ function assistant(dayPosition, x) {
   }
 }
 
+// ENTENDER ESTO
 // Coloca los valores en el calendario segun sus datos
-function queryDays(
-  id, 
-  dataDay, 
-  dayPosition, 
-  days, 
-  completMonth = null, 
-  status = null, 
-  notHired, 
-  dayhired = null
-) {
+function queryDays(id, dataDay, dayPosition, days, completMonth = null, status = null, notHired, dayhired = null) {
   $.ajax({
     type: 'POST',
     url: '?view=calendary&mode=asistance',
     dataType: 'json',
     data: { id: id, dataDay: dataDay },
     success: function (data) {
+      // console.log("data", data);
       if (data != false) {
         let dates = []
+
         for (let i = 0; i < data.length; i++) {
+          // Si tiene justificacion
           if (data[i].justificacion != '') {
             let queryDay = data[i].fecha_hora_aut
             queryDay = queryDay.slice(8, 10)
             queryDay = queryDay + data[i].justificacion
             dates.push(queryDay)
-          } else {
+          } 
+          // Si no tiene justificacion
+          else {
             let queryDay = data[i].fecha_hora_aut
             queryDay = queryDay.slice(8, 10)
             dates.push(queryDay)
           }
         }
+
         for (let x = 0; x < days; x++) {
           let y = x + 1
           y = String(y)
@@ -757,7 +748,8 @@ function queryDays(
 
           if (dates.includes(y) == true) {
             assistant(dayPosition, x)
-          } else if (dates.includes(y) == false) {
+          } 
+          else if (dates.includes(y) == false) {
             if (status != null && notHired != null) {
               const date = status.slice(8, 10)
               if (x < dayhired - 1) {
@@ -767,26 +759,30 @@ function queryDays(
               } else if (x < date) {
                 inAssitstant(dayPosition, x, days, completMonth, 'E')
               }
-            } else if (status != null) {
+            } 
+            else if (status != null) {
               const date = status.slice(8, 10)
               if (x >= date) {
                 inAssitstant(dayPosition, x, days, completMonth, 'R')
               } else if (x < date) {
                 inAssitstant(dayPosition, x, days, completMonth, 'E')
               }
-            } else if (notHired != null) {
+            } 
+            else if (notHired != null) {
               if (x < dayhired - 1) {
                 inAssitstant(dayPosition, x, days, completMonth, 'NC')
               } else if (x >= dayhired - 1) {
                 inAssitstant(dayPosition, x, days, completMonth, 'E')
               }
-            } else {
+            } 
+            else {
               inAssitstant(dayPosition, x, days, completMonth, 'E')
             }
           }
         }
         queryJustification(dates, dayPosition)
-      } else {
+      } 
+      else {
         if (status != null) {
           const date = status.slice(8, 10)
           for (let x = 0; x < days; x++) {
@@ -880,10 +876,7 @@ function rotationLog(id, selectedMonth, selectedYear, iterator, dayPosition, tot
 
 // Segun la rotacion llama a twoHolidays() o fourHolidays()
 function holyDays(rotationArray, rotacionString, dayPosition, totalDaysMonth, oldRotation, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso = null, dateChange = null) {
-  
-  // console.log("oldRotation", oldRotation)
   if (oldRotation == '') {
-    // console.log("rotationArray length", rotationArray.length);
     if (rotationArray.length == 2) {
       twoHolidays(rotacionString, dayPosition, totalDaysMonth, null, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso)
     } 
