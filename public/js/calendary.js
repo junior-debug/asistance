@@ -382,7 +382,7 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
       setIdDays(dayPosition, firstDayWeek)
 
       if (res[i].estatus_cambios == 1) {
-        dataLog(id, selectedMonth, i)
+        dataLog(id, selectedMonth, i, selectedYear)
         rotationLog(id, selectedMonth, selectedYear, i, dayPosition, totalDaysMonth, res[i].rotacion, today, res[i].estatus, notHired, dayhired, res[i].fecha_egreso)
       } 
       else {
@@ -838,13 +838,13 @@ function dataLog(id, selectedMonth, x) {
     success: function (data) {
       for (let i = 0; i < data.length; i++) {
         let arr = data[i].fecha.split('-')
-        if (selectedMonth == arr[1] && data[i].antigua_nomina != '') {
+        if (selectedMonth == arr[1] && selectedYear == arr[0] && data[i].antigua_nomina != '') {
           $(`#payRoll${x}`).text(`${data[i].antigua_nomina}`)
         }
-        if (selectedMonth == arr[1] && data[i].antiguo_cargo != '') {
+        if (selectedMonth == arr[1] && selectedYear == arr[0] && data[i].antiguo_cargo != '') {
           $(`#position${x}`).text(`${data[i].antiguo_cargo}`)
         }
-        if (selectedMonth == arr[1] && data[i].antiguo_turno != '') {
+        if (selectedMonth == arr[1] && selectedYear == arr[0] && data[i].antiguo_turno != '') {
           $(`#turn${x}`).text(`${data[i].antiguo_turno}`)
         }
       }
@@ -944,13 +944,6 @@ function buildQuery(payRolls) {
     const newQuery = data + ' ' + queryData
     return newQuery
   }
-}
-
-// Valida si la consulta aplica segun fecha de ingreso y egreso.
-function fechaValida(dateConsult, fechaIngreso, fechaEgreso, estatus){
-  const firstRule = estatus == 'activo' && fechaIngreso <= dateConsult
-  const secondRule = estatus == 'inactivo' && fechaEgreso >= dateConsult
-  return firstRule || secondRule
 }
 
 // Consulta los datos de userData y llama buildingCalendary
