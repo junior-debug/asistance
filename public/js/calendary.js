@@ -340,7 +340,19 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
       // console.log("userChanges", userChanges);
       if (userChanges == false) {
         $('#tableBody').append(
-          `<tr class='tableAsistance${i}'><td id="payRoll${i}">${res[i].nomina_cliente}</td><td>${res[i].cedula}</td><td>${res[i].ficha}</td><td>${res[i].nombre_apellido}</td><td>${res[i].fecha_ingreso}</td><td>${res[i].finalizacion_contrato}</td><td id="position${i}">${res[i].cargo}</td><td id="turn${i}">${res[i].turno}</td><td id="rotation${i}">${res[i].rotacion}</td></tr>`
+          `<tr class='tableAsistance${i}'>
+            <td id="payRoll${i}">${res[i].nomina_cliente}</td>
+            <td>${res[i].cedula}</td>
+            <td>${res[i].ficha}</td>
+            <td>${res[i].nombre_apellido}</td>
+            <td>${res[i].fecha_ingreso}</td>
+            <td>${res[i].finalizacion_contrato}</td>
+            <td class='soloExcel'>${res[i].finalizacion_segundo_contrato}</td>
+            <td class='soloExcel'>${res[i].finalizacion_tercer_contrato}</td>
+            <td id="position${i}">${res[i].cargo}</td>
+            <td id="turn${i}">${res[i].turno}</td>
+            <td id="rotation${i}">${res[i].rotacion}</td>
+          </tr>`
         )
         for (let x = 0; x < $('.dataDay').length; x++) {
           $(`.tableAsistance${i}`).append(`<td class ="day${i}" style="border: 1px solid rgba(128, 128, 128, 0.342);text-align: center;"></td>`)
@@ -349,7 +361,17 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
       } 
       else if (userChanges != false) {
         $('#tableBody').append(
-          `<tr class='tableAsistance${userChanges}'><td id="payRoll${userChanges}">${res[i].nomina_cliente}</td><td>${res[i].cedula}</td><td>${res[i].ficha}</td><td>${res[i].nombre_apellido}</td><td>${res[i].fecha_ingreso}</td><td>${res[i].finalizacion_contrato}</td><td id="position${userChanges}">${res[i].cargo}</td><td id="turn${userChanges}">${res[i].turno}</td><td id="rotation${userChanges}">${res[i].rotacion}</td></tr>`
+          `<tr class='tableAsistance${userChanges}'>
+            <td id="payRoll${userChanges}">${res[i].nomina_cliente}</td>
+            <td>${res[i].cedula}</td><td>${res[i].ficha}</td>
+            <td>${res[i].nombre_apellido}</td><td>${res[i].fecha_ingreso}</td>
+            <td>${res[i].finalizacion_contrato}</td>
+            <td class='soloExcel'>${res[i].finalizacion_segundo_contrato}</td>
+            <td class='soloExcel'>${res[i].finalizacion_tercer_contrato}</td>
+            <td id="position${userChanges}">${res[i].cargo}</td>
+            <td id="turn${userChanges}">${res[i].turno}</td>
+            <td id="rotation${userChanges}">${res[i].rotacion}</td>
+          </tr>`
         )
         for (let x = 0; x < $('.dataDay').length; x++) {
           $(`.tableAsistance${userChanges}`).append(`<td class ="day${userChanges}" style="border: 1px solid rgba(128, 128, 128, 0.342);text-align: center;"></td>`)
