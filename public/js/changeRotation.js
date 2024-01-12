@@ -87,34 +87,40 @@ function sendQuery(date, nomina, oldPayroll, cargo, oldPosition, oldTurn, turno,
   })
 }
 
-function validationQuery(array) {
-  let dataDay = $('#day').val()
-  dataDay = dataDay.split('-')
-  let dataDayInt = parseInt(dataDay[1])
-  dataDayInt = dataDayInt + 1
+function validationQuery(array, yearData) {
+  // Fecha donde cambiara la rotacion
+  let dateSelected = $('#day').val()
+  dateSelectedArray = dateSelected.split('-')
+  
+  // Mes seleccionado para el cambio + 1 
+  let monthSelected = parseInt(dateSelectedArray[1])
+  monthSelected = monthSelected + 1
+
+  // Ultimo mes en el que cambio
   const last = array[array.length - 1]
-  let lastInt = parseInt(last)
-  lastInt = lastInt + 1
-  if (lastInt == dataDayInt) {
+  let lastMonthChange = parseInt(last)
+  lastMonthChange = lastMonthChange + 1
+
+  if (lastMonthChange == monthSelected && yearData == year) {
     const id = $('#id').val()
-    let date = year + '-' + last + '-' + dataDay[2]
+    let date = year + '-' + last + '-' + dateSelectedArray[2]
     switch ($('#selectData').val()) {
       case 'nomina':
         const nomina = $('#nomina').val()
-        sendQuery(date, nomina, nomina, '', '', '', '', '', '', lastInt, dataDayInt)
+        sendQuery(date, nomina, nomina, '', '', '', '', '', '', lastMonthChange, monthSelected)
         break
       case 'cargo':
         const position = $('#cargo').val()
-        sendQuery(date, '', '', position, position, '', '', '', '', lastInt, dataDayInt)
+        sendQuery(date, '', '', position, position, '', '', '', '', lastMonthChange, monthSelected)
         break
       case 'turno':
         const turno = $('#turno').val()
-        sendQuery(date, '', '', '', '', turno, turno, '', '', lastInt, dataDayInt)
+        sendQuery(date, '', '', '', '', turno, turno, '', '', lastMonthChange, monthSelected)
         break
       case 'rotation':
         const rotation = $('#rotation').val()
         const oldRotation = $('#oldRotation').val()
-        sendQuery(date, '', '', '', '', '', '', oldRotation, rotation, lastInt, dataDayInt)
+        sendQuery(date, '', '', '', '', '', '', oldRotation, rotation, lastMonthChange, monthSelected)
         break
     }
     switch ($('#selectData').val()) {
@@ -132,52 +138,81 @@ function validationQuery(array) {
         break
     }
   }
-  for (let i = lastInt; i < dataDayInt; i++) {
-    if (i < 10) {
-      i = '0' + i
+  
+  // Si la data del anterior cambio es anterior al año actual
+  if(yearData < year){
+    countMonthBeforeEndYear = 12 - lastMonthChange 
+    item = 0
+    result = countMonthBeforeEndYear + monthSelected
+    isTwoYear = true
+  } else {
+    item = lastMonthChange
+    result = monthSelected
+    isTwoYear = false
+  }
+
+  // Contador con logica de meses
+  lastMonthChangeCounter = lastMonthChange
+  
+  // Recorre una vez por cada mes transcurrido
+  for (let i = item; i < result; i++) {
+
+    // Agrega 0 al string
+    if (lastMonthChangeCounter < 10) {
+      lastMonthChangeCounter = '0' + lastMonthChangeCounter
     }
-    let date = year + '-' + i + '-' + dataDay[2]
-    if (i < dataDayInt - 1) {
+
+    // Valida si es del año anterior o el actual
+    let date = ""
+    if(item <= countMonthBeforeEndYear && isTwoYear == true){
+      date = yearData + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
+    }else{
+      date = year + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
+    }
+
+    if (i < result - 1) {
       switch ($('#selectData').val()) {
         case 'nomina':
           const oldPayroll = $('#oldPayroll').val()
-          sendQuery(date, '', oldPayroll, '', '', '', '', '', '', lastInt, dataDayInt)
+          sendQuery(date, '', oldPayroll, '', '', '', '', '', '', lastMonthChange, monthSelected)
           break
         case 'cargo':
           const oldPosition = $('#position').val()
-          sendQuery(date, '', '', '', oldPosition, '', '', '', '', lastInt, dataDayInt)
+          sendQuery(date, '', '', '', oldPosition, '', '', '', '', lastMonthChange, monthSelected)
           break
         case 'turno':
           const oldTurn = $('#oldTurn').val()
-          sendQuery(date, '', '', '', '', oldTurn, '', '', '', lastInt, dataDayInt)
+          sendQuery(date, '', '', '', '', oldTurn, '', '', '', lastMonthChange, monthSelected)
           break
         case 'rotation':
           const oldRotation = $('#oldRotation').val()
-          sendQuery(date, '', '', '', '', '', '', oldRotation, '', lastInt, dataDayInt)
+          sendQuery(date, '', '', '', '', '', '', oldRotation, '', lastMonthChange, monthSelected)
           break
       }
-    } else if (i == dataDayInt - 1) {
+    } else if (i == result - 1) {
       switch ($('#selectData').val()) {
         case 'nomina':
           const nomina = $('#nomina').val()
-          sendQuery(date, nomina, nomina, '', '', '', '', '', '', lastInt, dataDayInt)
+          sendQuery(date, nomina, nomina, '', '', '', '', '', '', lastMonthChange, monthSelected)
           break
         case 'cargo':
           const position = $('#cargo').val()
-          sendQuery(date, '', '', position, position, '', '', '', '', lastInt, dataDayInt)
+          sendQuery(date, '', '', position, position, '', '', '', '', lastMonthChange, monthSelected)
           break
         case 'turno':
           const turno = $('#turno').val()
-          sendQuery(date, '', '', '', '', turno, turno, '', '', lastInt, dataDayInt)
+          sendQuery(date, '', '', '', '', turno, turno, '', '', lastMonthChange, monthSelected)
           break
         case 'rotation':
           const rotation = $('#rotation').val()
           const oldRotation = $('#oldRotation').val()
-          sendQuery(date, '', '', '', '', '', '', oldRotation, rotation, lastInt, dataDayInt)
+          sendQuery(date, '', '', '', '', '', '', oldRotation, rotation, lastMonthChange, monthSelected)
+          break
+        default:
           break
       }
     }
-    if (i == dataDayInt - 1) {
+    if (i == result - 1) {
       const id = $('#id').val()
       switch ($('#selectData').val()) {
         case 'nomina':
@@ -196,21 +231,25 @@ function validationQuery(array) {
           break
       }
     }
+
+    lastMonthChangeCounter == 12 ? lastMonthChangeCounter = 1 : lastMonthChangeCounter++
   }
 }
 
 function validator(data) {
   const array = []
+  let yearData = ""
   if (data == undefined || data == '') {
     array.push(0)
-    validationQuery(array)
+    validationQuery(array, yearData)
   } else if (data != undefined || data != '') {
     for (let i = 0; i < data.length; i++) {
       let str = data[i].fecha.split('-')
+      yearData = str[0]
       str = str[1]
       str = array.push(str)
       if (i + 1 == data.length) {
-        validationQuery(array)
+        validationQuery(array, yearData)
       }
     }
   }
