@@ -92,37 +92,39 @@ function validationQuery(array, yearData) {
   let dateSelected = $('#day').val()
   dateSelectedArray = dateSelected.split('-')
   
-  // Mes seleccionado para el cambio + 1 
+  // Mes seleccionado para el cambio
   let monthSelected = parseInt(dateSelectedArray[1])
-  monthSelected = monthSelected + 1
 
   // Ultimo mes en el que cambio
   const last = array[array.length - 1]
   let lastMonthChange = parseInt(last)
-  lastMonthChange = lastMonthChange + 1
 
+  // Si ya hubo un cambio este mismo mes
   if (lastMonthChange == monthSelected && yearData == year) {
     const id = $('#id').val()
-    let date = year + '-' + last + '-' + dateSelectedArray[2]
+    let date = year + '-' + monthSelected + '-' + dateSelectedArray[2]
+
+    // sendQuery
     switch ($('#selectData').val()) {
       case 'nomina':
         const nomina = $('#nomina').val()
-        sendQuery(date, nomina, nomina, '', '', '', '', '', '', lastMonthChange, monthSelected)
+        sendQuery(date, nomina, nomina, '', '', '', '', '', '')
         break
       case 'cargo':
         const position = $('#cargo').val()
-        sendQuery(date, '', '', position, position, '', '', '', '', lastMonthChange, monthSelected)
+        sendQuery(date, '', '', position, position, '', '', '', '')
         break
       case 'turno':
         const turno = $('#turno').val()
-        sendQuery(date, '', '', '', '', turno, turno, '', '', lastMonthChange, monthSelected)
+        sendQuery(date, '', '', '', '', turno, turno, '', '')
         break
       case 'rotation':
         const rotation = $('#rotation').val()
         const oldRotation = $('#oldRotation').val()
-        sendQuery(date, '', '', '', '', '', '', oldRotation, rotation, lastMonthChange, monthSelected)
+        sendQuery(date, '', '', '', '', '', '', oldRotation, rotation)
         break
     }
+    // payrollUpdate
     switch ($('#selectData').val()) {
       case 'nomina':
         payrollUpdate($('#nomina').val(), id, 'payrollUpdate')
@@ -141,19 +143,20 @@ function validationQuery(array, yearData) {
   
   // Si la data del anterior cambio es anterior al año actual
   if(yearData < year){
-    countMonthBeforeEndYear = 12 - lastMonthChange 
     item = 0
+    countMonthBeforeEndYear = 12 - lastMonthChange
     result = countMonthBeforeEndYear + monthSelected
     isTwoYear = true
   } else {
     item = lastMonthChange
+    countMonthBeforeEndYear = 0
     result = monthSelected
     isTwoYear = false
   }
 
   // Contador con logica de meses
-  lastMonthChangeCounter = lastMonthChange
-  
+  lastMonthChangeCounter = lastMonthChange == 0 ? 1 : lastMonthChange
+
   // Recorre una vez por cada mes transcurrido
   for (let i = item; i < result; i++) {
 
@@ -164,9 +167,13 @@ function validationQuery(array, yearData) {
 
     // Valida si es del año anterior o el actual
     let date = ""
-    if(item <= countMonthBeforeEndYear && isTwoYear == true){
+    if(i < countMonthBeforeEndYear && isTwoYear == true){
       date = yearData + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
-    }else{
+    }
+    if(i >= countMonthBeforeEndYear && isTwoYear == true){
+      date = year + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
+    }
+    if(isTwoYear == false){
       date = year + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
     }
 
@@ -174,39 +181,39 @@ function validationQuery(array, yearData) {
       switch ($('#selectData').val()) {
         case 'nomina':
           const oldPayroll = $('#oldPayroll').val()
-          sendQuery(date, '', oldPayroll, '', '', '', '', '', '', lastMonthChange, monthSelected)
+          sendQuery(date, '', oldPayroll, '', '', '', '', '', '')
           break
         case 'cargo':
           const oldPosition = $('#position').val()
-          sendQuery(date, '', '', '', oldPosition, '', '', '', '', lastMonthChange, monthSelected)
+          sendQuery(date, '', '', '', oldPosition, '', '', '', '')
           break
         case 'turno':
           const oldTurn = $('#oldTurn').val()
-          sendQuery(date, '', '', '', '', oldTurn, '', '', '', lastMonthChange, monthSelected)
+          sendQuery(date, '', '', '', '', oldTurn, '', '', '')
           break
         case 'rotation':
           const oldRotation = $('#oldRotation').val()
-          sendQuery(date, '', '', '', '', '', '', oldRotation, '', lastMonthChange, monthSelected)
+          sendQuery(date, '', '', '', '', '', '', oldRotation, '')
           break
       }
     } else if (i == result - 1) {
       switch ($('#selectData').val()) {
         case 'nomina':
           const nomina = $('#nomina').val()
-          sendQuery(date, nomina, nomina, '', '', '', '', '', '', lastMonthChange, monthSelected)
+          sendQuery(date, nomina, nomina, '', '', '', '', '', '')
           break
         case 'cargo':
           const position = $('#cargo').val()
-          sendQuery(date, '', '', position, position, '', '', '', '', lastMonthChange, monthSelected)
+          sendQuery(date, '', '', position, position, '', '', '', '')
           break
         case 'turno':
           const turno = $('#turno').val()
-          sendQuery(date, '', '', '', '', turno, turno, '', '', lastMonthChange, monthSelected)
+          sendQuery(date, '', '', '', '', turno, turno, '', '')
           break
         case 'rotation':
           const rotation = $('#rotation').val()
           const oldRotation = $('#oldRotation').val()
-          sendQuery(date, '', '', '', '', '', '', oldRotation, rotation, lastMonthChange, monthSelected)
+          sendQuery(date, '', '', '', '', '', '', oldRotation, rotation)
           break
         default:
           break
@@ -238,16 +245,14 @@ function validationQuery(array, yearData) {
 
 function validator(data) {
   const array = []
-  let yearData = ""
   if (data == undefined || data == '') {
-    array.push(0)
-    validationQuery(array, yearData)
+    validationQuery([0], 2023)
   } else if (data != undefined || data != '') {
     for (let i = 0; i < data.length; i++) {
       let str = data[i].fecha.split('-')
+      monthData = str[1]
       yearData = str[0]
-      str = str[1]
-      str = array.push(str)
+      array.push(monthData)
       if (i + 1 == data.length) {
         validationQuery(array, yearData)
       }
