@@ -182,7 +182,7 @@ class database
 
     public function queryRotation($id)
     {
-        $sql = $this->db->query("SELECT cedula, fecha, rotacion, antigua_rotacion FROM `cambios` WHERE cedula = '$id'");
+        $sql = $this->db->query("SELECT cedula, fecha, rotacion, antigua_rotacion FROM `cambios` WHERE cedula = '$id' ORDER BY `fecha` ASC");
         if ($this->db->rows($sql) > 0) {
             while ($data = $this->db->recorrer($sql)) {
                 $respuesta[] = $data;
