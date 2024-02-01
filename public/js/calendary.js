@@ -1,4 +1,5 @@
 const months = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+
 const week = [
   'dom',
   'lun',
@@ -43,16 +44,21 @@ const week = [
   'vie',
   'sab',
 ]
+
 const daysMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+
 let newDate = new Date()
 
 const year = newDate.getFullYear()
+
 const month = newDate.getMonth() + 1
 
 $('#month').html(months[month])
+
 let selectedYear = $('#selectYear').val()
 
 const dataDays = document.getElementsByClassName('dataDay')
+
 const day = document.getElementsByClassName('day')
 
 function monthsSelect() {
@@ -73,6 +79,7 @@ function monthsSelect() {
 monthsSelect()
 
 const selectedYearInput = document.querySelector("#selectYear");
+
 selectedYearInput.addEventListener("change", (e) => monthsSelect())
 
 function setSelected() {
@@ -117,6 +124,7 @@ function setSelected() {
       console.log('no data')
   }
 }
+
 setSelected()
 
 $(document).ready(function () {
@@ -732,7 +740,6 @@ function assistant(dayPosition, x) {
   }
 }
 
-// ENTENDER ESTO
 // Coloca los valores en el calendario segun sus datos
 function queryDays(id, dataDay, dayPosition, days, completMonth = null, status = null, notHired, dayhired = null) {
   $.ajax({
