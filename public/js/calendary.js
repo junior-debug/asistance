@@ -45,6 +45,8 @@ const week = [
   'sab',
 ]
 
+console.log("WORK");
+
 const daysMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
 
 let newDate = new Date()
@@ -464,8 +466,6 @@ function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, toda
   // **IMPORTANTE**
   // Validado los casos donde para por el ELSE
   // Validar caso donde newRot pase por el IF y llame a newRotation
-
-  // console.log("twoDays newRot", newRot)
   if (newRot) {
     const dateData = parseInt(dateChange) - 1
     for (let i = 0; i < dateData; i++) {
@@ -520,7 +520,6 @@ function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, toda
 // **IMPORTANTE**
 // Dentro de twoDays -- Validar caso donde newRot pase por el IF y llame a newRotation
 function twoHolidays(rotacion, dayPosition, totalDaysMonth, newRot = null, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange = null) {
-  // console.log("twoHolidays rotacion switch", rotacion);
   switch (rotacion) {
     case 'L-V':
       twoDays('sab', 'dom', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
@@ -717,17 +716,21 @@ function queryJustification(dates, dayPosition) {
 }
 
 function inAssitstant(dayPosition, x, days, completMonth, nomenclature) {
-  if (nomenclature == 'NC') {
-    dayPosition[x].textContent = `NC`
+  if(nomenclature == 'R'){
+    dayPosition[x].textContent = `R`
   } else {
-    if (dayPosition[x].textContent == '') {
-      if (completMonth == true) {
-        dayPosition[x].textContent = `${nomenclature}`
-      } else {
-        if (x == days - 1) {
-          dayPosition[x].textContent = ''
-        } else {
+    if (nomenclature == 'NC') {
+      dayPosition[x].textContent = `NC`
+    } else {
+      if (dayPosition[x].textContent == '') {
+        if (completMonth == true) {
           dayPosition[x].textContent = `${nomenclature}`
+        } else {
+          if (x == days - 1) {
+            dayPosition[x].textContent = ''
+          } else {
+            dayPosition[x].textContent = `${nomenclature}`
+          }
         }
       }
     }
