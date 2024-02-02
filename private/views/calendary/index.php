@@ -41,11 +41,22 @@
     </div>
     <div class="monthCont">
         <h2 id="month"></h2>
+        <!-- <button onclick="gif(30000)">Presionar</button> -->
     </div>
 </div>
 
 <div id="calendar" style="display: none" class="collectonme card">
-    <img src="public/images/loading-23.gif" alt="gif" id="gif" style="height: 100%;">
+
+    <!-- <img src="public/images/loading-23.gif" alt="gif" style="height: 100%;"> -->
+    <div id="gif" class="w-100 loading">
+        <h4 class="text-center">Cargando...</h4>
+        <div class="w-75 m-auto bg-primary border rounded">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <img src="public/images/loading-23.gif" alt="gif" style="height: 500px;">
+    </div>
+
+
     <div class="calendaryCont">
         <table id="table" class="table" style="width: 2300px;">
             <thead class="">

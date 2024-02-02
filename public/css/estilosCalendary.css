@@ -67,6 +67,20 @@ body {
   border-radius: 20px;
 }
 
+.loading {
+  background: white;
+  text-align: center;
+  font-size: 24px;
+  z-index: 9999;
+}
+
+.progress-bar {
+  width: 0;
+  height: 30px;
+  background-color: #4CAF50;
+  transition: width 1s ease-in-out;
+}
+
 .dataDays {
   text-align: center;
 }

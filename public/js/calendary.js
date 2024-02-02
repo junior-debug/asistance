@@ -45,8 +45,6 @@ const week = [
   'sab',
 ]
 
-console.log("WORK");
-
 const daysMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
 
 let newDate = new Date()
@@ -218,6 +216,27 @@ function changeMonth(firstDayWeek, totalDaysMonth, selectedMonth, payRolls, sele
   queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls, selectedYear)
 }
 
+// Reproduce el gif
+function gif(time) {
+  let progressBarElement = document.getElementById('progress-bar');
+  let incremento = (100 / time) * 100;
+  let progreso = 0;
+
+  let intervalID = setInterval(function () {
+      progreso += incremento;
+      progressBarElement.style.width = `${progreso}%`;
+
+      if (progreso >= 100) {
+          clearInterval(intervalID);
+      }
+  }, 100);
+
+  setTimeout(function () {
+    $('#gif').hide()
+    $('.calendaryCont').show()
+  }, time)
+}
+
 // Consulta a BD segun los parametros del usuario.
 function queryCalendary(firstDayWeek, totalDaysMonth, selectedMonth, payRolls, selectedYear) {
   const newQuery = buildQuery(payRolls)
@@ -275,7 +294,6 @@ function payRollChanges(res, selectedMonth, selectedYear, payRolls, firstDayWeek
       200: function (data) {
         // console.log("allPayrolls", allPayrolls);
         if (allPayrolls == true) {
-          console.log("ALL 2");
           buildJson(res, data, selectedMonth, firstDayWeek, totalDaysMonth, selectedYear)
           gif(480000) // 8 Minutos
         } else {
@@ -924,14 +942,6 @@ function holyDays(rotationArray, rotacionString, dayPosition, totalDaysMonth, ol
       fourHolidays(oldRotation, rotationArray, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
     }
   }
-}
-
-// Reproduce el gif
-function gif(time) {
-  setTimeout(function () {
-    $('#gif').hide()
-    $('.calendaryCont').show()
-  }, time)
 }
 
 // return
