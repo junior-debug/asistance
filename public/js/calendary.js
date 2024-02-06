@@ -218,13 +218,19 @@ function changeMonth(firstDayWeek, totalDaysMonth, selectedMonth, payRolls, sele
 
 // Reproduce el gif
 function gif(time) {
+  $('#gif').show()
+  $('.calendaryCont').hide()
+  $('#calendar').show('slow')
+
   let progressBarElement = document.getElementById('progress-bar');
+  let progressTextElement = document.getElementById('progress-text');
   let incremento = (100 / time) * 100;
   let progreso = 0;
 
   let intervalID = setInterval(function () {
       progreso += incremento;
       progressBarElement.style.width = `${progreso}%`;
+      progressTextElement.textContent = `${Math.round(progreso)}%`;
 
       if (progreso >= 100) {
           clearInterval(intervalID);

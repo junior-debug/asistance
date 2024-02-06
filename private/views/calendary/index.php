@@ -47,13 +47,14 @@
 
 <div id="calendar" style="display: none" class="collectonme card">
 
-    <!-- <img src="public/images/loading-23.gif" alt="gif" style="height: 100%;"> -->
     <div id="gif" class="w-100 loading">
-        <h4 class="text-center">Cargando...</h4>
+        <h4 class="text-center">
+            Cargando...
+                <span id="progress-text">0%</span>
+        </h4>
         <div class="w-75 m-auto bg-primary border rounded">
-            <div id="progress-bar" class="progress-bar"></div>
+            <div id="progress-bar" class="progress-bar text-center"></div>
         </div>
-        <img src="public/images/loading-23.gif" alt="gif" style="height: 500px;">
     </div>
 
 
