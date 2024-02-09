@@ -61,17 +61,27 @@ const dataDays = document.getElementsByClassName('dataDay')
 
 const day = document.getElementsByClassName('day')
 
-function monthsSelect() {
-  selectedYear = $('#selectYear').val()
+function monthsSelect(selectedMonth) {
+  selectedYear = $('#selectYear').val();
   if(selectedYear == year){
     $('#selectMonth').empty();
     for (let i = 1; i < month + 1; i++) {
-      $('#selectMonth').append(`<option value="${months[i].toLowerCase()}">${months[i]}</option>`)
+      $('#selectMonth').append(`<option class="month" value="${months[i].toLowerCase()}">${months[i]}</option>`)
+      if(selectedMonth == months[i].toLowerCase()){
+        console.log("Match", selectedMonth, months[i].toLowerCase());
+        // Hacer focus en el option
+        $('#selectMonth option[value="'+months[i].toLowerCase()+'"]').prop('selected', true);
+      }
     }
   } else {
     $('#selectMonth').empty();
     for (let i = 1; i < months.length; i++) {
       $('#selectMonth').append(`<option value="${months[i].toLowerCase()}">${months[i]}</option>`)
+      if(selectedMonth == months[i].toLowerCase()){
+        console.log("Match", selectedMonth, months[i].toLowerCase());
+        // Hacer focus en el option
+        $('#selectMonth option[value="'+months[i].toLowerCase()+'"]').prop('selected', true);
+      }
     }
   }
 }
@@ -80,7 +90,10 @@ monthsSelect()
 
 const selectedYearInput = document.querySelector("#selectYear");
 
-selectedYearInput.addEventListener("change", (e) => monthsSelect())
+selectedYearInput.addEventListener("change", (e) => {
+  let selectedMonth = $('#selectMonth').val();
+  monthsSelect(selectedMonth)
+});
 
 function setSelected() {
   switch ($('#month').text()) {
