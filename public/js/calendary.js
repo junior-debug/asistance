@@ -66,10 +66,8 @@ function monthsSelect(selectedMonth) {
   if(selectedYear == year){
     $('#selectMonth').empty();
     for (let i = 1; i < month + 1; i++) {
-      $('#selectMonth').append(`<option class="month" value="${months[i].toLowerCase()}">${months[i]}</option>`)
+      $('#selectMonth').append(`<option value="${months[i].toLowerCase()}">${months[i]}</option>`)
       if(selectedMonth == months[i].toLowerCase()){
-        console.log("Match", selectedMonth, months[i].toLowerCase());
-        // Hacer focus en el option
         $('#selectMonth option[value="'+months[i].toLowerCase()+'"]').prop('selected', true);
       }
     }
@@ -78,8 +76,6 @@ function monthsSelect(selectedMonth) {
     for (let i = 1; i < months.length; i++) {
       $('#selectMonth').append(`<option value="${months[i].toLowerCase()}">${months[i]}</option>`)
       if(selectedMonth == months[i].toLowerCase()){
-        console.log("Match", selectedMonth, months[i].toLowerCase());
-        // Hacer focus en el option
         $('#selectMonth option[value="'+months[i].toLowerCase()+'"]').prop('selected', true);
       }
     }
