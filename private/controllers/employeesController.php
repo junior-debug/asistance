@@ -198,36 +198,36 @@ if (empty($_SESSION)) {
                     $vacationBonus = $dataEmployees[24];
                     $utilities = $dataEmployees[25];
 
-                    // echo "Name:" . $name;
+                    echo "Name:" . $name;
 
-                    // $registro = $conexion->registro(
-                    //     $business,
-                    //     $payroll,
-                    //     $id,
-                    //     $birthDate,
-                    //     $email,
-                    //     $name,
-                    //     $dateAdmission,
-                    //     $dueDate,
-                    //     $position,
-                    //     $campus,
-                    //     $turn,
-                    //     $rotation,
-                    //     $workingHours,
-                    //     $exceptionLevel,
-                    //     $file,
-                    //     $bank,
-                    //     $accType,
-                    //     $accNumber,
-                    //     $salary,
-                    //     $manualDexterity,
-                    //     $address,
-                    //     $phone1,
-                    //     $phone2,
-                    //     $feeding,
-                    //     $vacationBonus,
-                    //     $utilities
-                    // );
+                    $registro = $conexion->registro(
+                        $business,
+                        $payroll,
+                        $id,
+                        $birthDate,
+                        $email,
+                        $name,
+                        $dateAdmission,
+                        $dueDate,
+                        $position,
+                        $campus,
+                        $turn,
+                        $rotation,
+                        $workingHours,
+                        $exceptionLevel,
+                        $file,
+                        $bank,
+                        $accType,
+                        $accNumber,
+                        $salary,
+                        $manualDexterity,
+                        $address,
+                        $phone1,
+                        $phone2,
+                        $feeding,
+                        $vacationBonus,
+                        $utilities
+                    );
                 }
                 break;
                 #------------------------------------------------------------------------------------
