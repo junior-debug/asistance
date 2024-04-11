@@ -15,7 +15,7 @@
             <div class="mb-3" style="width: 80%;">
                 <input class="form-control" type="file" id="formFile" name="fileEmployees">
             </div>
-            <button type="button" class="btn btn-primary" style="width: 6em;" onclick="uploadEmployees();">submit</button>
+            <button type="button" id="botonSubmit" class="btn btn-primary" style="width: 6em;" onclick="uploadEmployees();">submit</button>
         </div>
     </form>
 </div>

@@ -5,6 +5,7 @@ if (empty($_SESSION)) {
 } else {
     include_once(MODEL_DIR . 'employeesModel.php');
     $conexion = new database();
+
     if (isset($_GET['mode'])) {
         switch ($_GET['mode']) {
             case 'employees':
@@ -135,6 +136,7 @@ if (empty($_SESSION)) {
                 $fileContent = explode("\n", $fileContent);
                 $fileContent = array_filter($fileContent);
                 $fileContent = array_slice($fileContent, 1);
+
                 foreach ($fileContent as $employees) {
                     $listEmployees[] = explode(";", $employees);
                 }
@@ -155,13 +157,17 @@ if (empty($_SESSION)) {
                     $dateAdmission = $dataEmployees[6];
                     $dateAdmission = explode("/", $dateAdmission);
                     $dateAdmission0 = intval($dateAdmission[0]);
+
                     if ($dateAdmission0 < 10) {
                         $dateAdmission0 = '0' . $dateAdmission[0];
                     };
+
                     $dateAdmission1 = intval($dateAdmission[1]);
+
                     if ($dateAdmission1 < 10) {
                         $dateAdmission1 = '0' . $dateAdmission[1];
                     };
+
                     $dateAdmission2 = $dateAdmission[2];
                     $dateAdmission = "$dateAdmission2" . "-" . "$dateAdmission1" . "-" . "$dateAdmission0";
                     $dueDate = $dataEmployees[7];
@@ -192,34 +198,36 @@ if (empty($_SESSION)) {
                     $vacationBonus = $dataEmployees[24];
                     $utilities = $dataEmployees[25];
 
-                    $registro = $conexion->registro(
-                        $business,
-                        $payroll,
-                        $id,
-                        $birthDate,
-                        $email,
-                        $name,
-                        $dateAdmission,
-                        $dueDate,
-                        $position,
-                        $campus,
-                        $turn,
-                        $rotation,
-                        $workingHours,
-                        $exceptionLevel,
-                        $file,
-                        $bank,
-                        $accType,
-                        $accNumber,
-                        $salary,
-                        $manualDexterity,
-                        $address,
-                        $phone1,
-                        $phone2,
-                        $feeding,
-                        $vacationBonus,
-                        $utilities
-                    );
+                    // echo "Name:" . $name;
+
+                    // $registro = $conexion->registro(
+                    //     $business,
+                    //     $payroll,
+                    //     $id,
+                    //     $birthDate,
+                    //     $email,
+                    //     $name,
+                    //     $dateAdmission,
+                    //     $dueDate,
+                    //     $position,
+                    //     $campus,
+                    //     $turn,
+                    //     $rotation,
+                    //     $workingHours,
+                    //     $exceptionLevel,
+                    //     $file,
+                    //     $bank,
+                    //     $accType,
+                    //     $accNumber,
+                    //     $salary,
+                    //     $manualDexterity,
+                    //     $address,
+                    //     $phone1,
+                    //     $phone2,
+                    //     $feeding,
+                    //     $vacationBonus,
+                    //     $utilities
+                    // );
                 }
                 break;
                 #------------------------------------------------------------------------------------
