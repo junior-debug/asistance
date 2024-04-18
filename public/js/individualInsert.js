@@ -1,5 +1,11 @@
 function uploadEmployees() {
   const form = new FormData($("#individualInsert")[0]);
+
+  // $("#sendForm").disabled();
+  $("#sendForm").addClass('disabled');
+
+  console.log("form", form);
+
   $.ajax({
     url: "?view=employees&mode=iInsertCore",
     type: "post",
@@ -13,6 +19,9 @@ function uploadEmployees() {
       },
       400: function () {
         alert("Error en la solicitud");
+      },
+      410: function () {
+        alert("El usuario ya se encuentra activo");
       },
       500: function () {
         alert("Error en el Servidor");

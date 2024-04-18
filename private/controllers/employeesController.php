@@ -93,34 +93,41 @@ if (empty($_SESSION)) {
                 $utilities = $_POST['utilities'];
                 $utilities = strtoupper($utilities);
 
-                $individualInsert = $conexion->registro(
-                    $business,
-                    $payroll,
-                    $id,
-                    $birthDate,
-                    $email,
-                    $name,
-                    $dateAdmission,
-                    $dueDate,
-                    $position,
-                    $campus,
-                    $turn,
-                    $rotation,
-                    $workingHours,
-                    $exceptionLevel,
-                    $file,
-                    $bank,
-                    $accType,
-                    $accNumber,
-                    $salary,
-                    $manualDexterity,
-                    $address,
-                    $phone1,
-                    $phone2,
-                    $feeding,
-                    $vacationBonus,
-                    $utilities
-                );
+                $employes_exists = $conexion->findEmployeById($id);
+
+                if($employes_exists){
+                    http_response_code(410);
+                } else {
+                    $individualInsert = $conexion->registro(
+                        $business,
+                        $payroll,
+                        $id,
+                        $birthDate,
+                        $email,
+                        $name,
+                        $dateAdmission,
+                        $dueDate,
+                        $position,
+                        $campus,
+                        $turn,
+                        $rotation,
+                        $workingHours,
+                        $exceptionLevel,
+                        $file,
+                        $bank,
+                        $accType,
+                        $accNumber,
+                        $salary,
+                        $manualDexterity,
+                        $address,
+                        $phone1,
+                        $phone2,
+                        $feeding,
+                        $vacationBonus,
+                        $utilities
+                    );
+                }
+
                 break;
                 #------------------------------------------------------------------------------------
             case 'massiveInsert':

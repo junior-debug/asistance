@@ -8,7 +8,7 @@ class Conexion extends mysqli {
     $this->set_charset("utf8");
   }
 
-   public function rows($query) {
+  public function rows($query) {
     return mysqli_num_rows($query);
   }
 
