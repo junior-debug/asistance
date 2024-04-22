@@ -205,8 +205,6 @@ if (empty($_SESSION)) {
                     $vacationBonus = $dataEmployees[24];
                     $utilities = $dataEmployees[25];
 
-                    echo "Name:" . $name;
-
                     $registro = $conexion->registro(
                         $business,
                         $payroll,

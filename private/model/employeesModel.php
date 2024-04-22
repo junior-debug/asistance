@@ -39,7 +39,7 @@ class database
         $sql = $this->db->query("INSERT INTO empleados (empresa, nomina_cliente, cedula, fecha_nacimiento, correo, nombre_apellido, fecha_ingreso, fecha_egreso, finalizacion_contrato, cargo, unidad_organizativa, turno, rotacion, horario, excepcion, ficha, banco, tipo_cuenta, numero_cuenta, sueldo, destreza, direccion, telefono_1, telefono_2, tickets, bono, utilidades, estatus) VALUES ('$business', '$payroll', '$id', '$birthDate', '$email', '$name', '$dateAdmission','0000-00-00', '$dueDate', '$position', '$campus', '$turn', '$rotation', '$workingHours', '$exceptionLevel', '$file', '$bank', '$accType', '$accNumber', '$salary', '$manualDexterity', '$address', '$phone1', '$phone2', '$feeding', '$vacationBonus', '$utilities', 'activo')");
     }
 
-    public function findEmployeById($id): bool
+    public function findEmployeById($id)
     {
         $sql = $this->db->query("SELECT count(*) FROM empleados WHERE cedula = '$id' AND estatus = 'activo'");
         $sql = mysqli_fetch_array($sql);
