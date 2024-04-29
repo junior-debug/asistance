@@ -93,7 +93,7 @@ if (empty($_SESSION)) {
                 $utilities = $_POST['utilities'];
                 $utilities = strtoupper($utilities);
 
-                $employes_exists = $conexion->findEmployeById($id);
+                $employes_exists = $conexion->findEmployeById($id, $dateAdmission);
 
                 if($employes_exists){
                     http_response_code(410);

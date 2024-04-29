@@ -15,16 +15,16 @@ function uploadEmployees() {
   form.get("workingHours") == null && (error = true, campos.push("Horario"));
   form.get("file") == null && (error = true, campos.push("Ficha"));
   
-  console.log(form.get("business"))
-  console.log(form.get("payroll"))
-  console.log(form.get("id"))
-  console.log(form.get("name"))
-  console.log(form.get("dateAdmission"))
-  console.log(form.get("position"))
-  console.log(form.get("turn"))
-  console.log(form.get("rotation"))
-  console.log(form.get("workingHours"))
-  console.log(form.get("file"))
+  // console.log(form.get("business"))
+  // console.log(form.get("payroll"))
+  // console.log(form.get("id"))
+  // console.log(form.get("name"))
+  // console.log(form.get("dateAdmission"))
+  // console.log(form.get("position"))
+  // console.log(form.get("turn"))
+  // console.log(form.get("rotation"))
+  // console.log(form.get("workingHours"))
+  // console.log(form.get("file"))
 
   if(error){
     alert("Los siguientes campos son requeridos: " + campos);
@@ -44,7 +44,7 @@ function uploadEmployees() {
           alert("Error en la solicitud");
         },
         410: function () {
-          alert("El usuario ya se encuentra activo");
+          alert("El usuario ya se encuentra registrado.");
         },
         500: function () {
           alert("Error en el Servidor");

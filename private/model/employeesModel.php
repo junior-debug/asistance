@@ -40,9 +40,9 @@ class database
     }
 
     // public function findEmployeById($id): bool
-    public function findEmployeById($id)
+    public function findEmployeById($id, $dateAdmission)
     {
-        $sql = $this->db->query("SELECT count(*) FROM empleados WHERE cedula = '$id' AND estatus = 'activo'");
+        $sql = $this->db->query("SELECT count(*) FROM empleados WHERE cedula = '$id' AND fecha_ingreso = '$dateAdmission'");
         $sql = mysqli_fetch_array($sql);
         return intval($sql[0]) > 0 ? true : false;
     }
