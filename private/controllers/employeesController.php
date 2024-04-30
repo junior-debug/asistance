@@ -145,94 +145,121 @@ if (empty($_SESSION)) {
                 $fileContent = array_slice($fileContent, 1);
 
                 foreach ($fileContent as $employees) {
-                    $listEmployees[] = explode(";", $employees);
+                    $listEmployees[] = explode(",", $employees);
                 }
 
-                foreach ($listEmployees as $dataEmployees) {
-                    $business = $dataEmployees[0];
-                    $business = strtoupper($business);
-                    $payroll = $dataEmployees[1];
-                    $payroll = strtoupper($payroll);
-                    $id = $dataEmployees[2];
-                    $birthDate = $dataEmployees[3];
-                    $birthDate = explode("/", $birthDate);
-                    $birthDate = "$birthDate[2]" . "-" . "$birthDate[0]" . "-" . "$birthDate[1]";
-                    $email = $dataEmployees[4];
-                    $email = strtoupper($email);
-                    $name = $dataEmployees[5];
-                    $name = strtoupper($name);
-                    $dateAdmission = $dataEmployees[6];
-                    $dateAdmission = explode("/", $dateAdmission);
-                    $dateAdmission0 = intval($dateAdmission[0]);
+                $isError = false;
 
-                    if ($dateAdmission0 < 10) {
-                        $dateAdmission0 = '0' . $dateAdmission[0];
+                foreach ($listEmployees as $datosEmployees) {
+                    $cedula = $datosEmployees[2];
+                    $fechaAdmission = $datosEmployees[6];
+                    $fechaAdmission = explode("/", $fechaAdmission);
+                    $fechaAdmission0 = intval($fechaAdmission[0]);
+                    if ($fechaAdmission0 < 10) {
+                        $fechaAdmission0 = '0' . $fechaAdmission[0];
                     };
-
-                    $dateAdmission1 = intval($dateAdmission[1]);
-
-                    if ($dateAdmission1 < 10) {
-                        $dateAdmission1 = '0' . $dateAdmission[1];
+                    $fechaAdmission1 = intval($fechaAdmission[1]);
+                    if ($fechaAdmission1 < 10) {
+                        $fechaAdmission1 = '0' . $fechaAdmission[1];
                     };
+                    $fechaAdmission2 = $fechaAdmission[2];
+                    $fechaAdmission = "$fechaAdmission2" . "-" . "$fechaAdmission1" . "-" . "$fechaAdmission0";
+                    $employes_exists = $conexion->findEmployeById($cedula, $fechaAdmission);
+                        
+                    if($employes_exists){
+                        $isError = true;
+                    }
+                }
 
-                    $dateAdmission2 = $dateAdmission[2];
-                    $dateAdmission = "$dateAdmission2" . "-" . "$dateAdmission1" . "-" . "$dateAdmission0";
-                    $dueDate = $dataEmployees[7];
-                    $dueDate = explode("/", $dueDate);
-                    $dueDate = "$dueDate[2]" . "-" . "$dueDate[0]" . "-" . "$dueDate[1]";
-                    $position = $dataEmployees[8];
-                    $position = strtoupper($position);
-                    $campus = $dataEmployees[9];
-                    $campus = strtoupper($campus);
-                    $turn = $dataEmployees[10];
-                    $turn = strtoupper($turn);
-                    $rotation = $dataEmployees[11];
-                    $rotation = strtoupper($rotation);
-                    $workingHours = $dataEmployees[12];
-                    $exceptionLevel = $dataEmployees[13];
-                    $file = $dataEmployees[14];
-                    $bank = $dataEmployees[15];
-                    $accType = $dataEmployees[16];
-                    $accNumber = $dataEmployees[17];
-                    $salary = $dataEmployees[18];
-                    $manualDexterity = $dataEmployees[19];
-                    $manualDexterity = strtoupper($manualDexterity);
-                    $address = $dataEmployees[20];
-                    $address = strtoupper($address);
-                    $phone1 = $dataEmployees[21];
-                    $phone2 = $dataEmployees[22];
-                    $feeding = $dataEmployees[23];
-                    $vacationBonus = $dataEmployees[24];
-                    $utilities = $dataEmployees[25];
-
-                    $registro = $conexion->registro(
-                        $business,
-                        $payroll,
-                        $id,
-                        $birthDate,
-                        $email,
-                        $name,
-                        $dateAdmission,
-                        $dueDate,
-                        $position,
-                        $campus,
-                        $turn,
-                        $rotation,
-                        $workingHours,
-                        $exceptionLevel,
-                        $file,
-                        $bank,
-                        $accType,
-                        $accNumber,
-                        $salary,
-                        $manualDexterity,
-                        $address,
-                        $phone1,
-                        $phone2,
-                        $feeding,
-                        $vacationBonus,
-                        $utilities
-                    );
+                if($isError == true){
+                    http_response_code(401);
+                } else {
+                    foreach ($listEmployees as $dataEmployees) {
+                        $business = $dataEmployees[0];
+                        $business = strtoupper($business);
+                        $payroll = $dataEmployees[1];
+                        $payroll = strtoupper($payroll);
+                        $id = $dataEmployees[2];
+                        $birthDate = $dataEmployees[3];
+                        $birthDate = explode("/", $birthDate);
+                        $birthDate = "$birthDate[2]" . "-" . "$birthDate[0]" . "-" . "$birthDate[1]";
+                        $email = $dataEmployees[4];
+                        $email = strtoupper($email);
+                        $name = $dataEmployees[5];
+                        $name = strtoupper($name);
+                        $dateAdmission = $dataEmployees[6];
+                        $dateAdmission = explode("/", $dateAdmission);
+                        $dateAdmission0 = intval($dateAdmission[0]);
+    
+                        if ($dateAdmission0 < 10) {
+                            $dateAdmission0 = '0' . $dateAdmission[0];
+                        };
+    
+                        $dateAdmission1 = intval($dateAdmission[1]);
+    
+                        if ($dateAdmission1 < 10) {
+                            $dateAdmission1 = '0' . $dateAdmission[1];
+                        };
+    
+                        $dateAdmission2 = $dateAdmission[2];
+                        $dateAdmission = "$dateAdmission2" . "-" . "$dateAdmission1" . "-" . "$dateAdmission0";
+                        $dueDate = $dataEmployees[7];
+                        $dueDate = explode("/", $dueDate);
+                        $dueDate = "$dueDate[2]" . "-" . "$dueDate[0]" . "-" . "$dueDate[1]";
+                        $position = $dataEmployees[8];
+                        $position = strtoupper($position);
+                        $campus = $dataEmployees[9];
+                        $campus = strtoupper($campus);
+                        $turn = $dataEmployees[10];
+                        $turn = strtoupper($turn);
+                        $rotation = $dataEmployees[11];
+                        $rotation = strtoupper($rotation);
+                        $workingHours = $dataEmployees[12];
+                        $exceptionLevel = $dataEmployees[13];
+                        $file = $dataEmployees[14];
+                        $bank = $dataEmployees[15];
+                        $accType = $dataEmployees[16];
+                        $accNumber = $dataEmployees[17];
+                        $salary = $dataEmployees[18];
+                        $manualDexterity = $dataEmployees[19];
+                        $manualDexterity = strtoupper($manualDexterity);
+                        $address = $dataEmployees[20];
+                        $address = strtoupper($address);
+                        $phone1 = $dataEmployees[21];
+                        $phone2 = $dataEmployees[22];
+                        $feeding = $dataEmployees[23];
+                        $vacationBonus = $dataEmployees[24];
+                        $utilities = $dataEmployees[25];
+    
+                        $registro = $conexion->registro(
+                            $business,
+                            $payroll,
+                            $id,
+                            $birthDate,
+                            $email,
+                            $name,
+                            $dateAdmission,
+                            $dueDate,
+                            $position,
+                            $campus,
+                            $turn,
+                            $rotation,
+                            $workingHours,
+                            $exceptionLevel,
+                            $file,
+                            $bank,
+                            $accType,
+                            $accNumber,
+                            $salary,
+                            $manualDexterity,
+                            $address,
+                            $phone1,
+                            $phone2,
+                            $feeding,
+                            $vacationBonus,
+                            $utilities
+                        );
+                    }
                 }
                 break;
                 #------------------------------------------------------------------------------------
