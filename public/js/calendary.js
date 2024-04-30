@@ -474,7 +474,7 @@ function newRotation(totalDaysMonth, newRot, dayPosition, today, selectedMonth, 
       case 'M-S':
         newRotTwo('dom', 'lun', dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
-      case 'M-D':
+      case 'MI-D':
         newRotTwo('lun', 'mar', dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
         break
       case 'J-L':
@@ -560,7 +560,7 @@ function twoHolidays(rotacion, dayPosition, totalDaysMonth, newRot = null, today
     case 'M-S':
       twoDays('dom', 'lun', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
       break
-    case 'M-D':
+    case 'MI-D':
       twoDays('lun', 'mar', dayPosition, totalDaysMonth, newRot, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
       break
     case 'J-L':
