@@ -5,7 +5,7 @@
     <form action="" method="POST" enctype="multipart/form-data" id="filesForm">
         <div class="downloadField">
             <div class="imgDownload"></div>
-            <button class="butDownload btn btn-primary" onClick="DownloadFromUrl('private/views/muestra.csv','muestra.csv')">Descargar Archivo Modelo</button>
+            <button class="butDownload btn btn-primary" onClick="DownloadFromUrl('private/views/muestra_nueva.csv','muestra_nueva.csv')">Descargar Archivo Modelo</button>
         </div>
         <div class="uploadField">
             <div class="warningUpload">

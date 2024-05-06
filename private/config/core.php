@@ -6,7 +6,7 @@ date_default_timezone_set('America/Caracas');
 define('DB_HOST', '192.168.10.50');
 define('DB_USER', 'root');            //desarrollos
 define('DB_PASS', 'D3s4rr0ll0s++');            //prc333.c0m.v3
-define('DB_NAME', 'control_a_db');
+define('DB_NAME', 'desarrollo_asistencia'); // control_a_db
 define('DB_PORT', '3306');
 
 

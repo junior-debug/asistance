@@ -55,11 +55,11 @@ document.getElementById('formFile').addEventListener('change', function(event) {
       // Parsear el contenido CSV
       const filas = contenidoCSV.split('\n');
       let cantidadFilas = filas.length - 1;
-      const headers = filas[0].split(',').map(header => header.trim());
+      const headers = filas[0].split(';').map(header => header.trim());
       const datos = [];
 
       for (let i = 1; i < filas.length; i++) {
-        const fila = filas[i].split(',');
+        const fila = filas[i].split(';');
         const objeto = {};
         
         for (let j = 0; j < headers.length; j++) {
@@ -69,7 +69,7 @@ document.getElementById('formFile').addEventListener('change', function(event) {
         datos.push(objeto);
       }
 
-      // console.log('Datos parseados:', datos);
+      console.log('Datos parseados:', datos);
       const cabecerasAValidar = ['Empresa', 'N�mina / Cliente', 'C�dula', 'Nombre y Apellido', 'Fecha de Ingreso', 'Cargo', 'Turno', 'Rotacion', 'Horario de Trabajo', 'Ficha'];
       
       let errores = []
