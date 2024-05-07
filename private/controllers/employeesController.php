@@ -145,7 +145,7 @@ if (empty($_SESSION)) {
                 $fileContent = array_slice($fileContent, 1);
 
                 foreach ($fileContent as $employees) {
-                    $listEmployees[] = explode(",", $employees);
+                    $listEmployees[] = explode(";", $employees);
                 }
 
                 $isError = false;
