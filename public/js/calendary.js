@@ -738,7 +738,7 @@ function queryJustification(dates, dayPosition) {
       let date = dates[a].slice(0, -1)
       date = parseInt(date)
       date = date - 1
-      const nomenclature = dates[a].slice(2, 3)
+      const nomenclature = dates[a].slice(2, 4)
       if (dayPosition[date].textContent == 'DL') {
         dayPosition[date].textContent = 'DL'
       } else {
