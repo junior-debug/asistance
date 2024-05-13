@@ -953,7 +953,7 @@ function holyDays(rotationArray, rotacionString, dayPosition, totalDaysMonth, ol
   if (oldRotation != '') {
     if (rotationArray.length == 2) {
       twoHolidays(oldRotation, dayPosition, totalDaysMonth, rotacionString, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
-    } else if (rotation.length > 2) {
+    } else if (rotationArray.length > 2) {
       fourHolidays(oldRotation, rotationArray, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
     }
   }
