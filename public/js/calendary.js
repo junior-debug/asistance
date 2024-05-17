@@ -233,18 +233,40 @@ function gif(time) {
 
   let progressBarElement = document.getElementById('progress-bar');
   let progressTextElement = document.getElementById('progress-text');
-  let incremento = (100 / time) * 100;
+
+  let startTime = null;
   let progreso = 0;
+  // let incremento = (100 / time) * 100;
 
-  let intervalID = setInterval(function () {
-      progreso += incremento;
-      progressBarElement.style.width = `${progreso}%`;
-      progressTextElement.textContent = `${Math.round(progreso)}%`;
+  function updateProgress(timestamp) {
+    if (!startTime) startTime = timestamp;
+    let elapsed = timestamp - startTime;
 
-      if (progreso >= 100) {
-          clearInterval(intervalID);
-      }
-  }, 100);
+    progreso = (elapsed / time) * 100;
+    if (progreso > 100) progreso = 100;
+
+    progressBarElement.style.width = `${progreso}%`;
+    progressTextElement.textContent = `${Math.round(progreso)}%`;
+
+    if (progreso < 100) {
+      requestAnimationFrame(updateProgress);
+    } else {
+      progreso = 0;
+    }
+  }
+
+  requestAnimationFrame(updateProgress);
+
+  // let intervalID = setInterval(function () {
+  //     progreso += incremento;
+  //     progressBarElement.style.width = `${progreso}%`;
+  //     progressTextElement.textContent = `${Math.round(progreso)}%`;
+
+  //     if (progreso >= 100) {
+  //         progreso = 0;
+  //         clearInterval(intervalID);
+  //     }
+  // }, 100);
 
   setTimeout(function () {
     $('#gif').hide()
