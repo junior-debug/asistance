@@ -154,4 +154,9 @@ class database
         }
         return $respuesta;
     }
+
+    public function changedPasswordFromCalendary($user, $newPassword)
+    {
+        $sql = $this->db->query("UPDATE users SET password = '$newPassword', change_pw = false WHERE user = '$user'");
+    }
 }

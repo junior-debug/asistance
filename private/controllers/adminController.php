@@ -36,6 +36,25 @@ if (empty($_SESSION)) {
                 include(HTML_DIR . 'admin/editData.php');
                 include(PUBLIC_DIR . 'general/footer.php');
                 break;
+            #------------------------------------------------------------------------------------
+            case 'resetPassword':
+                include(PUBLIC_DIR . 'general/header.php');
+                include(PUBLIC_DIR . 'general/navbar.php');
+                include(HTML_DIR . 'admin/resetPassword.php');
+                include(PUBLIC_DIR . 'general/footer.php');                
+                break; 
+            #------------------------------------------------------------------------------------
+            case 'resetUserPassword':    
+                $username = $_POST['username'];
+                $newPassword = md5('prc12345+');
+                $data = $conexion->resetUserPassword($username, $newPassword);
+
+                break; 
+            #------------------------------------------------------------------------------------
+            case 'findUser':
+                $userName = $_POST['username'];
+                $data = $conexion->user($userName);
+                break;
                 #------------------------------------------------------------------------------------
             case 'queryData':
                 $dataUser = $_POST['dataUser'];

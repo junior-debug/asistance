@@ -43,3 +43,16 @@ body {
   justify-content: flex-end;
   align-items: center;
 }
+
+.iconChangePw {
+  display: flex;
+
+}
+
+.inputChangePw {
+  display: flex;
+}
+
+.butChangePw {
+  display: flex;
+}

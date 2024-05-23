@@ -54,6 +54,7 @@
                 <li><a class="dropdown-item" href="?view=admin&mode=createData">Nuevas Creaciones</a></li>
                 <li><a class="dropdown-item" href="?view=admin&mode=editData">Editar Datos</a></li>
                 <li><a class="dropdown-item" href="?view=admin&mode=createUser">Crear Nuevo Usuario</a></li>
+                <li><a class="dropdown-item" href="?view=admin&mode=resetPassword">Reiniciar Contraseñas</a></li>
               </ul>
             </li>
           </ul>

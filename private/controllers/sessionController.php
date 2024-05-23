@@ -29,6 +29,7 @@ if (isset($_GET['mode'])) {
 				$tipo 			= $c[0][5];
 				$status 		= $c[0][6];
 				$cod_serv		= $c[0][7];
+				$change_pw		= $c[0][8];
 
 				if ($status == 'INACTIVO') {
 					echo 3;
@@ -40,6 +41,7 @@ if (isset($_GET['mode'])) {
 					$_SESSION['user'] 		= $user;
 					$_SESSION['type_user']	= $tipo;
 					$_SESSION['cod_serv']	= $cod_serv;
+					$_SESSION['change_pw']	= $change_pw;
 
 					if ($p == '123456') {
 						echo 3;

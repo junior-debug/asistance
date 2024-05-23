@@ -96,7 +96,13 @@ if (empty($_SESSION)) {
 				$data = $conexion->rotationLog($id, $date);
 				echo json_encode($data);
 				#------------------------------------------------------------------------------------
-				break;
+			case 'changedPasswordFromCalendary':
+				$newPassword = $_POST['newPassword'];
+				$newPassword = md5($newPassword);
+				$user = $_SESSION['user'];
+				$data = $conexion->changedPasswordFromCalendary($user, $newPassword);
+				#------------------------------------------------------------------------------------
+			break;
 			case 'payrollChanges':
 				$data = $conexion->payrollChanges();
 				echo json_encode($data);

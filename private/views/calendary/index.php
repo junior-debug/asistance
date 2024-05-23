@@ -45,6 +45,29 @@
     </div>
 </div>
 
+<?php
+if ($_SESSION['change_pw'] == true){
+?>
+<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+      </div>
+      <div class="modal-body px-2">
+        Actualiza tu contraseña
+      </div>
+      <input type="password" class="form-control mx-3" style="width: 90%" placeholder="Contraseña" name="changedPassword" id="changedPassword">
+      <div class="modal-footer mx-2">
+        <button class="btn btn-primary" style="width: 10em; height:80%" onclick="changedPasswordModal()">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<?php
+}
+?>
+
 <div id="calendar" style="display: none" class="collectonme card">
 
     <div id="gif" class="w-100 loading">
@@ -87,3 +110,8 @@
 <script src="bower_components\jquery-table2excel\dist\jquery.table2excel.min.js"></script>
 <script src="public/js/calendary.js"></script>
 <script src="public/js/jquery.sumoselect.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#miModal').modal('show');
+  });
+</script>

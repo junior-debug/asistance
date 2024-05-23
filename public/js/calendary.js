@@ -1157,3 +1157,27 @@ function userData(requestDate, id) {
     },
   })
 }
+
+function changedPasswordModal() {
+  console.log('entro')
+  const newPassword = $("#changedPassword").val();
+  $.ajax({
+    type: 'POST',
+    url: `?view=calendary&mode=changedPasswordFromCalendary`,
+    dataType: 'json',
+    data: { newPassword: newPassword },
+    statusCode: {
+      200: function (data) {
+        $('#miModal').modal('hide');
+        window.location.href = "/asistance/"
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
+}
+

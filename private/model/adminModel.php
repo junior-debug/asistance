@@ -114,6 +114,13 @@ class database
     {
         $sql = $this->db->query("INSERT INTO users (nombre, apellido, user, password, type_user, status, cod_servicio) VALUES ('$name', '$lastName', '$userName', '$password', '$opt', 'ACTIVO', '$opt')");
     }
+    
+    
+    public function resetUserPassword($username, $newPassword)
+    {
+        $sql = $this->db->query("UPDATE users SET password = '$newPassword', change_pw = true WHERE user = '$username'");
+    }
+   
 
     public function user($userName)
     {
