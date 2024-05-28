@@ -1,0 +1,2 @@
+# Ignorar el archivo core.php dentro de /private/config/
+/private/config/core.php
