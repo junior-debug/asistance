@@ -1159,7 +1159,6 @@ function userData(requestDate, id) {
 }
 
 function changedPasswordModal() {
-  console.log('entro')
   const newPassword = $("#changedPassword").val();
   $.ajax({
     type: 'POST',
@@ -1169,7 +1168,7 @@ function changedPasswordModal() {
     statusCode: {
       200: function (data) {
         $('#miModal').modal('hide');
-        window.location.href = "/asistance/"
+        window.location.href = "/controlasistencia/"
       },
       400: function () {
         alert('Error en la solicitud')
