@@ -12,8 +12,9 @@ function peticionAjax(form){
       400: function () {
         alert("Error en la solicitud");
       },
-      401: function () {
-        alert("Uno de los datos ingresados ya se encuentran en la base de datos.");
+      401: function (data) {
+        console.log(data);
+        alert("El usuario " + data + " ya esta registrado");
       },
       500: function () {
         alert("Error en el Servidor");

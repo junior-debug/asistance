@@ -149,6 +149,7 @@ if (empty($_SESSION)) {
                 }
 
                 $isError = false;
+                $dataError = "";
 
                 foreach ($listEmployees as $datosEmployees) {
                     $cedula = $datosEmployees[2];
@@ -165,6 +166,7 @@ if (empty($_SESSION)) {
                     $fechaAdmission2 = $fechaAdmission[2];
                     $fechaAdmission = "$fechaAdmission2" . "-" . "$fechaAdmission1" . "-" . "$fechaAdmission0";
                     $employes_exists = $conexion->findEmployeById($cedula, $fechaAdmission);
+                    $dataError = $datosEmployees;
                         
                     if($employes_exists){
                         $isError = true;
@@ -172,6 +174,7 @@ if (empty($_SESSION)) {
                 }
 
                 if($isError == true){
+                    echo $dataError[2]." ".$dataError[4]." ".$dataError[5];
                     http_response_code(401);
                 } else {
                     foreach ($listEmployees as $dataEmployees) {
