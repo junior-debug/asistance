@@ -13,8 +13,7 @@ function peticionAjax(form){
         alert("Error en la solicitud");
       },
       401: function (data) {
-        console.log(data);
-        alert("El usuario " + data + " ya esta registrado");
+        alert("El usuario " + data.responseText + " ya esta registrado");
       },
       500: function () {
         alert("Error en el Servidor");
