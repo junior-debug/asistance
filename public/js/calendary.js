@@ -62,21 +62,21 @@ const dataDays = document.getElementsByClassName('dataDay')
 const day = document.getElementsByClassName('day')
 
 function monthsSelect(selectedMonth) {
-  selectedYear = $('#selectYear').val();
-  if(selectedYear == year){
-    $('#selectMonth').empty();
+  selectedYear = $('#selectYear').val()
+  if (selectedYear == year) {
+    $('#selectMonth').empty()
     for (let i = 1; i < month + 1; i++) {
       $('#selectMonth').append(`<option value="${months[i].toLowerCase()}">${months[i]}</option>`)
-      if(selectedMonth == months[i].toLowerCase()){
-        $('#selectMonth option[value="'+months[i].toLowerCase()+'"]').prop('selected', true);
+      if (selectedMonth == months[i].toLowerCase()) {
+        $('#selectMonth option[value="' + months[i].toLowerCase() + '"]').prop('selected', true)
       }
     }
   } else {
-    $('#selectMonth').empty();
+    $('#selectMonth').empty()
     for (let i = 1; i < months.length; i++) {
       $('#selectMonth').append(`<option value="${months[i].toLowerCase()}">${months[i]}</option>`)
-      if(selectedMonth == months[i].toLowerCase()){
-        $('#selectMonth option[value="'+months[i].toLowerCase()+'"]').prop('selected', true);
+      if (selectedMonth == months[i].toLowerCase()) {
+        $('#selectMonth option[value="' + months[i].toLowerCase() + '"]').prop('selected', true)
       }
     }
   }
@@ -84,12 +84,12 @@ function monthsSelect(selectedMonth) {
 
 monthsSelect()
 
-const selectedYearInput = document.querySelector("#selectYear");
+const selectedYearInput = document.querySelector('#selectYear')
 
-selectedYearInput.addEventListener("change", (e) => {
-  let selectedMonth = $('#selectMonth').val();
+selectedYearInput.addEventListener('change', (e) => {
+  let selectedMonth = $('#selectMonth').val()
   monthsSelect(selectedMonth)
-});
+})
 
 function setSelected() {
   switch ($('#month').text()) {
@@ -231,31 +231,31 @@ function gif(time) {
   $('.calendaryCont').hide()
   $('#calendar').show('slow')
 
-  let progressBarElement = document.getElementById('progress-bar');
-  let progressTextElement = document.getElementById('progress-text');
+  let progressBarElement = document.getElementById('progress-bar')
+  let progressTextElement = document.getElementById('progress-text')
 
-  let startTime = null;
-  let progreso = 0;
+  let startTime = null
+  let progreso = 0
   // let incremento = (100 / time) * 100;
 
   function updateProgress(timestamp) {
-    if (!startTime) startTime = timestamp;
-    let elapsed = timestamp - startTime;
+    if (!startTime) startTime = timestamp
+    let elapsed = timestamp - startTime
 
-    progreso = (elapsed / time) * 100;
-    if (progreso > 100) progreso = 100;
+    progreso = (elapsed / time) * 100
+    if (progreso > 100) progreso = 100
 
-    progressBarElement.style.width = `${progreso}%`;
-    progressTextElement.textContent = `${Math.round(progreso)}%`;
+    progressBarElement.style.width = `${progreso}%`
+    progressTextElement.textContent = `${Math.round(progreso)}%`
 
     if (progreso < 100) {
-      requestAnimationFrame(updateProgress);
+      requestAnimationFrame(updateProgress)
     } else {
-      progreso = 0;
+      progreso = 0
     }
   }
 
-  requestAnimationFrame(updateProgress);
+  requestAnimationFrame(updateProgress)
 
   // let intervalID = setInterval(function () {
   //     progreso += incremento;
@@ -335,13 +335,11 @@ function payRollChanges(res, selectedMonth, selectedYear, payRolls, firstDayWeek
           gif(480000) // 8 Minutos
         } else {
           for (let i = 0; i < data.length; i++) {
-            
             if ((data[i].nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth) || (data[i].antigua_nomina == payRolls && data[i].fecha.slice(5, 7) == selectedMonth)) {
               gif(60000) // 1 Minuto
               validationData(data, selectedMonth, selectedYear, payRolls, res, firstDayWeek, totalDaysMonth)
               return
-            } 
-            else if (i + 1 == data.length) {
+            } else if (i + 1 == data.length) {
               gif(60000) // 1 Minuto
               buildingCalendary(res, selectedMonth, selectedYear, firstDayWeek, totalDaysMonth)
             }
@@ -383,7 +381,7 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
     let dayhired = null
 
     const dateConsult = selectedYear + '-' + selectedMonth + '-' + totalDaysMonth
-    const dateConsultEgreso = selectedYear + '-' + selectedMonth + '-' + "01"
+    const dateConsultEgreso = selectedYear + '-' + selectedMonth + '-' + '01'
 
     // Si el año y mes en el que fue contratado es el actual.
     if (initMonth == selectedMonth && initYear == selectedYear) {
@@ -393,11 +391,7 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
       dayhired = res[i].fecha_ingreso.slice(8, 10)
     }
 
-    if (
-      (res[i].fecha_ingreso <= dateConsult && res[i].estatus == 'activo') 
-      ||
-      (res[i].fecha_egreso >= dateConsultEgreso && res[i].estatus == 'inactivo')
-    ){
+    if ((res[i].fecha_ingreso <= dateConsult && res[i].estatus == 'activo') || (res[i].fecha_egreso >= dateConsultEgreso && res[i].estatus == 'inactivo')) {
       $(`.day${i}`).remove()
       let id = res[i].cedula
       let dayPosition = ''
@@ -423,8 +417,7 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
           $(`.tableAsistance${i}`).append(`<td class ="day${i}" style="border: 1px solid rgba(128, 128, 128, 0.342);text-align: center;"></td>`)
         }
         dayPosition = document.getElementsByClassName(`day${i}`)
-      } 
-      else if (userChanges != false) {
+      } else if (userChanges != false) {
         $('#tableBody').append(
           `<tr class='tableAsistance${userChanges}'>
             <td id="payRoll${userChanges}">${res[i].nomina_cliente}</td>
@@ -449,8 +442,7 @@ function buildingCalendary(newRes, selectedMonth, selectedYear, firstDayWeek, to
       if (res[i].estatus_cambios == 1) {
         dataLog(id, selectedMonth, i, selectedYear)
         rotationLog(id, selectedMonth, selectedYear, i, dayPosition, totalDaysMonth, res[i].rotacion, today, res[i].estatus, notHired, dayhired, res[i].fecha_egreso)
-      } 
-      else {
+      } else {
         let rotacionString = res[i].rotacion
         let rotacionArray = res[i].rotacion.split('-')
         holyDays(rotacionArray, rotacionString, dayPosition, totalDaysMonth, '', today, selectedMonth, selectedYear, res[i].estatus, id, notHired, dayhired, res[i].fecha_egreso)
@@ -475,7 +467,7 @@ function newRotTwo(first, second, dayPosition, totalDaysMonth, today, selectedMo
       queryDays(id, dataDay, dayPosition, today, null, null, notHired, dayhired)
     }
   }
-  
+
   if (selectedMonth != month && selectedYear <= year) {
     let dataDay = `${selectedYear}-${selectedMonth}`
     if (estatusCambios == 'inactivo') {
@@ -559,7 +551,7 @@ function twoDays(first, second, dayPosition, totalDaysMonth, newRot = null, toda
         queryDays(id, dataDay, dayPosition, totalDaysMonth, true, null, notHired, dayhired)
       }
     }
-    
+
     // console.log("IF 2", selectedMonth != month && selectedYear <= year)
     if (selectedMonth != month && selectedYear <= year) {
       let dataDay = `${selectedYear}-${selectedMonth}`
@@ -660,7 +652,7 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, sele
           break
       }
     }
-    
+
     const dateData = parseInt(dateChange) - 1
     if (oldDays.length == 3) {
       for (let i = 0; i < dateData; i++) {
@@ -697,7 +689,7 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, sele
       queryDays(id, dataDay, dayPosition, totalDaysMonth, true, null, notHired, dayhired)
     }
   }
-  
+
   // console.log("threeDays IF 2", selectedMonth != month && selectedYear <= year)
   if (selectedMonth != month && selectedYear <= year) {
     let dataDay = `${selectedYear}-${selectedMonth}`
@@ -711,7 +703,7 @@ function threeDays(days, dayPosition, totalDaysMonth, today, selectedMonth, sele
 
 function fourHolidays(oldRotation, rotationArray, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange) {
   let days = []
-  
+
   // console.log("fourHolidays rotation", rotationArray);
   for (let i = 0; i < rotationArray.length; i++) {
     switch (rotationArray[i]) {
@@ -771,7 +763,7 @@ function queryJustification(dates, dayPosition) {
 }
 
 function inAssitstant(dayPosition, x, days, completMonth, nomenclature) {
-  if(nomenclature == 'R'){
+  if (nomenclature == 'R') {
     dayPosition[x].textContent = `R`
   } else {
     if (nomenclature == 'NC') {
@@ -817,7 +809,7 @@ function queryDays(id, dataDay, dayPosition, days, completMonth = null, status =
             queryDay = queryDay.slice(8, 10)
             queryDay = queryDay + data[i].justificacion
             dates.push(queryDay)
-          } 
+          }
           // Si no tiene justificacion
           else {
             let queryDay = data[i].fecha_hora_aut
@@ -835,8 +827,7 @@ function queryDays(id, dataDay, dayPosition, days, completMonth = null, status =
 
           if (dates.includes(y) == true) {
             assistant(dayPosition, x)
-          } 
-          else if (dates.includes(y) == false) {
+          } else if (dates.includes(y) == false) {
             if (status != null && notHired != null) {
               const date = status.slice(8, 10)
               if (x < dayhired - 1) {
@@ -846,30 +837,26 @@ function queryDays(id, dataDay, dayPosition, days, completMonth = null, status =
               } else if (x < date) {
                 inAssitstant(dayPosition, x, days, completMonth, 'E')
               }
-            } 
-            else if (status != null) {
+            } else if (status != null) {
               const date = status.slice(8, 10)
               if (x >= date) {
                 inAssitstant(dayPosition, x, days, completMonth, 'R')
               } else if (x < date) {
                 inAssitstant(dayPosition, x, days, completMonth, 'E')
               }
-            } 
-            else if (notHired != null) {
+            } else if (notHired != null) {
               if (x < dayhired - 1) {
                 inAssitstant(dayPosition, x, days, completMonth, 'NC')
               } else if (x >= dayhired - 1) {
                 inAssitstant(dayPosition, x, days, completMonth, 'E')
               }
-            } 
-            else {
+            } else {
               inAssitstant(dayPosition, x, days, completMonth, 'E')
             }
           }
         }
         queryJustification(dates, dayPosition)
-      } 
-      else {
+      } else {
         if (status != null) {
           const date = status.slice(8, 10)
           for (let x = 0; x < days; x++) {
@@ -962,16 +949,31 @@ function rotationLog(id, selectedMonth, selectedYear, iterator, dayPosition, tot
 }
 
 // Segun la rotacion llama a twoHolidays() o fourHolidays()
-function holyDays(rotationArray, rotacionString, dayPosition, totalDaysMonth, oldRotation, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso = null, dateChange = null) {
+function holyDays(
+  rotationArray,
+  rotacionString,
+  dayPosition,
+  totalDaysMonth,
+  oldRotation,
+  today,
+  selectedMonth,
+  selectedYear,
+  estatusCambios,
+  id,
+  notHired,
+  dayhired,
+  fecha_egreso = null,
+  dateChange = null
+) {
   if (oldRotation == '') {
     if (rotationArray.length == 2) {
       twoHolidays(rotacionString, dayPosition, totalDaysMonth, null, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso)
-    } 
+    }
     if (rotationArray.length > 2) {
       fourHolidays(null, rotationArray, dayPosition, totalDaysMonth, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso)
     }
-  } 
-  
+  }
+
   if (oldRotation != '') {
     if (rotationArray.length == 2) {
       twoHolidays(oldRotation, dayPosition, totalDaysMonth, rotacionString, today, selectedMonth, selectedYear, estatusCambios, id, notHired, dayhired, fecha_egreso, dateChange)
@@ -1159,7 +1161,7 @@ function userData(requestDate, id) {
 }
 
 function changedPasswordModal() {
-  const newPassword = $("#changedPassword").val();
+  const newPassword = $('#changedPassword').val()
   $.ajax({
     type: 'POST',
     url: `?view=calendary&mode=changedPasswordFromCalendary`,
@@ -1167,8 +1169,8 @@ function changedPasswordModal() {
     data: { newPassword: newPassword },
     statusCode: {
       200: function (data) {
-        $('#miModal').modal('hide');
-        window.location.href = "/controlasistencia/"
+        $('#miModal').modal('hide')
+        window.location.href = '/controlasistencia/'
       },
       400: function () {
         alert('Error en la solicitud')
@@ -1179,4 +1181,3 @@ function changedPasswordModal() {
     },
   })
 }
-

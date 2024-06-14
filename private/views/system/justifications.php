@@ -25,3 +25,15 @@
 <script src="bower_components\jquery\dist\jquery.min.js"></script>
 <script src="bower_components\jquery-table2excel\dist\jquery.table2excel.min.js"></script>
 <script src="public/js/justifications.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Genera un número aleatorio
+        const randomString = `?${Math.floor(Math.random() * 100000000)}`;
+        
+        // Selecciona el script existente
+        const scriptElement = document.querySelector('script[src="public/js/justifications.js"]');
+        
+        // Modifica el atributo src del script para incluir el número aleatorio
+        scriptElement.src += randomString;
+    });
+</script>

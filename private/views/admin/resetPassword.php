@@ -4,17 +4,6 @@
         <div class="card-body">
             <h5 class="card-title">Reiniciar Contraseña de Usuario</h5>
             <div class="options">
-                <!-- <div class="optionCont">
-                    <select class="form-select inputData" id="option">
-                        <option value="" disabled selected>Crear Nuev@</option>
-                        <?php if ($_SESSION['type_user'] == "5") { ?>
-                            <option value="5">Administrador</option>
-                        <?php } ?>
-                        <option value="4">Analista</option>
-                        <option value="3">Usuario</option>
-                        <option value="6">Analista de Planificacion</option>
-                    </select>
-                </div> -->
                 <div class="optionCont">
                     <div class="iconChangePw">
                         <img src="public/images/user.png" alt="user" width="30px">

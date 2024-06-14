@@ -38,3 +38,15 @@
 </div>
 
 <script src="public/js/editData.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Genera un número aleatorio
+        const randomString = `?${Math.floor(Math.random() * 100000000)}`;
+        
+        // Selecciona el script existente
+        const scriptElement = document.querySelector('script[src="public/js/editData.js"]');
+        
+        // Modifica el atributo src del script para incluir el número aleatorio
+        scriptElement.src += randomString;
+    });
+</script>
