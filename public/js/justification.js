@@ -17,6 +17,11 @@ function typeOption(value) {
   }
 }
 
+function closeModalJustification() {
+  $('#loadingRequest').hide('slow')
+  $('#spiner').hide('slow')
+}
+
 function modalFunction(id, selection) {
   if (selection == 'update') {
     $('#modalUpd').show('slow')
@@ -30,12 +35,20 @@ function modalFunction(id, selection) {
   $('#updDate').val(`${val}`)
 }
 
+function hideSpiner() {
+  $('#loadingRequest').hide('slow')
+  $('#spiner').hide('slow')
+}
+
 function queryJustification() {
   const id = $('#id').val()
+  $('#loadingRequest').show('slow')
+  $('#spiner').show('slow')
   let idBut = 0
   if (month < 10) {
     month = '0' + month
   }
+  setTimeout(hideSpiner, 20000)
   for (let t = 0; t < today; t++) {
     let day = 1 + t
     if (day < 10) {
@@ -130,6 +143,7 @@ function sentDatesBetween(startDate, endDate, justification, id, finalDay) {
     const month = date.getMonth() + 1
     const day = date.getDate()
     const dataDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
+
     if (index === dates.length - 1) {
       $.ajax({
         type: 'POST',
@@ -203,8 +217,6 @@ function validationData() {
       },
     })
   }
-  alert('justificacion realizada')
-  location.reload()
 }
 
 function logJustification(type) {
@@ -257,28 +269,61 @@ function logJustification(type) {
   }
 }
 
+function sendDataJustification(id, justification) {
+  const date = $('#oneDate').val()
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=queryJustification',
+    dataType: 'json',
+    data: { id: id, date: date, justification: justification },
+    statusCode: {
+      200: function () {
+        alert('justificacion realizada')
+        location.reload()
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
+}
+
+function validateJustification(id, justification) {
+  const date = $('#oneDate').val()
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=validateJustification',
+    dataType: 'json',
+    data: { id: id, date: date },
+    statusCode: {
+      200: function (data) {
+        if (data) {
+          $('#loadingRequest').show('slow')
+          $('#modalText').show('slow')
+        } else {
+          sendDataJustification(id, justification)
+        }
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
+}
+
 function sendJustification(id) {
   const justification = $('#justification').val()
   if ($('#daysJustifi').val() == 1) {
     if (justification == null) {
       alert('seleccione justificacion')
     } else if (justification != null) {
-      const date = $('#oneDate').val()
-      $.ajax({
-        type: 'POST',
-        url: '?view=sistema&mode=queryJustification',
-        dataType: 'json',
-        data: { id: id, date: date, justification: justification },
-        statusCode: {
-          200: function () {},
-          400: function () {
-            alert('Error en la solicitud')
-          },
-          500: function () {
-            alert('Error en el Servidor')
-          },
-        },
-      })
+      validateJustification(id, justification)
     }
   } else if ($('#daysJustifi').val() == 2) {
     const initDay = $('#initDay').val()

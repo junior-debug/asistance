@@ -128,6 +128,21 @@ class database
         return $respuesta;
     }
 
+    public function validateJustification($id, $date)
+    {
+        $date = $date . '%';  
+        $sql = $this->db->query("SELECT * FROM adtlog WHERE empleadoID = '$id' AND fecha_hora_aut LIKE '$date'");
+        $respuesta = [];
+        if ($this->db->rows($sql) > 0) {
+            while ($data = $this->db->recorrer($sql)) {
+                $respuesta[] = $data;
+            }
+        } else {
+            $respuesta = false;
+        }
+        return $respuesta;
+    }
+
     public function payroll()
     {
         $sql = $this->db->query("SELECT * FROM nominas");

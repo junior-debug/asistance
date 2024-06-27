@@ -39,6 +39,13 @@ if (isset($_GET['mode'])) {
             echo json_encode($data);
             #------------------------------------------------------------------------------------
             break;
+        case "validateJustification":
+            $id = $_POST['id'];
+            $date = $_POST['date'];
+            $data = $conexion->validateJustification($id, $date);
+            echo json_encode($data);
+            #------------------------------------------------------------------------------------
+            break;
         case "queryUpdate":
             $id = $_POST['id'];
             $date = $_POST['date'];

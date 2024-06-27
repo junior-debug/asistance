@@ -33,6 +33,15 @@
     </div>
 </div>
 <div class="cardCont">
+    <div class="loadingRequest" id="loadingRequest" style="display: none;">
+        <div id="modalText" class="modalText" style="display: none;">
+            <h4 style="color: white;">Este usuario ya tiene una justificacion, edita la justificacion</h4>
+            <button type="button" class="btn btn-danger" style="margin-right: 20px;" onclick="closeModalJustification()">Cerrar</button>
+        </div>
+        <div id="spiner" style="display: none;">
+            <img src="public/images/loading-23.gif" alt="spiner">
+        </div>
+    </div>
     <div class="card" style="width: 90%;margin-top: 25px;">
         <div class="card-body">
             <h5 class="card-title">Justificacion de dias ausentes</h5>
@@ -123,6 +132,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 
