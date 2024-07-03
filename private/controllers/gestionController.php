@@ -3,14 +3,14 @@ include(PUBLIC_DIR . 'general/session.php');
 if (empty($_SESSION)) {
     header('location:index.php');
 } else {
-    include_once(MODEL_DIR . 'adminModel.php');
+    include_once(MODEL_DIR . 'gestionModel.php');
     $conexion = new database();
     if (isset($_GET['mode'])) {
         switch ($_GET['mode']) {
             case 'createData':
                 include(PUBLIC_DIR . 'general/header.php');
                 include(PUBLIC_DIR . 'general/navbar.php');
-                include(HTML_DIR . 'admin/createData.php');
+                include(HTML_DIR . 'gestion/createData.php');
                 include(PUBLIC_DIR . 'general/footer.php');
                 break;
                 #------------------------------------------------------------------------------------
@@ -33,14 +33,14 @@ if (empty($_SESSION)) {
             case 'editData':
                 include(PUBLIC_DIR . 'general/header.php');
                 include(PUBLIC_DIR . 'general/navbar.php');
-                include(HTML_DIR . 'admin/editData.php');
+                include(HTML_DIR . 'gestion/editData.php');
                 include(PUBLIC_DIR . 'general/footer.php');
                 break;
             #------------------------------------------------------------------------------------
             case 'resetPassword':
                 include(PUBLIC_DIR . 'general/header.php');
                 include(PUBLIC_DIR . 'general/navbar.php');
-                include(HTML_DIR . 'admin/resetPassword.php');
+                include(HTML_DIR . 'gestion/resetPassword.php');
                 include(PUBLIC_DIR . 'general/footer.php');                
                 break; 
             #------------------------------------------------------------------------------------
@@ -116,7 +116,7 @@ if (empty($_SESSION)) {
             case 'createUser':
                 include(PUBLIC_DIR . 'general/header.php');
                 include(PUBLIC_DIR . 'general/navbar.php');
-                include(HTML_DIR . 'admin/createUser.php');
+                include(HTML_DIR . 'gestion/createUser.php');
                 include(PUBLIC_DIR . 'general/footer.php');
                 break;
                 #------------------------------------------------------------------------------------

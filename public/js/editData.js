@@ -35,7 +35,7 @@ function queryDate(value) {
   const dataUser = value;
   $.ajax({
     type: "POST",
-    url: "?view=admin&mode=queryData",
+    url: "?view=gestion&mode=queryData",
     dataType: "json",
     data: { dataUser: dataUser },
     success: function (data) {
@@ -86,7 +86,7 @@ function sendUpd(opt) {
   }
   $.ajax({
     type: "POST",
-    url: `?view=admin&mode=${update}`,
+    url: `?view=gestion&mode=${update}`,
     dataType: "json",
     data: { inputUpdate: inputUpdate, id: id },
     statusCode: {

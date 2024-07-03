@@ -33,7 +33,7 @@ function sendData() {
   const turnOff = $("#turnOff").val();
   $.ajax({
     type: "POST",
-    url: "?view=admin&mode=newData",
+    url: "?view=gestion&mode=newData",
     dataType: "json",
     data: {
       payroll: payroll,

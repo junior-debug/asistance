@@ -6,7 +6,7 @@ function finUserByCedula() {
       console.log('entro')
       $.ajax({
         type: "POST",
-        url: "?view=admin&mode=findUser",
+        url: "?view=gestion&mode=findUser",
         dataType: "json",
         data: {
           username: username,
@@ -31,7 +31,7 @@ function finUserByCedula() {
     const username = $("#nombreUsuario").val();
     $.ajax({
       type: "POST",
-      url: "?view=admin&mode=resetUserPassword",
+      url: "?view=gestion&mode=resetUserPassword",
       dataType: "json",
       data: {
         username: username,

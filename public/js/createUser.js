@@ -16,7 +16,7 @@ function createUser() {
   } else {
     $.ajax({
       type: "POST",
-      url: "?view=admin&mode=queryCreateUser",
+      url: "?view=gestion&mode=queryCreateUser",
       dataType: "json",
       data: {
         opt: opt,
@@ -47,7 +47,7 @@ function verification() {
   const userName = name + $("#lastName").val();
   $.ajax({
     type: "POST",
-    url: "?view=admin&mode=queryUser",
+    url: "?view=gestion&mode=queryUser",
     dataType: "json",
     data: {
       userName: userName,

@@ -51,10 +51,10 @@
                 Administrador
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="?view=admin&mode=createData">Nuevas Creaciones</a></li>
-                <li><a class="dropdown-item" href="?view=admin&mode=editData">Editar Datos</a></li>
-                <li><a class="dropdown-item" href="?view=admin&mode=createUser">Crear Nuevo Usuario</a></li>
-                <li><a class="dropdown-item" href="?view=admin&mode=resetPassword">Reiniciar Contraseñas</a></li>
+                <li><a class="dropdown-item" href="?view=gestion&mode=createData">Nuevas Creaciones</a></li>
+                <li><a class="dropdown-item" href="?view=gestion&mode=editData">Editar Datos</a></li>
+                <li><a class="dropdown-item" href="?view=gestion&mode=createUser">Crear Nuevo Usuario</a></li>
+                <li><a class="dropdown-item" href="?view=gestion&mode=resetPassword">Reiniciar Contraseñas</a></li>
               </ul>
             </li>
           </ul>
@@ -182,8 +182,8 @@
                 Administrador
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="?view=admin&mode=createData">Nuevas Creaciones</a></li>
-                <li><a class="dropdown-item" href="?view=admin&mode=editData">Editar Datos</a></li>
+                <li><a class="dropdown-item" href="?view=gestion&mode=createData">Nuevas Creaciones</a></li>
+                <li><a class="dropdown-item" href="?view=gestion&mode=editData">Editar Datos</a></li>
               </ul>
             </li>
           </ul>
