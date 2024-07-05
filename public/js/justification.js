@@ -48,33 +48,33 @@ function queryJustification() {
   if (month < 10) {
     month = '0' + month
   }
-  setTimeout(hideSpiner, 20000)
-  for (let t = 0; t < today; t++) {
-    let day = 1 + t
-    if (day < 10) {
-      day = '0' + day
-    }
-    let dataDay = `${year}-${month}-${day}`
-    $.ajax({
-      type: 'POST',
-      url: '?view=calendary&mode=asistance',
-      dataType: 'json',
-      data: { id: id, dataDay: dataDay },
-      success: function (data) {
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].justificacion != '') {
-            $('#updateCont').show('slow')
-            idBut++
-            let date = data[i].fecha_hora_aut
-            date = date.slice(0, 10)
-            $('#body').append(
-              `<div class="data"><h4 class="date">${date}</h4><h4>${data[i].justificacion}</h4><button type="button" id="${idBut}" class="btn btn-warning updJustification" onclick="modalFunction(id,'update')">Actualizar</button><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(id,'delete')">Eliminar</button></div>`
-            )
-          }
+  const dataDay = `${year}`
+  $.ajax({
+    type: 'POST',
+    url: '?view=calendary&mode=asistance',
+    dataType: 'json',
+    data: { id: id, dataDay: dataDay },
+    success: function (data) {
+      hideSpiner()
+      console.log(data)
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].justificacion != '') {
+          $('#updateCont').show('slow')
+          idBut++
+          let date = data[i].fecha_hora_aut
+          date = date.slice(0, 10)
+          $('#body').append(
+            `<tr>
+              <td>${date}</td>
+              <td>${data[i].justificacion}</td>
+              <td><button type="button" id="${idBut}" class="btn btn-warning updJustification" onclick="modalFunction(${idBut}, 'update')">Actualizar</button></td>
+              <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>
+            </tr>`
+          )
         }
-      },
-    })
-  }
+      }
+    },
+  })
 }
 
 function massivePayroll(value) {

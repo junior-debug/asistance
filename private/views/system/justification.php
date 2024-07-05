@@ -127,8 +127,20 @@
                 <img id="off" style="display: none; width: 2em;" src="public/images/power-on.png" alt="off">
                 <img id="on" style="display: none; width: 2em;" src="public/images/power.png" alt="on">
             </div>
-            <div id="body" class="body">
-
+            <div class="body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>Fecha</th>
+                        <th>Justificación</th>
+                        <th>Actualizar</th>
+                        <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body">
+                        <!-- Aquí se insertarán las filas de la tabla -->
+                    </tbody>
+                </table>     
             </div>
         </div>
     </div>
