@@ -65,7 +65,7 @@ function queryJustification() {
           date = date.slice(0, 10)
           $('#body').append(
             `<tr>
-              <td>${date}</td>
+              <td class='date'>${date}</td>
               <td>${data[i].justificacion}</td>
               <td><button type="button" id="${idBut}" class="btn btn-warning updJustification" onclick="modalFunction(${idBut}, 'update')">Actualizar</button></td>
               <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>

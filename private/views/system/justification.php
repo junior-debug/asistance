@@ -28,7 +28,7 @@
         <h4 class="card-title">Desea Eliminar Justificacion?</h4>
     </div>
     <div class="buttonsCont">
-        <button type="button" class="btn btn-success" style="margin-right: 20px;" onclick="queryDelete()">Actualizar</button>
+        <button type="button" class="btn btn-success" style="margin-right: 20px;" onclick="queryDelete()">Eliminar</button>
         <button type="button" class="btn btn-danger" style="margin-right: 20px;" onclick="closeModal('delete')">Cerrar</button>
     </div>
 </div>
