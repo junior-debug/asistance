@@ -131,7 +131,7 @@ class database
     public function validateJustification($id, $date)
     {
         $date = $date . '%';  
-        $sql = $this->db->query("SELECT * FROM adtlog WHERE empleadoID = '$id' AND fecha_hora_aut LIKE '$date'");
+        $sql = $this->db->query("SELECT * FROM adtlog WHERE empleadoID = '$id' AND fecha_hora_aut LIKE '$date' AND justificacion != ''");
         $respuesta = [];
         if ($this->db->rows($sql) > 0) {
             while ($data = $this->db->recorrer($sql)) {
