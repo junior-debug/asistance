@@ -51,7 +51,7 @@ function queryJustification() {
   const dataDay = `${year}`
   $.ajax({
     type: 'POST',
-    url: '?view=calendary&mode=asistance',
+    url: '?view=calendary&mode=justificationsLog',
     dataType: 'json',
     data: { id: id, dataDay: dataDay },
     success: function (data) {

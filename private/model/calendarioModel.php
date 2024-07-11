@@ -34,7 +34,21 @@ class database
         return $respuesta;
     }
 
+
     public function asistance($id, $dataDay)
+    {
+        $sql = $this->db->query("SELECT * FROM `adtlog` WHERE empleadoID = '$id' AND fecha_hora_aut LIKE '$dataDay-%';");
+        if ($this->db->rows($sql) > 0) {
+            while ($data = $this->db->recorrer($sql)) {
+                $respuesta[] = $data;
+            }
+        } else {
+            $respuesta = false;
+        }
+        return $respuesta;
+    }
+
+    public function justificationsLog($id, $dataDay)
     {
         $date = $dataDay . '%';  
         $sql = $this->db->query("SELECT * FROM adtlog WHERE empleadoID = '$id' AND justificacion != '' AND fecha_hora_aut LIKE '$date'");

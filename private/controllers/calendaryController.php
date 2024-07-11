@@ -29,6 +29,13 @@ if (empty($_SESSION)) {
 				echo json_encode($asistance);
 				break;
 				#------------------------------------------------------------------------------------
+			case 'justificationsLog':
+				$id = $_POST['id'];
+				$dataDay = $_POST['dataDay'];
+				$justificationsLog = $conexion->justificationsLog($id, $dataDay);
+				echo json_encode($justificationsLog);
+				break;
+				#------------------------------------------------------------------------------------
 			case 'queryChanges':
 				$id = $_POST['id'];
 				$data = $conexion->changes($id);
