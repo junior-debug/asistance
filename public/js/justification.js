@@ -156,7 +156,10 @@ function sentDatesBetween(startDate, endDate, justification, id, finalDay) {
           finalDay: finalDay,
         },
         statusCode: {
-          200: function () {},
+          200: function () {
+            alert('justificacion realizada')
+            location.reload()
+          },
           400: function () {
             alert('Error en la solicitud')
           },
