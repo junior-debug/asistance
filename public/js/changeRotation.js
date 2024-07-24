@@ -34,27 +34,6 @@ function changeOption(value) {
   $('#dataDay').show('slow')
 }
 
-function payrollUpdate(value, id, update) {
-  $.ajax({
-    type: 'POST',
-    url: `?view=calendary&mode=${update}`,
-    dataType: 'json',
-    data: { value: value, id: id },
-    statusCode: {
-      200: function () {
-        alert('solicitud procesada')
-        location.reload()
-      },
-      400: function () {
-        alert('Error en la solicitud')
-      },
-      500: function () {
-        alert('Error en el Servidor')
-      },
-    },
-  })
-}
-
 function sendQuery(date, nomina, oldPayroll, cargo, oldPosition, oldTurn, turno, oldRotation, rotation) {
   const id = $('#id').val()
   const reason = $('#reason').val()
@@ -158,8 +137,7 @@ function validationQuery(array, yearData) {
   lastMonthChangeCounter = lastMonthChange == 0 ? 1 : lastMonthChange
 
   // Recorre una vez por cada mes transcurrido
-  for (let i = item; i < result; i++) {
-
+  for (let i = item; i <= result; i++) {
     // Agrega 0 al string
     if (lastMonthChangeCounter < 10) {
       lastMonthChangeCounter = '0' + lastMonthChangeCounter
@@ -177,7 +155,7 @@ function validationQuery(array, yearData) {
       date = year + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
     }
 
-    if (i < result - 1) {
+    if (i < result) {
       switch ($('#selectData').val()) {
         case 'nomina':
           const oldPayroll = $('#oldPayroll').val()
@@ -196,43 +174,31 @@ function validationQuery(array, yearData) {
           sendQuery(date, '', '', '', '', '', '', oldRotation, '')
           break
       }
-    } else if (i == result - 1) {
+    }
+
+    if (i === result) {
+      const id = $('#id').val()
       switch ($('#selectData').val()) {
         case 'nomina':
           const nomina = $('#nomina').val()
           sendQuery(date, nomina, nomina, '', '', '', '', '', '')
+          payrollUpdate(nomina, id, 'payrollUpdate')
           break
         case 'cargo':
           const position = $('#cargo').val()
           sendQuery(date, '', '', position, position, '', '', '', '')
+          payrollUpdate(position, id, 'positionUpdate')
           break
         case 'turno':
           const turno = $('#turno').val()
           sendQuery(date, '', '', '', '', turno, turno, '', '')
+          payrollUpdate(turno, id, 'turnUpdate')
           break
         case 'rotation':
           const rotation = $('#rotation').val()
           const oldRotation = $('#oldRotation').val()
           sendQuery(date, '', '', '', '', '', '', oldRotation, rotation)
-          break
-        default:
-          break
-      }
-    }
-    if (i == result - 1) {
-      const id = $('#id').val()
-      switch ($('#selectData').val()) {
-        case 'nomina':
-          payrollUpdate($('#nomina').val(), id, 'payrollUpdate')
-          break
-        case 'cargo':
-          payrollUpdate($('#cargo').val(), id, 'positionUpdate')
-          break
-        case 'turno':
-          payrollUpdate($('#turno').val(), id, 'turnUpdate')
-          break
-        case 'rotation':
-          payrollUpdate($('#rotation').val(), id, 'rotationUpdate')
+          payrollUpdate(rotation, id, 'rotationUpdate')
           break
         default:
           break
@@ -241,6 +207,28 @@ function validationQuery(array, yearData) {
 
     lastMonthChangeCounter == 12 ? lastMonthChangeCounter = 1 : lastMonthChangeCounter++
   }
+}
+
+function payrollUpdate(value, id, update) {
+  console.log(id)
+  $.ajax({
+    type: 'POST',
+    url: `?view=calendary&mode=${update}`,
+    dataType: 'json',
+    data: { value: value, id: id },
+    statusCode: {
+      200: function () {
+        alert('solicitud procesada')
+        location.reload()
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
 }
 
 function validator(data) {
