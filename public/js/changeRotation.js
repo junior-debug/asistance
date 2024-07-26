@@ -122,7 +122,7 @@ function validationQuery(array, yearData) {
   
   // Si la data del anterior cambio es anterior al año actual
   if(yearData < year){
-    item = 0
+    item = 1
     countMonthBeforeEndYear = 12 - lastMonthChange
     result = countMonthBeforeEndYear + monthSelected
     isTwoYear = true
@@ -210,7 +210,6 @@ function validationQuery(array, yearData) {
 }
 
 function payrollUpdate(value, id, update) {
-  console.log(id)
   $.ajax({
     type: 'POST',
     url: `?view=calendary&mode=${update}`,
