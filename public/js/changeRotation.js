@@ -67,6 +67,7 @@ function sendQuery(date, nomina, oldPayroll, cargo, oldPosition, oldTurn, turno,
 }
 
 function validationQuery(array, yearData) {
+  debugger;
   // Fecha donde cambiara la rotacion
   let dateSelected = $('#day').val()
   dateSelectedArray = dateSelected.split('-')
@@ -145,13 +146,13 @@ function validationQuery(array, yearData) {
 
     // Valida si es del año anterior o el actual
     let date = ""
-    if(i < countMonthBeforeEndYear && isTwoYear == true){
+    if(i < countMonthBeforeEndYear && isTwoYear === true || i === countMonthBeforeEndYear && isTwoYear === true){
       date = yearData + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
     }
-    if(i >= countMonthBeforeEndYear && isTwoYear == true){
+    if(i > countMonthBeforeEndYear && isTwoYear === true){
       date = year + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
     }
-    if(isTwoYear == false){
+    if(isTwoYear === false){
       date = year + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
     }
 
