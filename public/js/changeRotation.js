@@ -67,7 +67,6 @@ function sendQuery(date, nomina, oldPayroll, cargo, oldPosition, oldTurn, turno,
 }
 
 function validationQuery(array, yearData) {
-  debugger;
   // Fecha donde cambiara la rotacion
   let dateSelected = $('#day').val()
   dateSelectedArray = dateSelected.split('-')
@@ -79,48 +78,6 @@ function validationQuery(array, yearData) {
   const last = array[array.length - 1]
   let lastMonthChange = parseInt(last)
 
-  // Si ya hubo un cambio este mismo mes
-  if (lastMonthChange == monthSelected && yearData == year) {
-    const id = $('#id').val()
-    let date = year + '-' + monthSelected + '-' + dateSelectedArray[2]
-
-    // sendQuery
-    switch ($('#selectData').val()) {
-      case 'nomina':
-        const nomina = $('#nomina').val()
-        sendQuery(date, nomina, nomina, '', '', '', '', '', '')
-        break
-      case 'cargo':
-        const position = $('#cargo').val()
-        sendQuery(date, '', '', position, position, '', '', '', '')
-        break
-      case 'turno':
-        const turno = $('#turno').val()
-        sendQuery(date, '', '', '', '', turno, turno, '', '')
-        break
-      case 'rotation':
-        const rotation = $('#rotation').val()
-        const oldRotation = $('#oldRotation').val()
-        sendQuery(date, '', '', '', '', '', '', oldRotation, rotation)
-        break
-    }
-    // payrollUpdate
-    switch ($('#selectData').val()) {
-      case 'nomina':
-        payrollUpdate($('#nomina').val(), id, 'payrollUpdate')
-        break
-      case 'cargo':
-        payrollUpdate($('#cargo').val(), id, 'positionUpdate')
-        break
-      case 'turno':
-        payrollUpdate($('#turno').val(), id, 'turnUpdate')
-        break
-      case 'rotation':
-        payrollUpdate($('#rotation').val(), id, 'rotationUpdate')
-        break
-    }
-  }
-  
   // Si la data del anterior cambio es anterior al año actual
   if(yearData < year){
     item = 1
