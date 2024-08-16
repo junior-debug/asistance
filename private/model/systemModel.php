@@ -143,6 +143,35 @@ class database
         return $respuesta;
     }
 
+    public function getEmployeesForPayroll($payRoll)
+    {
+        $sql = $this->db->query("SELECT cedula FROM empleados WHERE  nomina_cliente = '$payRoll' AND estatus = 'activo'");
+        $respuesta = [];
+        if ($this->db->rows($sql) > 0) {
+            while ($data = $this->db->recorrer($sql)) {
+                $respuesta[] = $data;
+            }
+        } else {
+            $respuesta = false;
+        }
+        return $respuesta;
+    }
+
+    public function validateJustificationForMassive($cedulas, $date)
+    {
+        $date = $date . '%';
+        $sql = $this->db->query("SELECT empleadoID FROM adtlog WHERE fecha_hora_aut LIKE '$date' AND justificacion != '' AND empleadoID IN ($cedulas)");
+        $respuesta = [];
+        if ($this->db->rows($sql) > 0) {
+            while ($data = $this->db->recorrer($sql)) {
+                $respuesta[] = $data;
+            }
+        } else {
+            $respuesta = false;
+        }
+        return $respuesta;
+    }
+
     public function payroll()
     {
         $sql = $this->db->query("SELECT * FROM nominas");
@@ -210,7 +239,7 @@ class database
 
     public function payRollEmployees($payRoll)
     {
-        $sql = $this->db->query("SELECT * FROM `empleados` WHERE nomina_cliente = '$payRoll'");
+        $sql = $this->db->query("SELECT * FROM `empleados` WHERE nomina_cliente = '$payRoll' AND estatus = 'activo'");
         if ($this->db->rows($sql) > 0) {
             while ($data = $this->db->recorrer($sql)) {
                 $respuesta[] = $data;

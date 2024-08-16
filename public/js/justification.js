@@ -56,7 +56,6 @@ function queryJustification() {
     data: { id: id, dataDay: dataDay },
     success: function (data) {
       hideSpiner()
-      console.log(data)
       for (let i = 0; i < data.length; i++) {
         if (data[i].justificacion != '') {
           $('#updateCont').show('slow')
@@ -192,33 +191,69 @@ function sentDatesBetween(startDate, endDate, justification, id, finalDay) {
   })
 }
 
+function validateJustificationForMassive (cedulas) {
+  const date = $('#oneDate').val()
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=validateJustificationForMassive',
+    dataType: 'json',
+    data: { date: date, cedulas: cedulas },
+    statusCode: {
+      200: function (data) {
+        if (data) {
+          const empleadoIDs = data.map(empleado => empleado.empleadoID).join(',');
+          alert(`el usuario ${empleadoIDs} ya posee una justificacion en la fecha seleccionado porfavor elimine la justificacion del usuario en el apartado de justificacion individual`)
+          location.reload()
+          return
+        }
+        const justification = $('#justification').val()
+        logJustification('masiva')
+        let cedulasArray = cedulas.split(',');
+        cedulasArray.forEach(function(cedula) {
+          sendDataJustification(cedula, justification);
+        });
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
+}
+
+
+function getEmployeesForPayroll () {
+  const payRoll = $('#payRoll').val()
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=getEmployeesForPayroll',
+    dataType: 'json',
+    data: { payRoll: payRoll },
+    statusCode: {
+      200: function (data) {
+        let cedulas = data.map(employee => employee.cedula);
+        cedulas = cedulas.join(',');
+        validateJustificationForMassive(cedulas)
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
+}
+
 function validationData() {
   if ($('#insertOption').val() == 'individual') {
     const id = $('#id').val()
     sendJustification(id)
     logJustification('individual')
   } else if ($('#insertOption').val() == 'masiva') {
-    logJustification('masiva')
-    const payRoll = $('#payRoll').val()
-    $.ajax({
-      type: 'POST',
-      url: '?view=sistema&mode=payRoll',
-      dataType: 'json',
-      data: { payRoll: payRoll },
-      statusCode: {
-        200: function (data) {
-          for (let i = 0; i < data.length; i++) {
-            sendJustification(data[i].cedula)
-          }
-        },
-        400: function () {
-          alert('Error en la solicitud')
-        },
-        500: function () {
-          alert('Error en el Servidor')
-        },
-      },
-    })
+    getEmployeesForPayroll()
   }
 }
 

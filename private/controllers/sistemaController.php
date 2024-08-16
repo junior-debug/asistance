@@ -46,6 +46,19 @@ if (isset($_GET['mode'])) {
             echo json_encode($data);
             #------------------------------------------------------------------------------------
             break;
+        case "getEmployeesForPayroll":
+            $payRoll = $_POST['payRoll'];
+            $data = $conexion->getEmployeesForPayroll($payRoll);
+            echo json_encode($data);
+            #------------------------------------------------------------------------------------
+            break;
+        case "validateJustificationForMassive":
+            $date = $_POST['date'];
+            $cedulas = $_POST['cedulas'];
+            $data = $conexion->validateJustificationForMassive($cedulas, $date);
+            echo json_encode($data);
+            #------------------------------------------------------------------------------------
+            break;
         case "queryUpdate":
             $id = $_POST['id'];
             $date = $_POST['date'];
