@@ -160,7 +160,7 @@ class database
     public function validateJustificationForMassive($cedulas, $date)
     {
         $date = $date . '%';
-        $sql = $this->db->query("SELECT empleadoID FROM adtlog WHERE fecha_hora_aut LIKE '$date' AND justificacion != '' AND empleadoID IN ($cedulas)");
+        $sql = $this->db->query("SELECT * FROM adtlog WHERE fecha_hora_aut LIKE '$date' AND justificacion != '' AND empleadoID IN ($cedulas)");
         $respuesta = [];
         if ($this->db->rows($sql) > 0) {
             while ($data = $this->db->recorrer($sql)) {

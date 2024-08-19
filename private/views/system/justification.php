@@ -145,6 +145,32 @@
         </div>
     </div>
 
+    <div id="updateContMassive" class="card" style="width: 90%;margin-top: 25px;display: none;">
+      <div class="card-body">
+        <div class="top">
+          <h5 id="dataName" class="card-title"></h5>
+          <h5 id="dataId" class="card-title"></h5>
+          <h5 id="dataStatus" class="card-title"></h5>
+          <img id="off" style="display: none; width: 2em;" src="public/images/power-on.png" alt="off">
+          <img id="on" style="display: none; width: 2em;" src="public/images/power.png" alt="on">
+        </div>
+        <div class="body">
+          <table class="table">
+            <thead>
+            <tr>
+              <th>User</th>
+              <th>Justificación</th>
+              <th>Eliminar</th>
+            </tr>
+            </thead>
+            <tbody id="bodyMassive">
+            <!-- Aquí se insertarán las filas de la tabla -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
 </div>
 
 

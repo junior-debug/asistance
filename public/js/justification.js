@@ -201,17 +201,27 @@ function validateJustificationForMassive (cedulas) {
     statusCode: {
       200: function (data) {
         if (data) {
-          const empleadoIDs = data.map(empleado => empleado.empleadoID).join(',');
-          alert(`el usuario ${empleadoIDs} ya posee una justificacion en la fecha seleccionado porfavor elimine la justificacion del usuario en el apartado de justificacion individual`)
-          location.reload()
-          return
+          $('#updateContMassive').show('slow')
+          data.forEach((item, index) => {
+            const empleado = item.empleadoID;
+            const idBut = `button_${index}`;
+            console.log(empleado)
+            $('#bodyMassive').append(
+              `<tr>
+                <td class='date'>${empleado}</td>
+                <td>${item.justificacion}</td>
+                <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>
+               </tr>`
+            );
+          });
+        } else {
+          const justification = $('#justification').val()
+          logJustification('masiva')
+          let cedulasArray = cedulas.split(',');
+          cedulasArray.forEach(function(cedula) {
+            sendDataJustification(cedula, justification);
+          });
         }
-        const justification = $('#justification').val()
-        logJustification('masiva')
-        let cedulasArray = cedulas.split(',');
-        cedulasArray.forEach(function(cedula) {
-          sendDataJustification(cedula, justification);
-        });
       },
       400: function () {
         alert('Error en la solicitud')
@@ -433,7 +443,6 @@ function queryDelete() {
     statusCode: {
       200: function () {
         alert('solicitud procesada')
-        location.reload()
       },
       400: function () {
         alert('Error en la solicitud')
