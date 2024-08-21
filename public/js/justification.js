@@ -25,10 +25,14 @@ function closeModalJustification() {
 function modalFunction(id, selection) {
   if (selection == 'update') {
     $('#modalUpd').show('slow')
-  } else if (selection == 'delete') {
-    $('#modalDel').show('slow')
   }
+  if (selection == 'delete') {
+    $('#modalDel').show('slow')
+    const cedula = document.getElementById(`empleadoid${id}`)
 
+    $('#buttonDelete').val(cedula.textContent)
+    $('#modalDel').val(id)
+  }
   let dateJus = document.getElementsByClassName('date')
   id = id - 1
   const val = dateJus[id].textContent
@@ -63,8 +67,9 @@ function queryJustification() {
           let date = data[i].fecha_hora_aut
           date = date.slice(0, 10)
           $('#body').append(
-            `<tr>
+            `<tr id="deleteJust${data[i].empleadoID}">
               <td class='date'>${date}</td>
+              <td id="empleadoid${idBut}">${data[i].empleadoID}</td>
               <td>${data[i].justificacion}</td>
               <td><button type="button" id="${idBut}" class="btn btn-warning updJustification" onclick="modalFunction(${idBut}, 'update')">Actualizar</button></td>
               <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>
@@ -72,6 +77,50 @@ function queryJustification() {
           )
         }
       }
+    },
+  })
+}
+
+function validateJustificationForMassive (cedulas) {
+  const date = $('#oneDate').val()
+  let idBut = 0
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=validateJustificationForMassive',
+    dataType: 'json',
+    data: { date: date, cedulas: cedulas },
+    statusCode: {
+      200: function (data) {
+        if (data) {
+          $('#updateContMassive').show('slow')
+          for (let i = 0; i < data.length; i++) {
+            idBut++
+            let date = data[i].fecha_hora_aut
+            date = date.slice(0, 10)
+            $('#bodyMassive').append(
+              `<tr id="deleteJust${data[i].empleadoID}">
+                  <td id="empleadoid${idBut}">${data[i].empleadoID}</td>
+                  <td class='date'>${date}</td>
+                  <td>${data[i].justificacion}</td>
+                  <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>
+              </tr>`
+            )
+          }
+        } else {
+          const justification = $('#justification').val()
+          logJustification('masiva')
+          let cedulasArray = cedulas.split(',');
+          cedulasArray.forEach(function(cedula) {
+            sendDataJustification(cedula, justification);
+          });
+        }
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
     },
   })
 }
@@ -190,49 +239,6 @@ function sentDatesBetween(startDate, endDate, justification, id, finalDay) {
     }
   })
 }
-
-function validateJustificationForMassive (cedulas) {
-  const date = $('#oneDate').val()
-  $.ajax({
-    type: 'POST',
-    url: '?view=sistema&mode=validateJustificationForMassive',
-    dataType: 'json',
-    data: { date: date, cedulas: cedulas },
-    statusCode: {
-      200: function (data) {
-        if (data) {
-          $('#updateContMassive').show('slow')
-          data.forEach((item, index) => {
-            const empleado = item.empleadoID;
-            const idBut = `button_${index}`;
-            console.log(empleado)
-            $('#bodyMassive').append(
-              `<tr>
-                <td class='date'>${empleado}</td>
-                <td>${item.justificacion}</td>
-                <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>
-               </tr>`
-            );
-          });
-        } else {
-          const justification = $('#justification').val()
-          logJustification('masiva')
-          let cedulasArray = cedulas.split(',');
-          cedulasArray.forEach(function(cedula) {
-            sendDataJustification(cedula, justification);
-          });
-        }
-      },
-      400: function () {
-        alert('Error en la solicitud')
-      },
-      500: function () {
-        alert('Error en el Servidor')
-      },
-    },
-  })
-}
-
 
 function getEmployeesForPayroll () {
   const payRoll = $('#payRoll').val()
@@ -433,7 +439,7 @@ function queryUpdate() {
 }
 
 function queryDelete() {
-  const id = $('#id').val()
+  const id = $('#buttonDelete').val()
   const date = $('#updDate').val()
   $.ajax({
     type: 'POST',
@@ -442,7 +448,16 @@ function queryDelete() {
     data: { id: id, date: date },
     statusCode: {
       200: function () {
-        alert('solicitud procesada')
+        if ($('#insertOption').val() === 'individual') {
+          alert('solicitud procesada')
+          location.reload()
+        }
+        if ($('#insertOption').val() === 'masiva') {
+          let deleteRow = document.getElementById(`deleteJust${id}`)
+          deleteRow.style.display = 'none';
+          closeModal('delete')
+          alert('solicitud procesada')
+        }
       },
       400: function () {
         alert('Error en la solicitud')

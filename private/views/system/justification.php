@@ -28,7 +28,7 @@
         <h4 class="card-title">Desea Eliminar Justificacion?</h4>
     </div>
     <div class="buttonsCont">
-        <button type="button" class="btn btn-success" style="margin-right: 20px;" onclick="queryDelete()">Eliminar</button>
+        <button type="button" class="btn btn-success" id="buttonDelete" style="margin-right: 20px;" onclick="queryDelete()">Eliminar</button>
         <button type="button" class="btn btn-danger" style="margin-right: 20px;" onclick="closeModal('delete')">Cerrar</button>
     </div>
 </div>
@@ -132,6 +132,7 @@
                     <thead>
                         <tr>
                         <th>Fecha</th>
+                        <th>Usuario</th>
                         <th>Justificación</th>
                         <th>Actualizar</th>
                         <th>Eliminar</th>
@@ -158,7 +159,8 @@
           <table class="table">
             <thead>
             <tr>
-              <th>User</th>
+              <th>Usuario</th>
+              <th>Fecha</th>
               <th>Justificación</th>
               <th>Eliminar</th>
             </tr>
