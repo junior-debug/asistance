@@ -81,50 +81,91 @@ function queryJustification() {
   })
 }
 
-function validateJustificationForMassive (cedulas) {
-  const date = $('#oneDate').val()
-  let idBut = 0
-  $.ajax({
-    type: 'POST',
-    url: '?view=sistema&mode=validateJustificationForMassive',
-    dataType: 'json',
-    data: { date: date, cedulas: cedulas },
-    statusCode: {
-      200: function (data) {
-        if (data) {
-          $('#updateContMassive').show('slow')
-          for (let i = 0; i < data.length; i++) {
-            idBut++
-            let date = data[i].fecha_hora_aut
-            date = date.slice(0, 10)
-            $('#bodyMassive').append(
-              `<tr id="deleteJust${data[i].empleadoID}">
-                  <td id="empleadoid${idBut}">${data[i].empleadoID}</td>
-                  <td class='date'>${date}</td>
-                  <td>${data[i].justificacion}</td>
-                  <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>
-              </tr>`
-            )
-          }
-        } else {
-          const justification = $('#justification').val()
-          logJustification('masiva')
-          let cedulasArray = cedulas.split(',');
-          cedulasArray.forEach(function(cedula) {
-            sendDataJustification(cedula, justification);
-          });
-        }
-      },
-      400: function () {
-        alert('Error en la solicitud')
-      },
-      500: function () {
-        alert('Error en el Servidor')
-      },
-    },
-  })
+async function daysSelected(cedulas) {
+  let date = '';
+
+  if ($('#daysJustifi').val() === '1') {
+    date = $('#oneDate').val();
+    const statusValidation = await validateJustificationForMassive(cedulas, date);
+
+    if (statusValidation) {
+      console.log('Justificación encontrada para la fecha seleccionada.');
+      return;
+    }
+  }
+
+  if ($('#daysJustifi').val() === '2') {
+    let initDate = $('#initDay').val();
+    let endDate = $('#finalDay').val();
+
+    let currentDate = new Date(initDate);
+    let finalDate = new Date(endDate);
+
+    while (currentDate <= finalDate) {
+      console.log('entro');
+      let formattedDate = currentDate.toISOString().split('T')[0];
+      const statusValidation = await validateJustificationForMassive(cedulas, formattedDate);
+
+      if (statusValidation) {
+        console.log(`Justificación encontrada para la fecha: ${formattedDate}`);
+        break;
+      }
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
 }
 
+
+function validateJustificationForMassive(cedulas, date) {
+  return new Promise((resolve, reject) => {
+    let idBut = 0;
+    $.ajax({
+      type: 'POST',
+      url: '?view=sistema&mode=validateJustificationForMassive',
+      dataType: 'json',
+      data: { date: date, cedulas: cedulas },
+      statusCode: {
+        200: function (data) {
+          if (data && data.length > 0) { // Verifica que data no esté vacío
+            alert(`Esta nómina ya cuenta con justificación el día ${date}`);
+            $('#updateContMassive').show('slow');
+            for (let i = 0; i < data.length; i++) {
+              idBut++;
+              let date = data[i].fecha_hora_aut;
+              date = date.slice(0, 10);
+              $('#bodyMassive').append(
+                `<tr id="deleteJust${data[i].empleadoID}">
+                    <td id="empleadoid${idBut}">${data[i].empleadoID}</td>
+                    <td class='date'>${date}</td>
+                    <td>${data[i].justificacion}</td>
+                    <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>
+                </tr>`
+              );
+            }
+            resolve(true); // Resuelve la promesa con true
+          } else {
+            const justification = $('#justification').val();
+            logJustification('masiva');
+            let cedulasArray = cedulas.split(',');
+            cedulasArray.forEach(function(cedula) {
+              sendDataJustification(cedula, justification);
+            });
+            resolve(false); // Resuelve la promesa con false si no hay datos
+          }
+        },
+        400: function () {
+          alert('Error en la solicitud');
+          reject('Error en la solicitud');
+        },
+        500: function () {
+          alert('Error en el Servidor');
+          reject('Error en el servidor');
+        },
+      },
+    });
+  });
+}
 function massivePayroll(value) {
   if (value != 0) {
     $('#daysJustifi').show('slow')
@@ -251,7 +292,7 @@ function getEmployeesForPayroll () {
       200: function (data) {
         let cedulas = data.map(employee => employee.cedula);
         cedulas = cedulas.join(',');
-        validateJustificationForMassive(cedulas)
+        daysSelected(cedulas)
       },
       400: function () {
         alert('Error en la solicitud')
