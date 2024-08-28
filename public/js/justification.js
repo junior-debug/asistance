@@ -86,7 +86,7 @@ async function daysSelected(cedulas) {
 
   if ($('#daysJustifi').val() === '1') {
     date = $('#oneDate').val();
-    const statusValidation = await validateJustificationForMassive(cedulas, date);
+    const statusValidation = await validateJustificationForMassive(cedulas, date, false);
 
     if (statusValidation) {
       console.log('Justificación encontrada para la fecha seleccionada.');
@@ -95,20 +95,22 @@ async function daysSelected(cedulas) {
   }
 
   if ($('#daysJustifi').val() === '2') {
-    let initDate = $('#initDay').val();
-    let endDate = $('#finalDay').val();
-
-    let currentDate = new Date(initDate);
-    let finalDate = new Date(endDate);
+    const currentDate = new Date($('#initDay').val());
+    const finalDate = new Date($('#finalDay').val());
 
     while (currentDate <= finalDate) {
-      console.log('entro');
       let formattedDate = currentDate.toISOString().split('T')[0];
-      const statusValidation = await validateJustificationForMassive(cedulas, formattedDate);
-
+      const statusValidation = await validateJustificationForMassive(cedulas, formattedDate, true);
+      console.log(statusValidation)
       if (statusValidation) {
-        console.log(`Justificación encontrada para la fecha: ${formattedDate}`);
+        $('#loadingRequest').hide('slow')
+        $('#spiner').hide('slow')
         break;
+      }
+
+      if (currentDate.getTime() === finalDate.getTime()) {
+        alert('justificaciones realizadas');
+        location.reload()
       }
 
       currentDate.setDate(currentDate.getDate() + 1);
@@ -117,7 +119,7 @@ async function daysSelected(cedulas) {
 }
 
 
-function validateJustificationForMassive(cedulas, date) {
+function validateJustificationForMassive(cedulas, date, someDays) {
   return new Promise((resolve, reject) => {
     let idBut = 0;
     $.ajax({
@@ -126,7 +128,7 @@ function validateJustificationForMassive(cedulas, date) {
       dataType: 'json',
       data: { date: date, cedulas: cedulas },
       statusCode: {
-        200: function (data) {
+        200: async function(data) {
           if (data && data.length > 0) { // Verifica que data no esté vacío
             alert(`Esta nómina ya cuenta con justificación el día ${date}`);
             $('#updateContMassive').show('slow');
@@ -148,9 +150,16 @@ function validateJustificationForMassive(cedulas, date) {
             const justification = $('#justification').val();
             logJustification('masiva');
             let cedulasArray = cedulas.split(',');
-            cedulasArray.forEach(function(cedula) {
-              sendDataJustification(cedula, justification);
-            });
+            $('#loadingRequest').show('slow')
+            $('#spiner').show('slow')
+            for (let i = 0; i < cedulasArray.length; i++) {
+              const cedula = cedulasArray[i];
+              const statusJustification = await sendDataJustification(cedula, justification);
+              if (i === cedulasArray.length - 1 && someDays === false) {
+                alert('Todas las peticiones se han completado');
+                location.reload();
+              }
+            }
             resolve(false); // Resuelve la promesa con false si no hay datos
           }
         },
@@ -365,25 +374,28 @@ function logJustification(type) {
 }
 
 function sendDataJustification(id, justification) {
-  const date = $('#oneDate').val()
-  $.ajax({
-    type: 'POST',
-    url: '?view=sistema&mode=queryJustification',
-    dataType: 'json',
-    data: { id: id, date: date, justification: justification },
-    statusCode: {
-      200: function () {
-        alert('justificacion realizada')
-        location.reload()
-      },
-      400: function () {
-        alert('Error en la solicitud')
-      },
-      500: function () {
-        alert('Error en el Servidor')
-      },
-    },
-  })
+  return new Promise((resolve, reject) => {
+    const date = $('#oneDate').val();
+    $.ajax({
+      type: 'POST',
+      url: '?view=sistema&mode=queryJustification',
+      dataType: 'json',
+      data: { id: id, date: date, justification: justification },
+      statusCode: {
+        200: function() {
+          resolve(true); // Resuelve la promesa en caso de éxito
+        },
+        400: function() {
+          alert('Error en la solicitud');
+          reject('Error en la solicitud'); // Rechaza la promesa en caso de error
+        },
+        500: function() {
+          alert('Error en el Servidor');
+          reject('Error en el Servidor'); // Rechaza la promesa en caso de error
+        }
+      }
+    });
+  });
 }
 
 function validateJustification(id, justification) {
@@ -394,12 +406,14 @@ function validateJustification(id, justification) {
     dataType: 'json',
     data: { id: id, date: date },
     statusCode: {
-      200: function (data) {
+      200: async function(data) {
         if (data) {
           $('#loadingRequest').show('slow')
           $('#modalText').show('slow')
         } else {
-          sendDataJustification(id, justification)
+          const validateJustification = await sendDataJustification(id, justification, true)
+          alert('justificacion realizada')
+          location.reload()
         }
       },
       400: function () {
