@@ -299,6 +299,10 @@ function getEmployeesForPayroll () {
     data: { payRoll: payRoll },
     statusCode: {
       200: function (data) {
+        if (!data) {
+          alert('no existen usuarios en nomina seleccionada')
+          location.reload()
+        }
         let cedulas = data.map(employee => employee.cedula);
         cedulas = cedulas.join(',');
         daysSelected(cedulas)
