@@ -45,41 +45,78 @@ function hideSpiner() {
 }
 
 function queryJustification() {
-  const id = $('#id').val()
-  $('#loadingRequest').show('slow')
-  $('#spiner').show('slow')
-  let idBut = 0
-  if (month < 10) {
-    month = '0' + month
-  }
-  const dataDay = `${year}`
+  const id = $('#id').val();
+  $('#loadingRequest').show('slow');
+  $('#spiner').show('slow');
+
+  const itemsPerPage = 5;
+  let currentPage = 1;
+  let totalPages = 0;
+  let data = [];  // Declarar data fuera del ámbito de la función AJAX
+
+  const dataDay = `${year}`;
   $.ajax({
     type: 'POST',
     url: '?view=calendary&mode=justificationsLog',
     dataType: 'json',
     data: { id: id, dataDay: dataDay },
-    success: function (data) {
-      hideSpiner()
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].justificacion != '') {
-          $('#updateCont').show('slow')
-          idBut++
-          let date = data[i].fecha_hora_aut
-          date = date.slice(0, 10)
-          $('#body').append(
-            `<tr id="deleteJust${data[i].empleadoID}">
-              <td class='date'>${date}</td>
-              <td id="empleadoid${idBut}">${data[i].empleadoID}</td>
-              <td>${data[i].justificacion}</td>
-              <td><button type="button" id="${idBut}" class="btn btn-warning updJustification" onclick="modalFunction(${idBut}, 'update')">Actualizar</button></td>
-              <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>
-            </tr>`
-          )
-        }
+    success: function (response) {
+      hideSpiner();
+      data = response;  // Asignar la respuesta a la variable data
+
+      if (data.length > 0) {
+        $('#updateCont').show('slow');
+        totalPages = Math.ceil(data.length / itemsPerPage);
+        renderTable(data, currentPage, itemsPerPage);
+        renderPagination(totalPages);
       }
-    },
-  })
+    }
+  });
+
+  function renderTable(data, page, itemsPerPage) {
+    $('#body').empty();  // Limpiar la tabla antes de insertar nuevos elementos
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedData = data.slice(start, end);
+
+    paginatedData.forEach((item, index) => {
+      if (item.justificacion !== '') {
+        let date = item.fecha_hora_aut.slice(0, 10);
+        $('#body').append(
+          `<tr id="deleteJust${item.empleadoID}">
+                        <td class='date'>${date}</td>
+                        <td id="empleadoid${start + index + 1}">${item.empleadoID}</td>
+                        <td>${item.justificacion}</td>
+                        <td><button type="button" id="${start + index + 1}" class="btn btn-warning updJustification" onclick="modalFunction(${start + index + 1}, 'update')">Actualizar</button></td>
+                        <td><button type="button" id="${start + index + 1}" class="btn btn-danger" onclick="modalFunction(${start + index + 1}, 'delete')">Eliminar</button></td>
+                    </tr>`
+        );
+      }
+    });
+  }
+
+  function renderPagination(totalPages) {
+    $('#pagination').empty();  // Limpiar la paginación antes de agregar nuevos botones
+    if (currentPage > 1) {
+      $('#pagination').append(`<li class="page-item"><a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a></li>`);
+    }
+
+    for (let i = 1; i <= totalPages; i++) {
+      $('#pagination').append(`<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" onclick="changePage(${i})">${i}</a></li>`);
+    }
+
+    if (currentPage < totalPages) {
+      $('#pagination').append(`<li class="page-item"><a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a></li>`);
+    }
+  }
+
+  window.changePage = function (page) {
+    currentPage = page;
+    renderTable(data, currentPage, itemsPerPage);  // Ahora data está disponible aquí
+    renderPagination(totalPages);
+  };
 }
+
 
 async function daysSelected(cedulas) {
   let date = '';

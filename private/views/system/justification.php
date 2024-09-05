@@ -141,7 +141,12 @@
                     <tbody id="body">
                         <!-- Aquí se insertarán las filas de la tabla -->
                     </tbody>
-                </table>     
+                </table>
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination" id="pagination">
+                    <!-- Aquí se generarán los botones de paginación -->
+                  </ul>
+                </nav>
             </div>
         </div>
     </div>
