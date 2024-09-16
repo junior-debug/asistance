@@ -12,7 +12,7 @@
                     <option value="1">Activos</option>
                     <option value="2">Egresos</option>
                 </select>
-                <button class="btn btn-primary" onclick="queryEmployees()">Consultar</a>
+                <button class="btn btn-primary" onclick="queryEmployees()">Consultar</button>
             </div>
             <div id="filter" class="filter" style="display: none">
                 <div class="totalEmployees">

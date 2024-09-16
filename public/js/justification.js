@@ -3,17 +3,167 @@ const year = newDate.getFullYear()
 let month = newDate.getMonth() + 1
 const today = newDate.getDate()
 
+
 function typeOption(value) {
-  if (value == 'individual') {
+  if (value === 'individual') {
     $('#IndividualInsert').show('slow')
     $('#massivedInsert').hide('slow')
     $('#individualTxt').show('slow')
     $('#massiveTxt').hide('slow')
-  } else if (value == 'masiva') {
+  }
+  if (value === 'masiva') {
     $('#IndividualInsert').hide('slow')
     $('#massivedInsert').show('slow')
     $('#individualTxt').hide('slow')
     $('#massiveTxt').show('slow')
+  }
+}
+
+function sendDataJustification(id, justification, date = null) {
+  return new Promise((resolve, reject) => {
+    if (!date){
+      date = $('#oneDate').val();
+    }
+    $.ajax({
+      type: 'POST',
+      url: '?view=sistema&mode=queryJustification',
+      dataType: 'json',
+      data: { id: id, date: date, justification: justification },
+      statusCode: {
+        200: function() {
+          resolve(true); // Resuelve la promesa en caso de éxito
+        },
+        400: function() {
+          alert('Error en la solicitud');
+          reject('Error en la solicitud'); // Rechaza la promesa en caso de error
+        },
+        500: function() {
+          alert('Error en el Servidor');
+          reject('Error en el Servidor'); // Rechaza la promesa en caso de error
+        }
+      }
+    });
+  });
+}
+
+function validateJustification(id, date) {
+  return new Promise((resolve, reject) => {
+    $('#loadingRequest').show('slow')
+    $.ajax({
+      type: 'POST',
+      url: '?view=sistema&mode=validateJustification',
+      dataType: 'json',
+      data: { id: id, date: date },
+      statusCode: {
+        200: async function(data) {
+          if (data){
+            resolve(data)
+          }
+          resolve(true);
+        },
+        400: function () {
+          alert('Error en la solicitud')
+          reject('Error en la solicitud');
+        },
+        500: function () {
+          alert('Error en el Servidor')
+          reject('Error en la solicitud');
+        },
+      },
+    })
+  });
+}
+
+async function sentDatesBetween(id, dates, justification) {
+  let validateJustificationDate
+  for (const date of dates) {
+
+    validateJustificationDate = await validateJustification(id, date)
+
+    if (validateJustificationDate === true) {
+      await sendDataJustification(id, justification, date)
+      logJustification('individual')
+    }
+    if (validateJustificationDate !== true) {
+      $('#modalText').show('slow');
+      $('#justificationMessage').text(`Este usuario ya tiene una justificación, edita la justificación ${date}`);
+      break;
+    }
+    if (date === dates) {
+      alert('justificacion realizada')
+      location.reload()
+    }
+  }
+}
+
+function generarFechasAsync(inicio, fin) {
+  return new Promise((resolve, reject) => {
+    try {
+      let fechaInicio = new Date(inicio);
+      let fechaFin = new Date(fin);
+      let fechas = [];
+
+      // Recorremos las fechas desde inicio hasta fin
+      while (fechaInicio <= fechaFin) {
+        let año = fechaInicio.getFullYear();
+        let mes = (fechaInicio.getMonth() + 1).toString().padStart(2, '0'); // Se suma 1 porque los meses en JS son de 0-11
+        let dia = fechaInicio.getDate().toString().padStart(2, '0');
+
+        fechas.push(`${año}-${mes}-${dia}`);
+
+        // Incrementamos el día
+        fechaInicio.setDate(fechaInicio.getDate() + 1);
+      }
+
+      resolve(fechas); // Resolvemos la promesa con el array de fechas
+    } catch (error) {
+      reject(error); // En caso de error, se rechaza la promesa
+    }
+  });
+}
+
+async function sendJustification(id) {
+  const justification = $('#justification').val()
+  let validateDate
+  if ($('#daysJustifi').val() == 1) {
+    if (!justification) {
+      alert('seleccione justificacion')
+    }
+    if (justification) {
+      validateDate = await validateJustification(id, $('#oneDate').val())
+      if (validateDate === true) {
+        await sendDataJustification(id, justification)
+        logJustification('individual')
+        alert('justificacion realizada')
+        location.reload()
+      }
+      if (validateDate !== true) {
+        $('#modalText').show('slow');
+        $('#justificationMessage').text(`Este usuario ya tiene una justificación, edita la justificación ${$('#oneDate').val()}`);
+      }
+    }
+  }
+
+  let generateDates
+  if ($('#daysJustifi').val() == 2) {
+    const initDay = $('#initDay').val()
+    const finalDay = $('#finalDay').val()
+    if (!justification) {
+      alert('seleccione justifiacion')
+    }
+    if (justification) {
+      generateDates = await generarFechasAsync(initDay, finalDay)
+      sentDatesBetween(id, generateDates, justification);
+    }
+  }
+}
+
+function validationData() {
+  if ($('#insertOption').val() === 'individual') {
+    const id = $('#id').val()
+    sendJustification(id)
+  } else if ($('#insertOption').val() === 'masiva') {
+    getEmployeesForPayroll()
   }
 }
 
@@ -22,11 +172,11 @@ function closeModalJustification() {
   $('#spiner').hide('slow')
 }
 
-function modalFunction(id, selection) {
-  if (selection == 'update') {
+function modalFunction(option, selection) {
+  if (option == 'modify') {
     $('#modalUpd').show('slow')
   }
-  if (selection == 'delete') {
+  if (option == 'delete') {
     $('#modalDel').show('slow')
     const cedula = document.getElementById(`empleadoid${id}`)
 
@@ -87,9 +237,7 @@ function queryJustification() {
                         <td class='date'>${date}</td>
                         <td id="empleadoid${start + index + 1}">${item.empleadoID}</td>
                         <td>${item.justificacion}</td>
-                        <td><button type="button" id="${start + index + 1}" class="btn btn-warning updJustification" onclick="modalFunction(${start + index + 1}, 'update')">Actualizar</button></td>
-                        <td><button type="button" id="${start + index + 1}" class="btn btn-danger" onclick="modalFunction(${start + index + 1}, 'delete')">Eliminar</button></td>
-                    </tr>`
+          </tr>`
         );
       }
     });
@@ -264,106 +412,6 @@ function queryUser() {
   })
 }
 
-function sentDatesBetween(startDate, endDate, justification, id, finalDay) {
-  const dates = []
-  let currentDate = new Date(startDate)
-
-  while (currentDate <= endDate) {
-    dates.push(new Date(currentDate))
-    currentDate.setDate(currentDate.getDate() + 1)
-  }
-
-  dates.forEach((date, index) => {
-    const year = date.getFullYear()
-    const month = date.getMonth() + 1
-    const day = date.getDate()
-    const dataDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
-
-    if (index === dates.length - 1) {
-      $.ajax({
-        type: 'POST',
-        url: '?view=sistema&mode=queryJustification',
-        dataType: 'json',
-        data: {
-          id: id,
-          date: dataDate,
-          justification: justification,
-          finalDay: finalDay,
-        },
-        statusCode: {
-          200: function () {
-            alert('justificacion realizada')
-            location.reload()
-          },
-          400: function () {
-            alert('Error en la solicitud')
-          },
-          500: function () {
-            alert('Error en el Servidor')
-          },
-        },
-      })
-    } else {
-      $.ajax({
-        type: 'POST',
-        url: '?view=sistema&mode=queryJustification',
-        dataType: 'json',
-        data: {
-          id: id,
-          date: dataDate,
-          justification: justification,
-        },
-        statusCode: {
-          200: function () {},
-          400: function () {
-            alert('Error en la solicitud')
-          },
-          500: function () {
-            alert('Error en el Servidor')
-          },
-        },
-      })
-    }
-  })
-}
-
-function getEmployeesForPayroll () {
-  const payRoll = $('#payRoll').val()
-  $.ajax({
-    type: 'POST',
-    url: '?view=sistema&mode=getEmployeesForPayroll',
-    dataType: 'json',
-    data: { payRoll: payRoll },
-    statusCode: {
-      200: function (data) {
-        if (!data) {
-          alert('no existen usuarios en nomina seleccionada')
-          location.reload()
-        }
-        let cedulas = data.map(employee => employee.cedula);
-        cedulas = cedulas.join(',');
-        daysSelected(cedulas)
-      },
-      400: function () {
-        alert('Error en la solicitud')
-      },
-      500: function () {
-        alert('Error en el Servidor')
-      },
-    },
-  })
-}
-
-function validationData() {
-  if ($('#insertOption').val() == 'individual') {
-    const id = $('#id').val()
-    sendJustification(id)
-    logJustification('individual')
-  } else if ($('#insertOption').val() == 'masiva') {
-    getEmployeesForPayroll()
-  }
-}
-
 function logJustification(type) {
   if (type == 'individual') {
     const opt = $('#insertOption').val()
@@ -414,79 +462,9 @@ function logJustification(type) {
   }
 }
 
-function sendDataJustification(id, justification) {
-  return new Promise((resolve, reject) => {
-    const date = $('#oneDate').val();
-    $.ajax({
-      type: 'POST',
-      url: '?view=sistema&mode=queryJustification',
-      dataType: 'json',
-      data: { id: id, date: date, justification: justification },
-      statusCode: {
-        200: function() {
-          resolve(true); // Resuelve la promesa en caso de éxito
-        },
-        400: function() {
-          alert('Error en la solicitud');
-          reject('Error en la solicitud'); // Rechaza la promesa en caso de error
-        },
-        500: function() {
-          alert('Error en el Servidor');
-          reject('Error en el Servidor'); // Rechaza la promesa en caso de error
-        }
-      }
-    });
-  });
-}
 
-function validateJustification(id, justification) {
-  const date = $('#oneDate').val()
-  $.ajax({
-    type: 'POST',
-    url: '?view=sistema&mode=validateJustification',
-    dataType: 'json',
-    data: { id: id, date: date },
-    statusCode: {
-      200: async function(data) {
-        if (data) {
-          $('#loadingRequest').show('slow')
-          $('#modalText').show('slow')
-        } else {
-          const validateJustification = await sendDataJustification(id, justification, true)
-          alert('justificacion realizada')
-          location.reload()
-        }
-      },
-      400: function () {
-        alert('Error en la solicitud')
-      },
-      500: function () {
-        alert('Error en el Servidor')
-      },
-    },
-  })
-}
 
-function sendJustification(id) {
-  const justification = $('#justification').val()
-  if ($('#daysJustifi').val() == 1) {
-    if (justification == null) {
-      alert('seleccione justificacion')
-    } else if (justification != null) {
-      validateJustification(id, justification)
-    }
-  } else if ($('#daysJustifi').val() == 2) {
-    const initDay = $('#initDay').val()
-    const finalDay = $('#finalDay').val()
-    if (justification == null) {
-      alert('seleccione justifiacion')
-    } else if (justification != null) {
-      const startDate = new Date(initDay)
-      const endDate = new Date(finalDay)
-      sentDatesBetween(startDate, endDate, justification, id, finalDay)
-    }
-  }
-}
+
 
 function selectDays() {
   if ($('#daysJustifi').val() == 1) {
@@ -535,8 +513,8 @@ function queryUpdate() {
 }
 
 function queryDelete() {
-  const id = $('#buttonDelete').val()
-  const date = $('#updDate').val()
+  const id = $('#id').val()
+  const date = $('#dateDelete').val()
   $.ajax({
     type: 'POST',
     url: '?view=sistema&mode=queryDelete',
@@ -571,4 +549,31 @@ function closeModal(selection) {
   } else if (selection == 'delete') {
     $('#modalDel').hide('slow')
   }
+}
+
+function getEmployeesForPayroll () {
+  const payRoll = $('#payRoll').val()
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=getEmployeesForPayroll',
+    dataType: 'json',
+    data: { payRoll: payRoll },
+    statusCode: {
+      200: function (data) {
+        if (!data) {
+          alert('no existen usuarios en nomina seleccionada')
+          location.reload()
+        }
+        let cedulas = data.map(employee => employee.cedula);
+        cedulas = cedulas.join(',');
+        daysSelected(cedulas)
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
 }

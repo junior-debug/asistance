@@ -31,11 +31,27 @@ function queryEmployees() {
           <th scope="col">Nombre y Apellido</th>
           <th scope="col">Fecha de Ingreso</th>
           <th scope="col">Fecha de Culminacion de Contrato</th>
+          <th scope="col">Finalizacion Segundo Contrato</th>
+          <th scope="col">Finalizacion Tercer Contrato</th>
           <th scope="col">Cargo</th>
           <th scope="col">Unidad Organizativa/Sede</th>
           <th scope="col">Turno</th>
           <th scope="col">Rotacion</th>
           <th scope="col">Horario de trabajo</th>
+          <th scope="col">Excepcion</th>
+          <th scope="col">Ficha</th>
+          <th scope="col">Banco</th>
+          <th scope="col">Tipo de Cuenta</th>
+          <th scope="col">Numero de Cuenta</th>
+          <th scope="col">Sueldo</th>
+          <th scope="col">Destreza</th>
+          <th scope="col">Direccion</th>
+          <th scope="col">Telefono 1</th>
+          <th scope="col">Telefono 2</th>
+          <th scope="col">Tickets</th>
+          <th scope="col">Bono</th>
+          <th scope="col">Utilidades</th>
+          <th scope="col">Estatus</th>
           </tr>`);
         } else if (selected == "2") {
           $("#totalEmployees").text(`Egresos`);
@@ -49,29 +65,98 @@ function queryEmployees() {
           <th scope="col">Nombre y Apellido</th>
           <th scope="col">Fecha de Ingreso</th>
           <th scope="col">Fecha de Egreso</th>
-          <th scope="col">Culminacion de Contrato</th>
-          <th scope="col">Culminacion Segundo Contrato</th>
-          <th scope="col">Culminacion Tercer Contrato</th>
+          <th scope="col">Fecha de Culminacion de Contrato</th>
+          <th scope="col">Finalizacion Segundo Contrato</th>
+          <th scope="col">Finalizacion Tercer Contrato</th>
           <th scope="col">Cargo</th>
           <th scope="col">Unidad Organizativa/Sede</th>
           <th scope="col">Turno</th>
           <th scope="col">Rotacion</th>
           <th scope="col">Horario de trabajo</th>
-          <th scope="col">motivo</th>
-          <th scope="col">comentario</th>
+          <th scope="col">Excepcion</th>
+          <th scope="col">Ficha</th>
+          <th scope="col">Banco</th>
+          <th scope="col">Tipo de Cuenta</th>
+          <th scope="col">Numero de Cuenta</th>
+          <th scope="col">Sueldo</th>
+          <th scope="col">Destreza</th>
+          <th scope="col">Direccion</th>
+          <th scope="col">Telefono 1</th>
+          <th scope="col">Telefono 2</th>
+          <th scope="col">Tickets</th>
+          <th scope="col">Bono</th>
+          <th scope="col">Utilidades</th>
+          <th scope="col">Estatus</th>
           </tr>`);
         }
         for (let i = 0; i < data.length; i++) {
           if (selected == "1") {
             $("#tableBody").append(
               `<tr>
-                <td>${data[i].empresa}</td><td>${data[i].nomina_cliente}</td><td>${data[i].cedula}</td><td>${data[i].fecha_nacimiento}</td><td>${data[i].correo}</td><td>${data[i].nombre_apellido}</td><td>${data[i].fecha_ingreso}</td><td>${data[i].finalizacion_contrato}</td><td>${data[i].cargo}</td><td>${data[i].unidad_organizativa}</td><td>${data[i].turno}</td><td>${data[i].rotacion}</td><td>${data[i].horario}</td>
+                <td>${data[i].empresa}</td>
+                <td>${data[i].nomina_cliente}</td>
+                <td>${data[i].cedula}</td>
+                <td>${data[i].fecha_nacimiento}</td>
+                <td>${data[i].correo}</td>
+                <td>${data[i].nombre_apellido}</td>
+                <td>${data[i].fecha_ingreso}</td>
+                <td>${data[i].finalizacion_contrato}</td>
+                <td>${data[i].finalizacion_segundo_contrato}</td>
+                <td>${data[i].finalizacion_tercer_contrato}</td>
+                <td>${data[i].cargo}</td>
+                <td>${data[i].unidad_organizativa}</td>
+                <td>${data[i].turno}</td>
+                <td>${data[i].rotacion}</td>
+                <td>${data[i].horario}</td>
+                <td>${data[i].excepcion}</td>
+                <td>${data[i].ficha}</td>
+                <td>${data[i].banco}</td>
+                <td>${data[i].tipo_cuenta}</td>
+                <td>${data[i].numero_cuenta}</td>
+                <td>${data[i].sueldo}</td>
+                <td>${data[i].destreza}</td>
+                <td>${data[i].direccion}</td>
+                <td>${data[i].telefono_1}</td>
+                <td>${data[i].telefono_2}</td>
+                <td>${data[i].tickets}</td>
+                <td>${data[i].bono}</td>
+                <td>${data[i].utilidades}</td>
+                <td>${data[i].estatus}</td>
               </tr>`
             );
           } else if (selected == "2") {
             $("#tableBody").append(
               `<tr>
-                <td>${data[i].empresa}</td><td>${data[i].nomina_cliente}</td><td>${data[i].cedula}</td><td>${data[i].fecha_nacimiento}</td><td>${data[i].correo}</td><td>${data[i].nombre_apellido}</td><td>${data[i].fecha_ingreso}</td><td>${data[i].fecha_egreso}</td><td>${data[i].finalizacion_contrato}</td><td>${data[i].finalizacion_segundo_contrato}</td><td>${data[i].finalizacion_tercer_contrato}</td><td>${data[i].cargo}</td><td>${data[i].unidad_organizativa}</td><td>${data[i].turno}</td><td>${data[i].rotacion}</td><td>${data[i].horario}</td><td>${data[i].motivo}</td><td>${data[i].comentario}</td>
+                <td>${data[i].empresa}</td>
+                <td>${data[i].nomina_cliente}</td>
+                <td>${data[i].cedula}</td>
+                <td>${data[i].fecha_nacimiento}</td>
+                <td>${data[i].correo}</td>
+                <td>${data[i].nombre_apellido}</td>
+                <td>${data[i].fecha_ingreso}</td>
+                <td>${data[i].fecha_egreso}</td>
+                <td>${data[i].finalizacion_contrato}</td>
+                <td>${data[i].finalizacion_segundo_contrato}</td>
+                <td>${data[i].finalizacion_tercer_contrato}</td>
+                <td>${data[i].cargo}</td>
+                <td>${data[i].unidad_organizativa}</td>
+                <td>${data[i].turno}</td>
+                <td>${data[i].rotacion}</td>
+                <td>${data[i].horario}</td>
+                <td>${data[i].excepcion}</td>
+                <td>${data[i].ficha}</td>
+                <td>${data[i].banco}</td>
+                <td>${data[i].tipo_cuenta}</td>
+                <td>${data[i].numero_cuenta}</td>
+                <td>${data[i].sueldo}</td>
+                <td>${data[i].destreza}</td>
+                <td>${data[i].direccion}</td>
+                <td>${data[i].telefono_1}</td>
+                <td>${data[i].telefono_2}</td>
+                <td>${data[i].tickets}</td>
+                <td>${data[i].bono}</td>
+                <td>${data[i].utilidades}</td>
+                <td>${data[i].estatus}</td>
               </tr>`
             );
           }

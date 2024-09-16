@@ -2,7 +2,7 @@
 <div class="topSeparation"></div>
 <div id="modalUpd" class="notice card" style="display: none;">
     <div class="inputsCont">
-        <input id="updDate" type="date" class="form-control" readonly="readonly" style="width: 30%;margin-right: 30px;">
+        <input id="updDate" type="date" class="form-control" style="width: 30%;margin-right: 30px;">
         <select id="justificationUpd" class="form-select selectData" style="margin-right: 0px;">
             <option selected disabled>Justificacion</option>
             <option value="J">Inasistencia Justificada</option>
@@ -25,7 +25,8 @@
 </div>
 <div id="modalDel" class="notice card" style="display: none;">
     <div class="titleCont">
-        <h4 class="card-title">Desea Eliminar Justificacion?</h4>
+      <h4 class="card-title">Desea Eliminar Justificacion?</h4>
+      <input type="date" id="dateDelete" style="margin-bottom: 20px;width: 30%;" class="form-control">
     </div>
     <div class="buttonsCont">
         <button type="button" class="btn btn-success" id="buttonDelete" style="margin-right: 20px;" onclick="queryDelete()">Eliminar</button>
@@ -35,8 +36,8 @@
 <div class="cardCont">
     <div class="loadingRequest" id="loadingRequest" style="display: none;">
         <div id="modalText" class="modalText" style="display: none;">
-            <h4 style="color: white;">Este usuario ya tiene una justificacion, edita la justificacion</h4>
-            <button type="button" class="btn btn-danger" style="margin-right: 20px;" onclick="closeModalJustification()">Cerrar</button>
+            <h4 id="justificationMessage" style="color: white;"></h4>
+            <button id="butCloseAlert" type="button" class="btn btn-danger" style="margin-right: 20px;" onclick="closeModalJustification()">Cerrar</button>
         </div>
         <div id="spiner" style="display: none;">
             <img src="public/images/loading-23.gif" alt="spiner">
@@ -119,6 +120,10 @@
     </div>
 
     <div id="updateCont" class="card" style="width: 90%;margin-top: 25px;display: none;">
+      <div class="modification" style="margin-top: 10px;">
+        <button class="btn btn-success" style="margin-right: 50px;" onclick="modalFunction('modify')">Modificar</button>
+        <button class="btn btn-danger" onclick="modalFunction('delete')">Eliminar</button>
+      </div>
         <div class="card-body">
             <div class="top">
                 <h5 id="dataName" class="card-title"></h5>
@@ -134,8 +139,6 @@
                         <th>Fecha</th>
                         <th>Usuario</th>
                         <th>Justificación</th>
-                        <th>Actualizar</th>
-                        <th>Eliminar</th>
                         </tr>
                     </thead>
                     <tbody id="body">

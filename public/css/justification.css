@@ -10,7 +10,7 @@ body {
 .notice {
   position: absolute;
   width: 60%;
-  height: 10em;
+  height: 11em;
   border-radius: 15px;
   background: #fff;
   z-index: 1;
@@ -107,11 +107,12 @@ body {
 
 .titleCont {
   width: 100%;
-  height: 4em;
+  height: 5em;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  flex-direction: column;
 }
 
 .IndividualInsert {
@@ -157,4 +158,10 @@ body {
 
 .table th {
   background-color: #f2f2f2;
+}
+
+.modification {
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
