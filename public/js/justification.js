@@ -2,7 +2,7 @@ let newDate = new Date()
 const year = newDate.getFullYear()
 let month = newDate.getMonth() + 1
 const today = newDate.getDate()
-
+let payrollUsers = []
 
 function typeOption(value) {
   if (value === 'individual') {
@@ -172,21 +172,42 @@ function closeModalJustification() {
   $('#spiner').hide('slow')
 }
 
-function modalFunction(option, selection) {
-  if (option == 'modify') {
+function modalFunction(option, opt) {
+  if (option == 'modify' && opt == 'individual') {
     $('#modalUpd').show('slow')
   }
-  if (option == 'delete') {
+  if (option == 'delete' && opt == 'individual') {
     $('#modalDel').show('slow')
-    const cedula = document.getElementById(`empleadoid${id}`)
-
-    $('#buttonDelete').val(cedula.textContent)
-    $('#modalDel').val(id)
+    // const cedula = document.getElementById(`empleadoid${id}`)
+    //
+    // $('#buttonDelete').val(cedula.textContent)
+    // $('#modalDel').val(id)
   }
-  let dateJus = document.getElementsByClassName('date')
-  id = id - 1
-  const val = dateJus[id].textContent
-  $('#updDate').val(`${val}`)
+  if (option === 'delete' && opt === 'Payroll') {
+    $('#modalDelPayRoll').show('slow')
+  }
+}
+
+function queryDeletePayroll () {
+  const date = $('#oneDate').val();
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=queryDeletePayRoll',
+    dataType: 'json',
+    data: { date: date, payrollUsers: payrollUsers },
+    statusCode: {
+      200: function () {
+        alert('solicitud procesada')
+        location.reload()
+      },
+      400: function () {
+        alert('Error en la solicitud')
+      },
+      500: function () {
+        alert('Error en el Servidor')
+      },
+    },
+  })
 }
 
 function hideSpiner() {
@@ -268,7 +289,6 @@ function queryJustification() {
 
 async function daysSelected(cedulas) {
   let date = '';
-
   if ($('#daysJustifi').val() === '1') {
     date = $('#oneDate').val();
     const statusValidation = await validateJustificationForMassive(cedulas, date, false);
@@ -318,6 +338,7 @@ function validateJustificationForMassive(cedulas, date, someDays) {
             alert(`Esta nómina ya cuenta con justificación el día ${date}`);
             $('#updateContMassive').show('slow');
             for (let i = 0; i < data.length; i++) {
+              payrollUsers.push(data[i].empleadoID)
               idBut++;
               let date = data[i].fecha_hora_aut;
               date = date.slice(0, 10);
@@ -326,7 +347,6 @@ function validateJustificationForMassive(cedulas, date, someDays) {
                     <td id="empleadoid${idBut}">${data[i].empleadoID}</td>
                     <td class='date'>${date}</td>
                     <td>${data[i].justificacion}</td>
-                    <td><button type="button" id="${idBut}" class="btn btn-danger" onclick="modalFunction(${idBut}, 'delete')">Eliminar</button></td>
                 </tr>`
               );
             }
@@ -461,11 +481,6 @@ function logJustification(type) {
     })
   }
 }
-
-
-
-
-
 function selectDays() {
   if ($('#daysJustifi').val() == 1) {
     $('#oneDay').show('slow')
@@ -483,8 +498,8 @@ function button(selectedDays) {
     $('#but').show('slow')
   }
 }
-
 function queryUpdate() {
+  $('#loadingRequest').show('slow');
   const id = $('#id').val()
   const date = $('#updDate').val()
   const justification = $('#justificationUpd').val()
@@ -497,7 +512,12 @@ function queryUpdate() {
       dataType: 'json',
       data: { id: id, date: date, justification: justification },
       statusCode: {
-        200: function () {
+        200: function (data) {
+          if (!data) {
+            $('#modalText').show('slow');
+            $('#justificationMessage').text(`Este usuario no cuenta con una justificación en la fecha ${date}`);
+            return
+          }
           alert('solicitud procesada')
           location.reload()
         },
@@ -548,6 +568,7 @@ function closeModal(selection) {
     $('#modalUpd').hide('slow')
   } else if (selection == 'delete') {
     $('#modalDel').hide('slow')
+    $('#modalDelPayRoll').hide('slow')
   }
 }
 

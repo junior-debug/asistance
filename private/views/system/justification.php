@@ -33,6 +33,15 @@
         <button type="button" class="btn btn-danger" style="margin-right: 20px;" onclick="closeModal('delete')">Cerrar</button>
     </div>
 </div>
+<div id="modalDelPayRoll" class="notice card" style="display: none;">
+  <div class="titleCont">
+    <h4 class="card-title">Desea Eliminar Justificaciones?</h4>
+  </div>
+  <div class="buttonsCont">
+    <button type="button" class="btn btn-success" id="buttonDelete" style="margin-right: 20px;" onclick="queryDeletePayroll()">Eliminar</button>
+    <button type="button" class="btn btn-danger" style="margin-right: 20px;" onclick="closeModal('delete')">Cerrar</button>
+  </div>
+</div>
 <div class="cardCont">
     <div class="loadingRequest" id="loadingRequest" style="display: none;">
         <div id="modalText" class="modalText" style="display: none;">
@@ -121,8 +130,8 @@
 
     <div id="updateCont" class="card" style="width: 90%;margin-top: 25px;display: none;">
       <div class="modification" style="margin-top: 10px;">
-        <button class="btn btn-success" style="margin-right: 50px;" onclick="modalFunction('modify')">Modificar</button>
-        <button class="btn btn-danger" onclick="modalFunction('delete')">Eliminar</button>
+        <button class="btn btn-success" style="margin-right: 50px;" onclick="modalFunction('modify', 'individual')">Modificar</button>
+        <button class="btn btn-danger" onclick="modalFunction('delete', 'individual')">Eliminar</button>
       </div>
         <div class="card-body">
             <div class="top">
@@ -155,6 +164,9 @@
     </div>
 
     <div id="updateContMassive" class="card" style="width: 90%;margin-top: 25px;display: none;">
+      <div class="modification" style="margin-top: 10px;">
+        <button class="btn btn-danger" onclick="modalFunction('delete', 'Payroll')">Eliminar</button>
+      </div>
       <div class="card-body">
         <div class="top">
           <h5 id="dataName" class="card-title"></h5>
@@ -170,7 +182,6 @@
               <th>Usuario</th>
               <th>Fecha</th>
               <th>Justificación</th>
-              <th>Eliminar</th>
             </tr>
             </thead>
             <tbody id="bodyMassive">

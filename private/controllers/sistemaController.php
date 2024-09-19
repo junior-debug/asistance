@@ -74,6 +74,13 @@ if (isset($_GET['mode'])) {
             echo json_encode($data);
             #------------------------------------------------------------------------------------
             break;
+        case  "queryDeletePayRoll":
+            $payrollUsers = $_POST['payrollUsers'];
+            $date = $_POST['date'];
+            $data = $conexion->queryDeletePayRoll($payrollUsers, $date);
+            echo json_encode($data);
+            #------------------------------------------------------------------------------------
+            break;
         case "justifications":
             include(PUBLIC_DIR . 'general/header.php');
             include(PUBLIC_DIR . 'general/navbar.php');

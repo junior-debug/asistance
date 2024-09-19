@@ -33,12 +33,31 @@ class database
 
     public function queryUpdate($id, $date, $justification)
     {
-        $sql = $this->db->query("UPDATE adtlog SET justificacion = '$justification' WHERE empleadoID = '$id' AND fecha_hora_aut = '$date'");
+        $date = $date . '%';
+        $sql = $this->db->query("SELECT * FROM adtlog WHERE empleadoID = '$id' AND fecha_hora_aut LIKE '$date' AND justificacion != ''");
+        if ($this->db->rows($sql) > 0) {
+            $sql = $this->db->query("UPDATE adtlog SET justificacion = '$justification' WHERE empleadoID = '$id' AND fecha_hora_aut = '$date'");
+        }
+        return false;
     }
 
     public function queryDelete($id, $date)
     {
         $sql = $this->db->query("DELETE FROM adtlog WHERE empleadoID = '$id' AND fecha_hora_aut = '$date'");
+    }
+
+    public function queryDeletePayRoll($payrollUsers, $date)
+    {
+        // Verifica que el array no esté vacío
+        if (!is_array($payrollUsers) || empty($payrollUsers)) {
+            throw new \Exception("La variable \$payrollUsers debe ser un array no vacío.");
+        }
+
+        // Convertir el array en una lista de strings separados por comas, cada uno entre comillas simples
+        $payRollList = implode("','", $payrollUsers);
+
+        // Ejecutar la consulta
+        $sql = $this->db->query("DELETE FROM adtlog WHERE fecha_hora_aut = '$date' AND empleadoID IN ('$payRollList')");
     }
 
     public function rotations()
