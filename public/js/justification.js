@@ -75,23 +75,28 @@ function validateJustification(id, date) {
 }
 
 async function sentDatesBetween(id, dates, justification) {
-  let validateJustificationDate
-  for (const date of dates) {
+  let validateJustificationDate;
 
-    validateJustificationDate = await validateJustification(id, date)
+  for (let i = 0; i < dates.length; i++) {
+    const date = dates[i];
+
+    console.log(date, dates);
+    validateJustificationDate = await validateJustification(id, date);
 
     if (validateJustificationDate === true) {
-      await sendDataJustification(id, justification, date)
-      logJustification('individual')
-    }
-    if (validateJustificationDate !== true) {
+      await sendDataJustification(id, justification, date);
+      logJustification('individual');
+    } else {
       $('#modalText').show('slow');
-      $('#justificationMessage').text(`Este usuario ya tiene una justificación, edita la justificación ${date}`);
+      $('#justificationMessage').text(`Este usuario ya tiene una justificación, edita la justificación para la fecha ${date}`);
       break;
     }
-    if (date === dates) {
-      alert('justificacion realizada')
-      location.reload()
+
+    // Si es el último elemento del array, entonces muestra el mensaje de "justificación realizada".
+    if (i === dates.length - 1) {
+      console.log('Entró al final');
+      alert('Justificación realizada');
+      location.reload();
     }
   }
 }
@@ -500,6 +505,7 @@ function button(selectedDays) {
 }
 function queryUpdate() {
   $('#loadingRequest').show('slow');
+  $('#spiner').show('slow');
   const id = $('#id').val()
   const date = $('#updDate').val()
   const justification = $('#justificationUpd').val()
@@ -513,6 +519,7 @@ function queryUpdate() {
       data: { id: id, date: date, justification: justification },
       statusCode: {
         200: function (data) {
+          $('#spiner').hide('slow');
           if (!data) {
             $('#modalText').show('slow');
             $('#justificationMessage').text(`Este usuario no cuenta con una justificación en la fecha ${date}`);
@@ -535,6 +542,8 @@ function queryUpdate() {
 function queryDelete() {
   const id = $('#id').val()
   const date = $('#dateDelete').val()
+  $('#loadingRequest').show('slow');
+  $('#spiner').show('slow');
   $.ajax({
     type: 'POST',
     url: '?view=sistema&mode=queryDelete',
