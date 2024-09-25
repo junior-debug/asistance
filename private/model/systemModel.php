@@ -36,7 +36,16 @@ class database
         $date = $date . '%';
         $sql = $this->db->query("SELECT * FROM adtlog WHERE empleadoID = '$id' AND fecha_hora_aut LIKE '$date' AND justificacion != ''");
         if ($this->db->rows($sql) > 0) {
+            while ($data = $this->db->recorrer($sql)) {
+                $respuesta[] = $data;
+            }
+        } else {
+            $respuesta = false;
+        }
+
+        if ($respuesta) {
             $sql = $this->db->query("UPDATE adtlog SET justificacion = '$justification' WHERE empleadoID = '$id' AND fecha_hora_aut = '$date'");
+            return true;
         }
         return false;
     }

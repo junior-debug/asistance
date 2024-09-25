@@ -46,7 +46,7 @@
     <div class="loadingRequest" id="loadingRequest" style="display: none;">
         <div id="modalText" class="modalText" style="display: none;">
             <h4 id="justificationMessage" style="color: white;"></h4>
-            <button id="butCloseAlert" type="button" class="btn btn-danger" style="margin-right: 20px;" onclick="closeModalJustification()">Cerrar</button>
+            <button id="butCloseAlert" type="button" class="btn btn-danger" style="margin-right: 20px;display: none;" onclick="closeModalJustification()">Cerrar</button>
         </div>
         <div id="spiner" style="display: none;">
             <img src="public/images/loading-23.gif" alt="spiner">

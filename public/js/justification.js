@@ -88,13 +88,13 @@ async function sentDatesBetween(id, dates, justification) {
       logJustification('individual');
     } else {
       $('#modalText').show('slow');
+      $('#butCloseAlert').show('slow');
       $('#justificationMessage').text(`Este usuario ya tiene una justificación, edita la justificación para la fecha ${date}`);
       break;
     }
 
     // Si es el último elemento del array, entonces muestra el mensaje de "justificación realizada".
     if (i === dates.length - 1) {
-      console.log('Entró al final');
       alert('Justificación realizada');
       location.reload();
     }
@@ -135,7 +135,9 @@ async function sendJustification(id) {
       alert('seleccione justificacion')
     }
     if (justification) {
+      $('#spiner').show('slow')
       validateDate = await validateJustification(id, $('#oneDate').val())
+      console.log(validateDate)
       if (validateDate === true) {
         await sendDataJustification(id, justification)
         logJustification('individual')
@@ -143,7 +145,9 @@ async function sendJustification(id) {
         location.reload()
       }
       if (validateDate !== true) {
+        $('#spiner').hide('slow')
         $('#modalText').show('slow');
+        $('#butCloseAlert').show('slow');
         $('#justificationMessage').text(`Este usuario ya tiene una justificación, edita la justificación ${$('#oneDate').val()}`);
       }
     }
@@ -175,6 +179,8 @@ function validationData() {
 function closeModalJustification() {
   $('#loadingRequest').hide('slow')
   $('#spiner').hide('slow')
+  $('#justificationMessage').text('');
+  $('#butCloseAlert').hide('slow');
 }
 
 function modalFunction(option, opt) {
@@ -504,14 +510,14 @@ function button(selectedDays) {
   }
 }
 function queryUpdate() {
-  $('#loadingRequest').show('slow');
-  $('#spiner').show('slow');
   const id = $('#id').val()
   const date = $('#updDate').val()
   const justification = $('#justificationUpd').val()
   if (justification == null) {
     alert('seleccione justificacion')
   } else if (justification != null) {
+    $('#loadingRequest').show('slow');
+    $('#spiner').show('slow');
     $.ajax({
       type: 'POST',
       url: '?view=sistema&mode=queryUpdate',
@@ -520,8 +526,9 @@ function queryUpdate() {
       statusCode: {
         200: function (data) {
           $('#spiner').hide('slow');
-          if (!data) {
+          if (data === false) {
             $('#modalText').show('slow');
+            $('#butCloseAlert').show('slow');
             $('#justificationMessage').text(`Este usuario no cuenta con una justificación en la fecha ${date}`);
             return
           }
