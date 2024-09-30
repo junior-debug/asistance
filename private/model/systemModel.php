@@ -52,7 +52,7 @@ class database
 
     public function queryDelete($id, $date)
     {
-        $sql = $this->db->query("DELETE FROM adtlog WHERE empleadoID = '$id' AND fecha_hora_aut = '$date'");
+        $sql = $this->db->query("DELETE FROM adtlog WHERE empleadoID = '$id' AND fecha_hora_aut like '$date%'");
     }
 
     public function queryDeletePayRoll($payrollUsers, $date)

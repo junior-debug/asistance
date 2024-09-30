@@ -231,7 +231,7 @@ function queryJustification() {
   $('#loadingRequest').show('slow');
   $('#spiner').show('slow');
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   let currentPage = 1;
   let totalPages = 0;
   let data = [];  // Declarar data fuera del ámbito de la función AJAX
@@ -264,9 +264,11 @@ function queryJustification() {
     paginatedData.forEach((item, index) => {
       if (item.justificacion !== '') {
         let date = item.fecha_hora_aut.slice(0, 10);
+        let [year, month, day] = date.split('-');
+        let formattedDate = `${day}/${month}/${year}`;
         $('#body').append(
           `<tr id="deleteJust${item.empleadoID}">
-                        <td class='date'>${date}</td>
+                        <td class='date'>${formattedDate}</td>
                         <td id="empleadoid${start + index + 1}">${item.empleadoID}</td>
                         <td>${item.justificacion}</td>
           </tr>`
