@@ -40,11 +40,26 @@ class database
     }
 
     // public function findEmployeById($id): bool
-    public function findEmployeById($id, $dateAdmission)
+    public function findEmployeById($id)
     {
-        $sql = $this->db->query("SELECT count(*) FROM empleados WHERE cedula = '$id' AND fecha_ingreso = '$dateAdmission'");
-        $sql = mysqli_fetch_array($sql);
-        return intval($sql[0]) > 0 ? true : false;
+        // Utilizamos una consulta preparada para mayor seguridad
+        $stmt = $this->db->prepare("SELECT cedula FROM empleados WHERE cedula = ? AND estatus = 'activo'");
+
+        // Enlazamos el parámetro (asumimos que 'cedula' es de tipo string)
+        $stmt->bind_param("s", $id);
+
+        // Ejecutamos la consulta
+        $stmt->execute();
+
+        // Obtenemos el resultado
+        $stmt->store_result();
+
+        // Si hay al menos una fila encontrada, devolvemos true
+        if ($stmt->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function queryEmployee($id)

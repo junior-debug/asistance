@@ -144,6 +144,50 @@ if (empty($_SESSION)) {
                 $fileContent = array_filter($fileContent);
                 $fileContent = array_slice($fileContent, 1);
 
+                function formatDateToYMD($date) {
+                    // Definimos una lista de formatos de fecha comunes a intentar
+                    $formats = [
+                        'Y-m-d',  // Formato ISO (2024-10-08)
+                        'd/m/Y',  // Formato europeo (08/10/2024)
+                        'm/d/Y',  // Formato estadounidense (10/08/2024)
+                        'd-m-Y',  // Formato con guiones (08-10-2024)
+                        'm-d-Y',  // Formato con guiones (10-08-2024)
+                        'Y/m/d',  // Formato ISO con barras (2024/10/08)
+                        'Ymd',    // Sin separadores (20241008)
+                        'd F Y',  // Formato con nombre de mes (08 October 2024)
+                        'F d, Y', // Formato de nombre de mes antes (October 08, 2024)
+                    ];
+
+                    // Intentamos cada formato y devolvemos el primero que coincida
+                    foreach ($formats as $format) {
+                        $dateTime = DateTime::createFromFormat($format, $date);
+                        if ($dateTime && $dateTime->format($format) === $date) {
+                            return $dateTime->format('Y-m-d');
+                        }
+                    }
+
+                    // Si no se pudo detectar el formato, devolver null o lanzar una excepción
+                    return null;  // O puedes lanzar una excepción: throw new Exception("Formato de fecha no reconocido.");
+                }
+
+                function excelDateToDateTime($excelDate) {
+                    // Fecha base de Excel (1 de enero de 1900 es el día 1)
+                    $startDate = new DateTime('1899-12-30'); // Ajuste de desfase con Excel
+                    $daysInterval = new DateInterval('P' . intval($excelDate) . 'D');
+                    $startDate->add($daysInterval);
+                    return $startDate->format('Y-m-d');
+                }
+
+                function formatDate($date) {
+                    // Detectamos si es un número de serie de Excel (cadena numérica grande)
+                    if (is_numeric($date) && intval($date) > 30000) {  // Para números grandes (fechas después de 1900)
+                        return excelDateToDateTime($date);
+                    } else {
+                        // Intentamos convertir el formato de fecha con diferentes patrones
+                        return formatDateToYMD($date);
+                    }
+                }
+
                 foreach ($fileContent as $employees) {
                     $listEmployees[] = explode(";", $employees);
                 }
@@ -153,31 +197,20 @@ if (empty($_SESSION)) {
 
                 foreach ($listEmployees as $datosEmployees) {
                     $cedula = $datosEmployees[2];
-                    $fechaAdmission = $datosEmployees[6];
-                    $fechaAdmission = explode("/", $fechaAdmission);
-                    $fechaAdmission0 = intval($fechaAdmission[0]);
-                    if ($fechaAdmission0 < 10) {
-                        $fechaAdmission0 = '0' . $fechaAdmission[0];
-                    };
-                    $fechaAdmission1 = intval($fechaAdmission[1]);
-                    if ($fechaAdmission1 < 10) {
-                        $fechaAdmission1 = '0' . $fechaAdmission[1];
-                    };
-                    $fechaAdmission2 = $fechaAdmission[2];
-                    $fechaAdmission = "$fechaAdmission2" . "-" . "$fechaAdmission1" . "-" . "$fechaAdmission0";
-                    $employes_exists = $conexion->findEmployeById($cedula, $fechaAdmission);
-                    $dataError = $datosEmployees;
-                        
-                    if($employes_exists){
+                    $employes_exists = $conexion->findEmployeById($cedula);
+                    if ($employes_exists) {
+                        echo "Empleado encontrado: Cedula: " . $cedula . "\n";
                         $isError = true;
+                        print_r($datosEmployees);  // Aquí imprimes los detalles del empleado
                     }
                 }
 
                 if($isError == true){
-                    echo $dataError[2]." ".$dataError[4]." ".$dataError[5];
+//                    echo $dataError[2]." ".$dataError[4]." ".$dataError[5];
                     http_response_code(401);
                 } else {
                     foreach ($listEmployees as $dataEmployees) {
+                        print_r($dataEmployees);
                         $business = $dataEmployees[0];
                         $business = strtoupper($business);
                         $payroll = $dataEmployees[1];
@@ -190,25 +223,8 @@ if (empty($_SESSION)) {
                         $email = strtoupper($email);
                         $name = $dataEmployees[5];
                         $name = strtoupper($name);
-                        $dateAdmission = $dataEmployees[6];
-                        $dateAdmission = explode("/", $dateAdmission);
-                        $dateAdmission0 = intval($dateAdmission[0]);
-    
-                        if ($dateAdmission0 < 10) {
-                            $dateAdmission0 = '0' . $dateAdmission[0];
-                        };
-    
-                        $dateAdmission1 = intval($dateAdmission[1]);
-    
-                        if ($dateAdmission1 < 10) {
-                            $dateAdmission1 = '0' . $dateAdmission[1];
-                        };
-    
-                        $dateAdmission2 = $dateAdmission[2];
-                        $dateAdmission = "$dateAdmission2" . "-" . "$dateAdmission1" . "-" . "$dateAdmission0";
-                        $dueDate = $dataEmployees[7];
-                        $dueDate = explode("/", $dueDate);
-                        $dueDate = "$dueDate[2]" . "-" . "$dueDate[0]" . "-" . "$dueDate[1]";
+                        $dateAdmission = formatDate($dataEmployees[6]); // Fecha desde CSV
+                        $dueDate = formatDate($dataEmployees[7]);
                         $position = $dataEmployees[8];
                         $position = strtoupper($position);
                         $campus = $dataEmployees[9];
@@ -233,7 +249,7 @@ if (empty($_SESSION)) {
                         $feeding = $dataEmployees[23];
                         $vacationBonus = $dataEmployees[24];
                         $utilities = $dataEmployees[25];
-    
+
                         $registro = $conexion->registro(
                             $business,
                             $payroll,
