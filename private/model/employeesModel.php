@@ -36,7 +36,32 @@ class database
         $vacationBonus,
         $utilities
     ) {
-        $sql = $this->db->query("INSERT INTO empleados (empresa, nomina_cliente, cedula, fecha_nacimiento, correo, nombre_apellido, fecha_ingreso, fecha_egreso, finalizacion_contrato, cargo, unidad_organizativa, turno, rotacion, horario, excepcion, ficha, banco, tipo_cuenta, numero_cuenta, sueldo, destreza, direccion, telefono_1, telefono_2, tickets, bono, utilidades, estatus) VALUES ('$business', '$payroll', '$id', '$birthDate', '$email', '$name', '$dateAdmission','0000-00-00', '$dueDate', '$position', '$campus', '$turn', '$rotation', '$workingHours', '$exceptionLevel', '$file', '$bank', '$accType', '$accNumber', '$salary', '$manualDexterity', '$address', '$phone1', '$phone2', '$feeding', '$vacationBonus', '$utilities', 'activo')");
+        try {
+            // Ejecutar la consulta
+            $sql = $this->db->query("INSERT INTO empleados (
+        empresa, nomina_cliente, cedula, fecha_nacimiento, correo, nombre_apellido, 
+        fecha_ingreso, fecha_egreso, finalizacion_contrato, cargo, unidad_organizativa, 
+        turno, rotacion, horario, excepcion, ficha, banco, tipo_cuenta, numero_cuenta, 
+        sueldo, destreza, direccion, telefono_1, telefono_2, tickets, bono, utilidades, estatus, estatus_cambios
+    ) VALUES (
+        '$business', '$payroll', '$id', '$birthDate', '$email', '$name', '$dateAdmission', 
+        null, '$dueDate', '$position', '$campus', '$turn', '$rotation', '$workingHours', 
+        '$exceptionLevel', '$file', '$bank', '$accType', '$accNumber', '$salary', 
+        '$manualDexterity', '$address', '$phone1', '$phone2', '$feeding', '$vacationBonus', 
+        '$utilities', 'activo', 0
+    )");
+
+            if ($sql === false) {
+                // Mostrar el error de SQL si la consulta falla
+                echo "Error al insertar el registro: " . $id . $this->db->error;
+            }
+
+        } catch (Exception $e) {
+            // Capturar y mostrar cualquier error que ocurra
+            echo "Excepción capturada: " . $e->getMessage();
+        }
+
+
     }
 
     // public function findEmployeById($id): bool

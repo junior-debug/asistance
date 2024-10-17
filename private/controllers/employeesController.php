@@ -145,29 +145,28 @@ if (empty($_SESSION)) {
                 $fileContent = array_slice($fileContent, 1);
 
                 function formatDateToYMD($date) {
-                    // Definimos una lista de formatos de fecha comunes a intentar
-                    $formats = [
-                        'Y-m-d',  // Formato ISO (2024-10-08)
-                        'd/m/Y',  // Formato europeo (08/10/2024)
-                        'm/d/Y',  // Formato estadounidense (10/08/2024)
-                        'd-m-Y',  // Formato con guiones (08-10-2024)
-                        'm-d-Y',  // Formato con guiones (10-08-2024)
-                        'Y/m/d',  // Formato ISO con barras (2024/10/08)
-                        'Ymd',    // Sin separadores (20241008)
-                        'd F Y',  // Formato con nombre de mes (08 October 2024)
-                        'F d, Y', // Formato de nombre de mes antes (October 08, 2024)
-                    ];
-
-                    // Intentamos cada formato y devolvemos el primero que coincida
-                    foreach ($formats as $format) {
-                        $dateTime = DateTime::createFromFormat($format, $date);
-                        if ($dateTime && $dateTime->format($format) === $date) {
-                            return $dateTime->format('Y-m-d');
+                    // Intentamos convertir fechas en formato d/m/Y al formato Y-m-d
+                    $dateTime = DateTime::createFromFormat('d/m/Y', $date);
+                    if ($dateTime !== false) {
+                        return $dateTime->format('Y-m-d');
+                    } else {
+                        // Intentar normalizar la fecha
+                        $parts = explode('/', $date);
+                        if (count($parts) == 3) {
+                            // Asegurarse de que el día y el mes tengan dos dígitos
+                            $day = str_pad(trim($parts[0]), 2, '0', STR_PAD_LEFT);
+                            $month = str_pad(trim($parts[1]), 2, '0', STR_PAD_LEFT);
+                            $year = trim($parts[2]);
+                            // Crear la fecha en el formato correcto
+                            $normalizedDate = "$year-$month-$day";
+                            $dateTime = DateTime::createFromFormat('Y-m-d', $normalizedDate);
+                            echo ($dateTime);
+                            if ($dateTime !== false) {
+                                return $dateTime->format('Y-m-d');
+                            }
                         }
+                        return null; // Si no se puede formatear, retornar nulo
                     }
-
-                    // Si no se pudo detectar el formato, devolver null o lanzar una excepción
-                    return null;  // O puedes lanzar una excepción: throw new Exception("Formato de fecha no reconocido.");
                 }
 
                 function excelDateToDateTime($excelDate) {
@@ -180,12 +179,12 @@ if (empty($_SESSION)) {
 
                 function formatDate($date) {
                     // Detectamos si es un número de serie de Excel (cadena numérica grande)
-                    if (is_numeric($date) && intval($date) > 30000) {  // Para números grandes (fechas después de 1900)
+                    if (is_numeric($date) && intval($date) > 20000) {  // Para números grandes (fechas después de 1900)
                         return excelDateToDateTime($date);
-                    } else {
+                    } else
                         // Intentamos convertir el formato de fecha con diferentes patrones
-                        return formatDateToYMD($date);
-                    }
+                    return formatDateToYMD($date);
+
                 }
 
                 foreach ($fileContent as $employees) {
@@ -201,27 +200,23 @@ if (empty($_SESSION)) {
                     if ($employes_exists) {
                         echo "Empleado encontrado: Cedula: " . $cedula . "\n";
                         $isError = true;
-                        print_r($datosEmployees);  // Aquí imprimes los detalles del empleado
                     }
                 }
 
-                if($isError == true){
-//                    echo $dataError[2]." ".$dataError[4]." ".$dataError[5];
+                if($isError){
+                    echo $dataError[2]." ".$dataError[4]." ".$dataError[5];
                     http_response_code(401);
                 } else {
                     foreach ($listEmployees as $dataEmployees) {
-                        print_r($dataEmployees);
                         $business = $dataEmployees[0];
                         $business = strtoupper($business);
                         $payroll = $dataEmployees[1];
                         $payroll = strtoupper($payroll);
                         $id = $dataEmployees[2];
-                        $birthDate = $dataEmployees[3];
-                        $birthDate = explode("/", $birthDate);
-                        $birthDate = "$birthDate[2]" . "-" . "$birthDate[0]" . "-" . "$birthDate[1]";
+                        $birthDate = formatDate($dataEmployees[3]);
                         $email = $dataEmployees[4];
                         $email = strtoupper($email);
-                        $name = $dataEmployees[5];
+                        $name = mb_convert_encoding($dataEmployees[5], 'UTF-8', 'auto');
                         $name = strtoupper($name);
                         $dateAdmission = formatDate($dataEmployees[6]); // Fecha desde CSV
                         $dueDate = formatDate($dataEmployees[7]);
@@ -242,7 +237,7 @@ if (empty($_SESSION)) {
                         $salary = $dataEmployees[18];
                         $manualDexterity = $dataEmployees[19];
                         $manualDexterity = strtoupper($manualDexterity);
-                        $address = $dataEmployees[20];
+                        $address = iconv('UTF-8', 'UTF-8//IGNORE',$dataEmployees[20]);
                         $address = strtoupper($address);
                         $phone1 = $dataEmployees[21];
                         $phone2 = $dataEmployees[22];
