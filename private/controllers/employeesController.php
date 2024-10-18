@@ -216,7 +216,7 @@ if (empty($_SESSION)) {
                         $birthDate = formatDate($dataEmployees[3]);
                         $email = $dataEmployees[4];
                         $email = strtoupper($email);
-                        $name = mb_convert_encoding($dataEmployees[5], 'UTF-8', 'auto');
+                        $name = iconv('UTF-8', 'UTF-8//IGNORE',$dataEmployees[5]);
                         $name = strtoupper($name);
                         $dateAdmission = formatDate($dataEmployees[6]); // Fecha desde CSV
                         $dueDate = formatDate($dataEmployees[7]);

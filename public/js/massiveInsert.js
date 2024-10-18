@@ -70,7 +70,7 @@ document.getElementById('formFile').addEventListener('change', function(event) {
       }
 
       console.log('Datos parseados:', datos);
-      const cabecerasAValidar = ['Empresa', 'N�mina / Cliente', 'C�dula', 'Nombre y Apellido', 'Fecha de Ingreso', 'Cargo', 'Turno', 'Rotacion', 'Horario de Trabajo', 'Ficha'];
+      const cabecerasAValidar = ['Empresa', 'N�mina / Cliente', 'C�dula', 'Nombre y Apellido', 'Fecha de Ingreso', 'Cargo', 'Turno', 'Rotacion', 'Horario de Trabajo'];
       
       let errores = []
       for (const dato of datos) {
