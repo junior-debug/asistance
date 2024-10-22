@@ -86,6 +86,8 @@ function queryEmployees() {
           <th scope="col">Tickets</th>
           <th scope="col">Bono</th>
           <th scope="col">Utilidades</th>
+          <th scope="col">Motivo</th>
+          <th scope="col">Comentario</th>
           <th scope="col">Estatus</th>
           </tr>`);
         }
@@ -156,6 +158,8 @@ function queryEmployees() {
                 <td>${data[i].tickets}</td>
                 <td>${data[i].bono}</td>
                 <td>${data[i].utilidades}</td>
+                <td>${data[i].motivo}</td>
+                <td>${data[i].comentario}</td>
                 <td>${data[i].estatus}</td>
               </tr>`
             );
