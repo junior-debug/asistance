@@ -140,6 +140,7 @@ if (empty($_SESSION)) {
             case 'mInsertCore':
                 $fileContent = $_FILES['fileEmployees'];
                 $fileContent = file_get_contents($fileContent['tmp_name']);
+                $fileContent = mb_convert_encoding($fileContent, 'UTF-8', mb_detect_encoding($fileContent, 'UTF-8, ISO-8859-1', true));
                 $fileContent = explode("\n", $fileContent);
                 $fileContent = array_filter($fileContent);
                 $fileContent = array_slice($fileContent, 1);
@@ -216,7 +217,7 @@ if (empty($_SESSION)) {
                         $birthDate = formatDate($dataEmployees[3]);
                         $email = $dataEmployees[4];
                         $email = strtoupper($email);
-                        $name = iconv('UTF-8', 'UTF-8//IGNORE',$dataEmployees[5]);
+                        $name = mb_strtoupper($dataEmployees[5], 'UTF-8');
                         $name = strtoupper($name);
                         $dateAdmission = formatDate($dataEmployees[6]); // Fecha desde CSV
                         $dueDate = formatDate($dataEmployees[7]);
