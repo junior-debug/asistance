@@ -197,9 +197,30 @@ if (empty($_SESSION)) {
 
                 foreach ($listEmployees as $datosEmployees) {
                     $cedula = $datosEmployees[2];
+                    $payRoll = $datosEmployees[1];
+                    $turn = $datosEmployees[10];
+                    $workingHours = $datosEmployees[12];
                     $employes_exists = $conexion->findEmployeById($cedula);
+                    $dontExistPayRoll = $conexion->findPayRoll(strtoupper($payRoll));
+                    $findTurn = $conexion->findTurn(strtoupper($turn));
+                    $findWorkingHours = $conexion->findWorkingHours(strtoupper($workingHours));
                     if ($employes_exists) {
                         echo "Empleado encontrado: Cedula: " . $cedula . "\n";
+                        $isError = true;
+                    }
+
+                    if (!$dontExistPayRoll) {
+                        echo "Nomina no encontrado: Cedula: " . $cedula . "\n";
+                        $isError = true;
+                    }
+
+                    if (!$findTurn) {
+                        echo "Turno no encontrado: Cedula: " . $cedula . "\n";
+                        $isError = true;
+                    }
+
+                    if (!$findWorkingHours) {
+                        echo "Horario no encontrado: Cedula: " . $cedula . "\n";
                         $isError = true;
                     }
                 }

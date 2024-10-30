@@ -87,6 +87,78 @@ class database
         }
     }
 
+    public function findPayRoll($payRoll)
+    {
+        echo $payRoll;
+        // Utilizamos una consulta preparada para mayor seguridad
+        $stmt = $this->db->prepare("SELECT id FROM nominas WHERE nomina = ?  AND estatus_deshabilitado = 0");
+
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . $this->db->error);
+        }
+
+        // Enlazamos el parámetro (asumimos que 'cedula' es de tipo string)
+        $stmt->bind_param("s", $payRoll);
+
+        // Ejecutamos la consulta
+        $stmt->execute();
+
+        // Obtenemos el resultado
+        $stmt->store_result();
+
+        // Si hay al menos una fila encontrada, devolvemos true
+        if ($stmt->num_rows > 0) {
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function findTurn($turn)
+    {
+        // Utilizamos una consulta preparada para mayor seguridad
+        $stmt = $this->db->prepare("SELECT * FROM turnos WHERE turno = ? ");
+
+        // Enlazamos el parámetro (asumimos que 'cedula' es de tipo string)
+        $stmt->bind_param("s", $turn);
+
+        // Ejecutamos la consulta
+        $stmt->execute();
+
+        // Obtenemos el resultado
+        $stmt->store_result();
+
+        // Si hay al menos una fila encontrada, devolvemos true
+        if ($stmt->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function findWorkingHours($workingHours)
+    {
+        // Utilizamos una consulta preparada para mayor seguridad
+        $stmt = $this->db->prepare("SELECT * FROM horarios WHERE horarios = ? AND estatus_deshabilitado = 0");
+
+        // Enlazamos el parámetro (asumimos que 'cedula' es de tipo string)
+        $stmt->bind_param("s", $workingHours);
+
+        // Ejecutamos la consulta
+        $stmt->execute();
+
+        // Obtenemos el resultado
+        $stmt->store_result();
+
+        // Si hay al menos una fila encontrada, devolvemos true
+        if ($stmt->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function queryEmployee($id)
     {
         $sql = $this->db->query("SELECT * FROM empleados WHERE cedula = '$id' AND estatus = 'activo'");
