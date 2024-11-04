@@ -89,7 +89,6 @@ class database
 
     public function findPayRoll($payRoll)
     {
-        echo $payRoll;
         // Utilizamos una consulta preparada para mayor seguridad
         $stmt = $this->db->prepare("SELECT id FROM nominas WHERE nomina = ?  AND estatus_deshabilitado = 0");
 
@@ -144,6 +143,28 @@ class database
 
         // Enlazamos el parámetro (asumimos que 'cedula' es de tipo string)
         $stmt->bind_param("s", $workingHours);
+
+        // Ejecutamos la consulta
+        $stmt->execute();
+
+        // Obtenemos el resultado
+        $stmt->store_result();
+
+        // Si hay al menos una fila encontrada, devolvemos true
+        if ($stmt->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function findRotation($rotation)
+    {
+        // Utilizamos una consulta preparada para mayor seguridad
+        $stmt = $this->db->prepare("SELECT * FROM rotaciones WHERE rotacion = ? AND estatus_deshabilitado = 0");
+
+        // Enlazamos el parámetro (asumimos que 'cedula' es de tipo string)
+        $stmt->bind_param("s", $rotation);
 
         // Ejecutamos la consulta
         $stmt->execute();

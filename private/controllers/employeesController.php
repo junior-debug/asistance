@@ -200,33 +200,40 @@ if (empty($_SESSION)) {
                     $payRoll = $datosEmployees[1];
                     $turn = $datosEmployees[10];
                     $workingHours = $datosEmployees[12];
+                    $rotation = $datosEmployees[11];
                     $employes_exists = $conexion->findEmployeById($cedula);
                     $dontExistPayRoll = $conexion->findPayRoll(strtoupper($payRoll));
                     $findTurn = $conexion->findTurn(strtoupper($turn));
                     $findWorkingHours = $conexion->findWorkingHours(strtoupper($workingHours));
+                    $findRotation = $conexion->findRotation(strtoupper($rotation));
+
                     if ($employes_exists) {
                         echo "Empleado encontrado: Cedula: " . $cedula . "\n";
                         $isError = true;
                     }
 
                     if (!$dontExistPayRoll) {
-                        echo "Nomina no encontrado: Cedula: " . $cedula . "\n";
+                        echo "Nomina no encontrada usuario: " . $cedula . "Nomina ingresada: " . $payRoll . "\n";
                         $isError = true;
                     }
 
                     if (!$findTurn) {
-                        echo "Turno no encontrado: Cedula: " . $cedula . "\n";
+                        echo "Turno no encontrado usuario: " . $cedula . "Nomina ingresada: " . $datosEmployees . "\n";
                         $isError = true;
                     }
 
                     if (!$findWorkingHours) {
-                        echo "Horario no encontrado: Cedula: " . $cedula . "\n";
+                        echo "Horario no encontrado usuario: " . $cedula . "Horario ingresado: " . $workingHours ."\n";
+                        $isError = true;
+                    }
+
+                    if (!$findRotation) {
+                        echo "Rotacion no encontrada usuario: " . $cedula . "Rotacion ingresada: " . $rotation . "\n";
                         $isError = true;
                     }
                 }
 
                 if($isError){
-                    echo $dataError[2]." ".$dataError[4]." ".$dataError[5];
                     http_response_code(401);
                 } else {
                     foreach ($listEmployees as $dataEmployees) {
