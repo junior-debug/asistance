@@ -61,6 +61,33 @@ const dataDays = document.getElementsByClassName('dataDay')
 
 const day = document.getElementsByClassName('day')
 
+function populateYears(selectId, startYear) {
+  const select = document.getElementById(selectId);
+  const currentYear = new Date().getFullYear();
+
+  // Limpiamos el select antes de añadir los nuevos años
+  select.innerHTML = '';
+
+  // Agregar la opción por defecto
+  const defaultOption = document.createElement('option');
+  defaultOption.value = '';
+  defaultOption.textContent = 'Seleccione año';
+  select.appendChild(defaultOption);
+
+  // Llenamos el select con los años
+  for (let year = startYear; year <= currentYear; year++) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = year;
+    select.appendChild(option);
+  }
+}
+
+// Llamamos a la función cuando la página carga
+document.addEventListener('DOMContentLoaded', function() {
+  populateYears('selectYear', 2023);
+});
+
 function monthsSelect(selectedMonth) {
   selectedYear = $('#selectYear').val()
   if (selectedYear == year) {
