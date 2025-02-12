@@ -506,10 +506,22 @@ function selectDays() {
 
 function button(selectedDays) {
   if (selectedDays == '1dia') {
-    $('#but').show('slow')
+    $('#openModal').show('slow')
   } else if (selectedDays == 'dias' && $('#initDay').val() != '') {
-    $('#but').show('slow')
+    $('#openModal').show('slow')
   }
+}
+
+function openModal() {
+  if (($('#insertOption').val() === 'masiva')) {
+    $('#myModal').show('slow')
+  }else {
+    validationData()
+  }
+}
+
+function closeModalMasive() {
+  $('#myModal').hide('slow')
 }
 function queryUpdate() {
   const id = $('#id').val()

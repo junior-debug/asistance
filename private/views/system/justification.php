@@ -124,34 +124,44 @@
                 </div>
             </div>
 
-            <button id="but" class="btn btn-primary" style="margin-top: 1em;display: none;" onclick="validationData()">Justificar</button>
+          <button id="openModal" class="btn btn-primary" style="margin-top: 1em;display: none;" onclick="openModal()">Ejecutar</button>
+          <!-- <button id="but" class="btn btn-primary" style="margin-top: 1em;display: none;" onclick="validationData()">Justificar</button> -->
+       </div>
+      <div id="myModal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Justificación Masiva</h2>
+          <p>Esta justificación afectará a todos los empleados de la nómina. Puedes excluir alguno en el siguiente formulario.</p>
+          <button id="but" class="btn btn-primary" onclick="validationData()">Justificar</button>
+          <button id="closeModal" class="btn btn-secondary" onclick="closeModalMasive()">Cerrar</button>
         </div>
-    </div>
-
-    <div id="updateCont" class="card" style="width: 90%;margin-top: 25px;display: none;">
-      <div class="modification" style="margin-top: 10px;">
-        <button class="btn btn-success" style="margin-right: 50px;" onclick="modalFunction('modify', 'individual')">Modificar</button>
-        <button class="btn btn-danger" onclick="modalFunction('delete', 'individual')">Eliminar</button>
       </div>
-        <div class="card-body">
-            <div class="top">
-                <h5 id="dataName" class="card-title"></h5>
-                <h5 id="dataId" class="card-title"></h5>
-                <h5 id="dataStatus" class="card-title"></h5>
-                <img id="off" style="display: none; width: 2em;" src="public/images/power-on.png" alt="off">
-                <img id="on" style="display: none; width: 2em;" src="public/images/power.png" alt="on">
-            </div>
-            <div class="body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                        <th>Fecha</th>
-                        <th>Usuario</th>
-                        <th>Justificación</th>
-                        </tr>
-                    </thead>
-                    <tbody id="body">
-                        <!-- Aquí se insertarán las filas de la tabla -->
+   </div>
+
+   <div id="updateCont" class="card" style="width: 90%;margin-top: 25px;display: none;">
+     <div class="modification" style="margin-top: 10px;">
+       <button class="btn btn-success" style="margin-right: 50px;" onclick="modalFunction('modify', 'individual')">Modificar</button>
+       <button class="btn btn-danger" onclick="modalFunction('delete', 'individual')">Eliminar</button>
+     </div>
+       <div class="card-body">
+           <div class="top">
+               <h5 id="dataName" class="card-title"></h5>
+               <h5 id="dataId" class="card-title"></h5>
+               <h5 id="dataStatus" class="card-title"></h5>
+               <img id="off" style="display: none; width: 2em;" src="public/images/power-on.png" alt="off">
+               <img id="on" style="display: none; width: 2em;" src="public/images/power.png" alt="on">
+           </div>
+           <div class="body">
+               <table class="table">
+                   <thead>
+                       <tr>
+                       <th>Fecha</th>
+                       <th>Usuario</th>
+                       <th>Justificación</th>
+                       </tr>
+                   </thead>
+                   <tbody id="body">
+                       <!-- Aquí se insertarán las filas de la tabla -->
                     </tbody>
                 </table>
                 <nav aria-label="Page navigation example">
