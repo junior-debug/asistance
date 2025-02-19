@@ -180,13 +180,24 @@ body {
   align-items: center;
 }
 
+.actionBut {
+  width: 60%;
+}
+
 .modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  text-align: center;
-  position: relative;
+  max-height: 80vh; /* Limita la altura del modal al 80% de la pantalla */
+  overflow: hidden; /* Evita que el modal se expanda más allá de su tamaño */
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-container {
+  max-height: 50vh; /* Ajusta la altura máxima de la tabla */
+  overflow-y: auto; /* Agrega scroll vertical si la tabla es muy grande */
+  border: 1px solid #ddd; /* Opcional: para marcar los bordes */
 }
 
 .close {

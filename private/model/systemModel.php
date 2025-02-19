@@ -26,9 +26,27 @@ class database
         return $respuesta;
     }
 
-    public function queryJustification($id, $date, $justification, $finalDay)
+    public function queryJustification($id, $date, $justification)
     {
-        $sql = $this->db->query("INSERT INTO adtlog (empleadoID, fecha_hora_aut, fecha_aut, hora_aut, direccion, nombre_dispositivo, sn_dispositivo, nombre_persona, no_tarjeta, justificacion, final_justificacion) VALUES ('$id', '$date', '0000-00-00', '12:56:01.000000', 'IN', '', '', '', '', '$justification', '$finalDay')");
+        $fecha_aut = date('Y-m-d');
+        try {
+            $sql = "INSERT INTO adtlog (empleadoID, fecha_hora_aut, fecha_aut, hora_aut, direccion, nombre_dispositivo, sn_dispositivo, nombre_persona, no_tarjeta, justificacion, final_justificacion) 
+                VALUES ('$id', '$date', '$fecha_aut', '12:56:01.000000', 'IN', '', '', '', '', '$justification', '')";
+
+            $result = $this->db->query($sql);
+
+            if (!$result) {
+                // Si query devuelve false, obtenemos el error
+                throw new Exception("Error en la consulta: " . $this->db->error);
+            }
+
+            return true; // Éxito
+        } catch (Exception $e) {
+            // Registrar o mostrar el error
+            echo "<strong>Error:</strong> " . $e->getMessage();
+            error_log($e->getMessage()); // Registrar en el log de errores
+            return false; // Indicar que falló
+        }
     }
 
     public function queryUpdate($id, $date, $justification)

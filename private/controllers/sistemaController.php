@@ -34,8 +34,7 @@ if (isset($_GET['mode'])) {
             $id = $_POST['id'];
             $date = $_POST['date'];
             $justification = $_POST['justification'];
-            $finalDay = $_POST['finalDay'];
-            $data = $conexion->queryJustification($id, $date, $justification, $finalDay);
+            $data = $conexion->queryJustification($id, $date, $justification);
             echo json_encode($data);
             #------------------------------------------------------------------------------------
             break;

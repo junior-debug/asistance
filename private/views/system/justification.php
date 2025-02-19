@@ -131,9 +131,23 @@
         <div class="modal-content">
           <span class="close">&times;</span>
           <h2>Justificación Masiva</h2>
-          <p>Esta justificación afectará a todos los empleados de la nómina. Puedes excluir alguno en el siguiente formulario.</p>
-          <button id="but" class="btn btn-primary" onclick="validationData()">Justificar</button>
-          <button id="closeModal" class="btn btn-secondary" onclick="closeModalMasive()">Cerrar</button>
+          <p style="text-align: center;">Esta justificación afectará a todos los empleados de la nómina. Puedes excluir alguno en el siguiente formulario.</p>
+
+          <div class="table-container">
+            <table id="employeesTable" border="1">
+              <thead>
+              <tr>
+                <th>Seleccionar</th>
+                <th>Cédula</th>
+              </tr>
+              </thead>
+              <tbody id="employeesTableBody">
+              </tbody>
+            </table>
+          </div>
+
+          <button id="but" class="btn btn-primary actionBut" onclick="validationData()">Justificar</button>
+          <button id="closeModal" class="btn btn-secondary actionBut" onclick="closeModalMasive()">Cerrar</button>
         </div>
       </div>
    </div>

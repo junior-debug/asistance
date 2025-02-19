@@ -31,6 +31,7 @@ function sendDataJustification(id, justification, date = null) {
       data: { id: id, date: date, justification: justification },
       statusCode: {
         200: function() {
+
           resolve(true); // Resuelve la promesa en caso de éxito
         },
         400: function() {
@@ -513,12 +514,44 @@ function button(selectedDays) {
 }
 
 function openModal() {
-  if (($('#insertOption').val() === 'masiva')) {
-    $('#myModal').show('slow')
-  }else {
-    validationData()
+  if ($('#insertOption').val() === 'masiva') {
+    $('#myModal').show('slow');
+    const payRoll = $('#payRoll').val();
+
+    $.ajax({
+      type: 'POST',
+      url: '?view=sistema&mode=getEmployeesForPayroll',
+      dataType: 'json',
+      data: { payRoll: payRoll },
+      success: function (data) {
+        if (!data || data.length === 0) {
+          alert('No existen usuarios en la nómina seleccionada');
+          location.reload();
+          return;
+        }
+
+        // Limpiar la tabla antes de añadir nuevos datos
+        $('#employeesTableBody').empty();
+
+        // Insertar datos en la tabla
+        data.forEach(emp => {
+          $('#employeesTableBody').append(`
+                        <tr>
+                            <td><input type="checkbox" class="empCheckbox" value="${emp.id}"></td>
+                            <td>${emp.cedula}</td>
+                        </tr>
+                    `);
+        });
+      },
+      error: function () {
+        alert('Error en la solicitud');
+      }
+    });
+  } else {
+    validationData();
   }
 }
+
 
 function closeModalMasive() {
   $('#myModal').hide('slow')
@@ -615,9 +648,20 @@ function getEmployeesForPayroll () {
           alert('no existen usuarios en nomina seleccionada')
           location.reload()
         }
-        let cedulas = data.map(employee => employee.cedula);
+
+        let checkedCedulas = [];
+        $('#employeesTableBody input[type="checkbox"]:checked').each(function () {
+          let cedula = $(this).closest('tr').find('td:eq(1)').text().trim();
+          checkedCedulas.push(cedula);
+        });
+
+        let cedulas = data
+          .map(employee => employee.cedula)
+          .filter(cedula => !checkedCedulas.includes(cedula));
+
         cedulas = cedulas.join(',');
-        daysSelected(cedulas)
+        console.log(cedulas)
+        daysSelected(cedulas);
       },
       400: function () {
         alert('Error en la solicitud')
