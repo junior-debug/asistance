@@ -138,7 +138,8 @@
               <thead>
               <tr>
                 <th>Seleccionar</th>
-                <th>Cédula</th>
+                <th style="padding-left: 10px;">Cédula</th>
+                <th style="padding-left: 10px;">Nombre</th>
               </tr>
               </thead>
               <tbody id="employeesTableBody">

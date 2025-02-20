@@ -191,7 +191,7 @@ class database
 
     public function getEmployeesForPayroll($payRoll)
     {
-        $sql = $this->db->query("SELECT cedula FROM empleados WHERE  nomina_cliente = '$payRoll' AND estatus = 'activo'");
+        $sql = $this->db->query("SELECT cedula, nombre_apellido  FROM empleados WHERE  nomina_cliente = '$payRoll' AND estatus = 'activo'");
         $respuesta = [];
         if ($this->db->rows($sql) > 0) {
             while ($data = $this->db->recorrer($sql)) {

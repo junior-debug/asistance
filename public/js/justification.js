@@ -537,8 +537,9 @@ function openModal() {
         data.forEach(emp => {
           $('#employeesTableBody').append(`
                         <tr>
-                            <td><input type="checkbox" class="empCheckbox" value="${emp.id}"></td>
-                            <td>${emp.cedula}</td>
+                            <td style="padding-left: 30px;"><input type="checkbox" class="empCheckbox" value="${emp.id}"></td>
+                            <td style="padding-left: 10px;">${emp.cedula}</td>
+                            <td style="padding-left: 10px;">${emp.nombre_apellido}</td>
                         </tr>
                     `);
         });
