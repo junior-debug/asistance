@@ -37,7 +37,7 @@
                   Rotacion
                 </li>
                 <li><a class="dropdown-item" href="?view=sistema&mode=createRotation">Crear rotacion</a></li>
-                <li><a class="dropdown-item" href="?view=sistema&mode=changeRotation">Cambiar rotacion</a></li>
+                <li><a class="dropdown-item" href="?view=sistema&mode=changeRotation">Cambios</a></li>
                 <li class="dropdown-header">
                   Justificacion
                 </li>
@@ -100,7 +100,7 @@
                   Rotacion
                 </li>
                 <li><a class="dropdown-item" href="?view=sistema&mode=createRotation">Crear rotacion</a></li>
-                <li><a class="dropdown-item" href="?view=sistema&mode=changeRotation">Cambiar rotacion</a></li>
+                <li><a class="dropdown-item" href="?view=sistema&mode=changeRotation">Cambios</a></li>
                 <li class="dropdown-header">
                   Justificacion
                 </li>
@@ -169,7 +169,7 @@
                   Rotacion
                 </li>
                 <li><a class="dropdown-item" href="?view=sistema&mode=createRotation">Crear rotacion</a></li>
-                <li><a class="dropdown-item" href="?view=sistema&mode=changeRotation">Cambiar rotacion</a></li>
+                <li><a class="dropdown-item" href="?view=sistema&mode=changeRotation">Cambios</a></li>
                 <li class="dropdown-header">
                   Justificacion
                 </li>
