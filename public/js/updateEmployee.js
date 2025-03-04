@@ -7,7 +7,7 @@ function searchEmployee() {
     data: { id: id },
     statusCode: {
       200: function (data) {
-        if (data == "false") {
+        if (data === false) {
           alert("Cedula Invalida");
         }
         $("#queryEmployee").val("");

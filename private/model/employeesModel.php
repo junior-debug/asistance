@@ -182,7 +182,7 @@ class database
 
     public function queryEmployee($id)
     {
-        $sql = $this->db->query("SELECT * FROM empleados WHERE cedula = '$id' AND estatus = 'activo'");
+        $sql = $this->db->query("SELECT * FROM empleados WHERE cedula = '$id'");
         if ($this->db->rows($sql) > 0) {
             while ($data = $this->db->recorrer($sql)) {
                 $respuesta[] = $data;
