@@ -46,3 +46,12 @@ body {
   color: grey;
   margin-right: 1em;
 }
+
+.changesContainer {
+  border-left: 10px;
+  border-right: 10px;
+}
+
+#changes tbody td {
+  padding: 10px 5px; /* 10px arriba/abajo, 5px izquierda/derecha */
+}

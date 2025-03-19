@@ -29,9 +29,138 @@ function changeOption(value) {
       $('#nomina').hide('slow')
       $('#cargo').hide('slow')
       $('#turno').hide('slow')
+      findChangesRotation()
       break
   }
   $('#dataDay').show('slow')
+}
+
+function findChangesRotation() {
+  const id = $('#id').val();
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=findChangesRotation',
+    dataType: 'json',
+    data: { id: id },
+    success: function (data) {
+      if (Array.isArray(data) && data.length > 0) {
+        let tableContent = `
+          <table style="width:100%; border-collapse: collapse;">
+            <thead  class="text-center">
+              <tr>
+                <th>Cédula</th>
+                <th>Fecha</th>
+                <th>Rotación</th>
+                <th>Antigua Rotación</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>`;
+
+        data.forEach(res => {
+          tableContent += `
+            <tr class="text-center">
+              <td>${res.cedula}</td>
+              <td>${res.fecha}</td>
+              <td>${res.rotacion}</td>
+              <td>${res.antigua_rotacion}</td>
+              <td class="text-center">
+                  <button class="btn btn-primary btn-sm" onclick="openRotationModal(${res.id})">
+                    <img style="width: 33px;" src="https://img.icons8.com/?size=100&id=49&format=png&color=000000"/>
+                  </button>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-danger btn-sm" onclick="openDeleteModal(${res.id})">
+                  <img style="width: 33px;" src="https://img.icons8.com/?size=100&id=43949&format=png&color=000000"/>
+                </button>
+              </td>
+            </tr>`;
+        });
+
+        tableContent += `</tbody></table>`;
+
+        $('#changes').html(tableContent);
+      } else {
+        $('#changes').html('<p>No se encontraron datos.</p>');
+      }
+    },
+    error: function () {
+      alert('Error al obtener los datos');
+    }
+  });
+}
+
+let deleteId = null;
+
+function openDeleteModal(id) {
+  deleteId = id; // Guardamos el ID del registro a eliminar
+  const deleteModal = new bootstrap.Modal(document.getElementById("deleteModal"));
+  deleteModal.show();
+}
+
+document.getElementById("confirmDelete").addEventListener("click", function () {
+  if (deleteId) {
+    deleteRecord(deleteId); // Llama a la función de eliminación
+    deleteId = null; // Reinicia el ID después de eliminar
+    const deleteModal = bootstrap.Modal.getInstance(document.getElementById("deleteModal"));
+    deleteModal.hide(); // Cierra el modal
+  }
+});
+
+function deleteRecord (id) {
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=deleteRotation',
+    dataType: 'json',
+    data: { id: id },
+    success: function (data) {
+      location.reload()
+    },
+    error: function () {
+      alert('Error al obtener los datos');
+    }
+  });
+}
+
+let selectedId = null; // Variable global para almacenar el ID
+
+// Función para abrir el modal y asignar el ID
+function openRotationModal(id) {
+  selectedId = id; // Guarda el ID del registro
+  const rotationModal = new bootstrap.Modal(document.getElementById("rotationModal"));
+  rotationModal.show();
+}
+
+// Evento para el botón "Aceptar" en el modal de selección de rotación
+document.getElementById("confirmRotation").addEventListener("click", function () {
+  const selectedRotation = document.getElementById("oldRotationSelect").value;
+
+  if (selectedId && selectedRotation) {
+    updateRotation(selectedId, selectedRotation); // Llama a la función con los datos
+    selectedId = null; // Reinicia el ID después de actualizar
+    const rotationModal = bootstrap.Modal.getInstance(document.getElementById("rotationModal"));
+    rotationModal.hide(); // Cierra el modal
+  } else {
+    alert("Por favor, selecciona una antigua rotación.");
+  }
+});
+
+function updateRotation(id, rotation) {
+  $.ajax({
+    type: 'POST',
+    url: '?view=sistema&mode=changeOldRotation',
+    dataType: 'json',
+    data: { id: id ,
+    rotation: rotation
+    },
+    success: function (data) {
+      location.reload()
+    },
+    error: function () {
+      alert('Error al obtener los datos');
+    }
+  });
 }
 
 function sendQuery(date, nomina, oldPayroll, cargo, oldPosition, oldTurn, turno, oldRotation, rotation) {

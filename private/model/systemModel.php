@@ -26,6 +26,24 @@ class database
         return $respuesta;
     }
 
+    public function findChangesRotation($id)
+    {
+        $sql = $this->db->query("select id, rotacion, antigua_rotacion, cedula, fecha from cambios where cedula =  '$id' AND nomina = '' AND antigua_nomina = '' AND motivo = '' AND cargo = '' AND antiguo_turno = '' AND  turno = '' AND antiguo_cargo = '' ");
+        if ($this->db->rows($sql) > 0) {
+            while ($data = $this->db->recorrer($sql)) {
+                $respuesta[] = $data;
+            }
+        } else {
+            $respuesta = false;
+        }
+        return $respuesta;
+    }
+
+    public function deleteRotation($id)
+    {
+        $this->db->query("DELETE FROM cambios WHERE id = '$id'");
+    }
+
     public function queryJustification($id, $date, $justification)
     {
         $fecha_aut = date('Y-m-d');
@@ -87,6 +105,10 @@ class database
         $sql = $this->db->query("DELETE FROM adtlog WHERE fecha_hora_aut = '$date' AND empleadoID IN ('$payRollList')");
     }
 
+    public function changeOldRotation($id, $rotation)
+    {
+        $this->db->query("UPDATE cambios SET antigua_rotacion = '$rotation' WHERE id = '$id'");
+    }
     public function rotations()
     {
         $sql = $this->db->query("SELECT * FROM rotaciones");

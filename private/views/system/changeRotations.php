@@ -70,7 +70,52 @@
             <button id="button" href="#" class="btn btn-primary" style="display: none;margin-top: 1em;" onclick="sendData()">Realizar Cambio</button>
 
         </div>
+      <div id="changes" class="changesContainer">
+      </div>
     </div>
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <div class="card p-4">
+            <h5 class="mb-3">¿Desea eliminar la rotación?</h5>
+            <button id="confirmDelete" class="btn btn-primary">Aceptar</button>
+            <button style="margin-top: 6px;" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="rotationModal" tabindex="-1" aria-labelledby="rotationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <div class="card p-4">
+            <h5 class="mb-3">Selecciona la antigua rotación</h5>
+            <select id="oldRotationSelect" class="form-select mb-3">
+              <option value="">Seleccione una opción</option>
+              <option value="L-V">L-V</option>
+              <option value="M-S">M-S</option>
+              <option value="MI-D">MI-D</option>
+              <option value="J-L">J-L</option>
+              <option value="V-M">V-M</option>
+              <option value="S-MI">S-MI</option>
+              <option value="D-J">D-J</option>
+              <option value="L-J-D">L-J-D</option>
+              <option value="M-V-S">M-V-S</option>
+              <option value="L-MI-V">L-MI-V</option>
+              <option value="MI-J-D">MI-J-D</option>
+              <option value="M-MI-S">M-MI-S</option>
+              <option value="MI-J-V-S-D">MI-J-V-S-D</option>
+            </select>
+            <button id="confirmRotation" class="btn btn-primary">Aceptar</button>
+            <button style="margin-top: 6px;" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="public/js/changeRotation.js"></script>

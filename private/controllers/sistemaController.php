@@ -24,12 +24,24 @@ if (isset($_GET['mode'])) {
             include(PUBLIC_DIR . 'general/footer.php');
             break;
             #------------------------------------------------------------------------------------
-            break;
         case "queryUser":
             $id = $_POST['id'];
             $data = $conexion->queryUser($id);
             echo json_encode($data);
             break;
+             #------------------------------------------------------------------------------------
+        case "findChangesRotation":
+            $id = $_POST['id'];
+            $dataRotations = $conexion->findChangesRotation($id);
+            echo json_encode($dataRotations);
+            break;
+            #------------------------------------------------------------------------------------
+        case "deleteRotation":
+            $id = $_POST['id'];
+            $data = $conexion->deleteRotation($id);
+            echo json_encode($data);
+            break;
+        #------------------------------------------------------------------------------------
         case "queryJustification":
             $id = $_POST['id'];
             $date = $_POST['date'];
@@ -77,6 +89,13 @@ if (isset($_GET['mode'])) {
             $payrollUsers = $_POST['payrollUsers'];
             $date = $_POST['date'];
             $data = $conexion->queryDeletePayRoll($payrollUsers, $date);
+            echo json_encode($data);
+            #------------------------------------------------------------------------------------
+            break;
+        case  "changeOldRotation":
+            $id = $_POST['id'];
+            $rotation = $_POST['rotation'];
+            $data = $conexion->changeOldRotation($id, $rotation);
             echo json_encode($data);
             #------------------------------------------------------------------------------------
             break;
