@@ -154,7 +154,17 @@ class database
 
     public function changeRot($rotation, $oldRotation, $dataDay, $id)
     {
-        $sql = $this->db->query("INSERT INTO cambios (cedula, fecha, rotacion, antigua_rotacion ) VALUES ('$id', '$dataDay', '$rotation', '$oldRotation')");
+        try {
+            $sql = "INSERT INTO asistencia.cambios (cedula, fecha, rotacion, antigua_rotacion) 
+                VALUES ('$id', '$dataDay', '$rotation', '$oldRotation')";
+
+            $this->db->query($sql);
+
+            return true; // Éxito
+        } catch (PDOException $e) {
+            echo "Error en changeRot: " . $e->getMessage();
+            return false;
+        }
     }
 
     public function queryChangesData($id, $date)

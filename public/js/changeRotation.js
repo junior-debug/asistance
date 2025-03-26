@@ -195,105 +195,104 @@ function sendQuery(date, nomina, oldPayroll, cargo, oldPosition, oldTurn, turno,
   })
 }
 
-function validationQuery(array, yearData) {
-  // Fecha donde cambiara la rotacion
-  let dateSelected = $('#day').val()
-  dateSelectedArray = dateSelected.split('-')
-  
-  // Mes seleccionado para el cambio
-  let monthSelected = parseInt(dateSelectedArray[1])
+function generateDateRange(hiringDate, dateSelected) {
+  let dates = [];
+  let [selectedYear, selectedMonth, selectedDay] = dateSelected.split('-').map(Number);
+  let [hiringYear, hiringMonth] = hiringDate.split('-').map(Number);
 
-  // Ultimo mes en el que cambio
-  const last = array[array.length - 1]
-  let lastMonthChange = parseInt(last)
+  let currentDate = new Date(hiringYear, hiringMonth - 1, selectedDay); // Comienza desde el mes de contratación con el día de dateSelected
 
-  // Si la data del anterior cambio es anterior al año actual
-  if(yearData < year){
-    item = 1
-    countMonthBeforeEndYear = 12 - lastMonthChange
-    result = countMonthBeforeEndYear + monthSelected
-    isTwoYear = true
+  while (currentDate.getFullYear() < selectedYear ||
+  (currentDate.getFullYear() === selectedYear && currentDate.getMonth() + 1 <= selectedMonth)) {
+
+    let formattedDate = currentDate.toISOString().split('T')[0]; // Formatear YYYY-MM-DD
+    dates.push(formattedDate);
+
+    currentDate.setMonth(currentDate.getMonth() + 1); // Avanzar mes a mes
+  }
+
+  return dates;
+}
+
+function generateDateRangeWithChanges(lastChangeDate, dateSelected) {
+  const startDate = new Date(lastChangeDate);
+  const endDate = new Date(dateSelected);
+
+  const day = endDate.getDate(); // Tomamos el día de dateSelected
+  let currentDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, day); // Siguiente mes después de lastChangeDate
+
+  const dateArray = [];
+
+  while (currentDate <= endDate) {
+    dateArray.push(currentDate.toISOString().split('T')[0]); // Guardamos la nueva fecha
+    currentDate.setMonth(currentDate.getMonth() + 1); // Avanzamos mes a mes
+  }
+
+  return dateArray;
+}
+
+function validationQuery(haveChanges = null, yearData) {
+  let dateSelected = $('#day').val();
+  let dateArray = []
+  // Generar todas las fechas desde hiringDate hasta dateSelected
+  if (haveChanges) {
+     dateArray = generateDateRangeWithChanges(haveChanges.fecha, dateSelected);
   } else {
-    item = lastMonthChange
-    countMonthBeforeEndYear = 0
-    result = monthSelected
-    isTwoYear = false
+     dateArray = generateDateRange(yearData, dateSelected);
   }
 
-  // Contador con logica de meses
-  lastMonthChangeCounter = lastMonthChange == 0 ? 1 : lastMonthChange
+  let id = $('#id').val();
+  let selectData = $('#selectData').val();
 
-  // Recorre una vez por cada mes transcurrido
-  for (let i = item; i <= result; i++) {
-    // Agrega 0 al string
-    if (lastMonthChangeCounter < 10) {
-      lastMonthChangeCounter = '0' + lastMonthChangeCounter
-    }
+  dateArray.forEach((date, index) => {
+    let isLastIteration = index === dateArray.length - 1;
 
-    // Valida si es del año anterior o el actual
-    let date = ""
-    if(i < countMonthBeforeEndYear && isTwoYear === true || i === countMonthBeforeEndYear && isTwoYear === true){
-      date = yearData + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
-    }
-    if(i > countMonthBeforeEndYear && isTwoYear === true){
-      date = year + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
-    }
-    if(isTwoYear === false){
-      date = year + '-' + lastMonthChangeCounter + '-' + dateSelectedArray[2]
-    }
+    switch (selectData) {
+      case 'nomina':
+        const payroll = $('#nomina').val();
+        if (isLastIteration) {
+          sendQuery(date, payroll, payroll, '', '', '', '', '', '');
+          payrollUpdate(payroll, id, 'payrollUpdate');
+        } else {
+          const oldPayroll = $('#oldPayroll').val();
+          sendQuery(date, '', oldPayroll, '', '', '', '', '', '');
+        }
+        break;
 
-    if (i < result) {
-      switch ($('#selectData').val()) {
-        case 'nomina':
-          const oldPayroll = $('#oldPayroll').val()
-          sendQuery(date, '', oldPayroll, '', '', '', '', '', '')
-          break
-        case 'cargo':
-          const oldPosition = $('#position').val()
-          sendQuery(date, '', '', '', oldPosition, '', '', '', '')
-          break
-        case 'turno':
-          const oldTurn = $('#oldTurn').val()
-          sendQuery(date, '', '', '', '', oldTurn, '', '', '')
-          break
-        case 'rotation':
-          const oldRotation = $('#oldRotation').val()
-          sendQuery(date, '', '', '', '', '', '', oldRotation, '')
-          break
-      }
-    }
+      case 'cargo':
+        const position = $('#cargo').val();
+        if (isLastIteration) {
+          sendQuery(date, '', '', position, position, '', '', '', '');
+          payrollUpdate(position, id, 'positionUpdate');
+        } else {
+          const oldPosition = $('#position').val();
+          sendQuery(date, '', '', '', oldPosition, '', '', '', '');
+        }
+        break;
 
-    if (i === result) {
-      const id = $('#id').val()
-      switch ($('#selectData').val()) {
-        case 'nomina':
-          const nomina = $('#nomina').val()
-          sendQuery(date, nomina, nomina, '', '', '', '', '', '')
-          payrollUpdate(nomina, id, 'payrollUpdate')
-          break
-        case 'cargo':
-          const position = $('#cargo').val()
-          sendQuery(date, '', '', position, position, '', '', '', '')
-          payrollUpdate(position, id, 'positionUpdate')
-          break
-        case 'turno':
-          const turno = $('#turno').val()
-          sendQuery(date, '', '', '', '', turno, turno, '', '')
-          payrollUpdate(turno, id, 'turnUpdate')
-          break
-        case 'rotation':
-          const rotation = $('#rotation').val()
-          const oldRotation = $('#oldRotation').val()
-          sendQuery(date, '', '', '', '', '', '', oldRotation, rotation)
-          payrollUpdate(rotation, id, 'rotationUpdate')
-          break
-        default:
-          break
-      }
-    }
+      case 'turno':
+        const turno = $('#turno').val();
+        if (isLastIteration) {
+          sendQuery(date, '', '', '', '', turno, turno, '', '');
+          payrollUpdate(turno, id, 'turnUpdate');
+        } else {
+          const oldTurn = $('#oldTurn').val();
+          sendQuery(date, '', '', '', '', oldTurn, '', '', '');
+        }
+        break;
 
-    lastMonthChangeCounter == 12 ? lastMonthChangeCounter = 1 : lastMonthChangeCounter++
-  }
+      case 'rotation':
+        const rotation = $('#rotation').val();
+        const oldRotation = $('#oldRotation').val();
+        if (isLastIteration) {
+          sendQuery(date, '', '', '', '', '', '', oldRotation, rotation);
+          payrollUpdate(rotation, id, 'rotationUpdate');
+        } else {
+          sendQuery(date, '', '', '', '', '', '', oldRotation, '');
+        }
+        break;
+    }
+  });
 }
 
 function payrollUpdate(value, id, update) {
@@ -315,23 +314,6 @@ function payrollUpdate(value, id, update) {
       },
     },
   })
-}
-
-function validator(data) {
-  const array = []
-  if (data == undefined || data == '') {
-    validationQuery([0], 2023)
-  } else if (data != undefined || data != '') {
-    for (let i = 0; i < data.length; i++) {
-      let str = data[i].fecha.split('-')
-      monthData = str[1]
-      yearData = str[0]
-      array.push(monthData)
-      if (i + 1 == data.length) {
-        validationQuery(array, yearData)
-      }
-    }
-  }
 }
 
 function logChanges(id) {
@@ -358,93 +340,83 @@ function logChanges(id) {
   })
 }
 
-function queryChanges(queryData) {
-  const id = $('#id').val()
-  logChanges(id)
+function getHiringDate(id) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      type: 'POST',
+      url: '?view=sistema&mode=queryUser',
+      dataType: 'json',
+      data: { id: id },
+      success: function (data) {
+        resolve(data[0].fecha_ingreso);
+      },
+      error: function () {
+        reject('Error en la solicitud');
+      }
+    });
+  });
+}
+
+async function queryChanges(queryData) {
+  const id = $('#id').val();
+  logChanges(id);
+
+  const hiringDate = await getHiringDate(id)
+
   $.ajax({
     type: 'POST',
     url: `?view=sistema&mode=${queryData}`,
     dataType: 'json',
-    data: {
-      id: id,
-    },
+    data: { id: id },
     statusCode: {
-      200: function (data) {
+      200: function(data) {
+        if (!data || data.length === 0) {
+          return validationQuery(null, hiringDate);
+        }
+
+        // Ordenamos los datos por fecha en orden ascendente
+        data.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+        const latestData = data[data.length - 1]; // Última posición
+
         switch ($('#selectData').val()) {
           case 'nomina':
-            if (data == false) {
-              validator(undefined)
+            if (latestData.antigua_nomina || latestData.nomina) {
+              validationQuery(latestData, hiringDate);
             } else {
-              for (let i = 0; i < data.length; i++) {
-                if (data[i].antigua_nomina == '' && data[i].nomina == '') {
-                  if (i + 1 == data.length) {
-                    validator(undefined)
-                  }
-                } else {
-                  validator(data)
-                  return
-                }
-              }
+              validationQuery();
             }
-            break
+            break;
           case 'cargo':
-            if (data == false) {
-              validator(undefined)
+            if (latestData.antiguo_cargo || latestData.cargo) {
+              validationQuery(latestData, hiringDate);
             } else {
-              for (let i = 0; i < data.length; i++) {
-                if (data[i].antiguo_cargo == '' && data[i].cargo == '') {
-                  if (i + 1 == data.length) {
-                    validator(undefined)
-                  }
-                } else {
-                  validator(data)
-                  return
-                }
-              }
+              validationQuery(undefined);
             }
-            break
+            break;
           case 'turno':
-            if (data == false) {
-              validator(undefined)
+            if (latestData.antiguo_turno || latestData.turno) {
+              validationQuery(latestData, hiringDate);
             } else {
-              for (let i = 0; i < data.length; i++) {
-                if (data[i].antiguo_turno == '' && data[i].turno == '') {
-                  if (i + 1 == data.length) {
-                    validator(undefined)
-                  }
-                } else {
-                  validator(data)
-                  return
-                }
-              }
+              validationQuery(undefined);
             }
-            break
+            break;
           case 'rotation':
-            if (data == false) {
-              validator(undefined)
+            if (latestData.antigua_rotacion || latestData.rotacion) {
+              validationQuery(latestData, hiringDate);
             } else {
-              for (let i = 0; i < data.length; i++) {
-                if (data[i].antigua_rotacion == '' && data[i].rotacion == '') {
-                  if (i + 1 == data.length) {
-                    validator(undefined)
-                  }
-                } else {
-                  validator(data)
-                  return
-                }
-              }
+              validationQuery(undefined);
             }
-            break
+            break;
         }
       },
-      400: function () {
-        alert('Error en la solicitud')
+      400: function() {
+        alert('Error en la solicitud');
       },
-      500: function () {
-        alert('Error en el Servidor')
+      500: function() {
+        alert('Error en el Servidor');
       },
     },
-  })
+  });
 }
 
 function sendData() {
