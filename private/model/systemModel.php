@@ -155,8 +155,10 @@ class database
     public function changeRot($rotation, $oldRotation, $dataDay, $id)
     {
         try {
-            $sql = "INSERT INTO asistencia.cambios (cedula, fecha, rotacion, antigua_rotacion) 
+            $sql = "INSERT INTO cambios (cedula, fecha, rotacion, antigua_rotacion) 
                 VALUES ('$id', '$dataDay', '$rotation', '$oldRotation')";
+
+            var_dump($sql);
 
             $this->db->query($sql);
 
