@@ -28,7 +28,7 @@ class database
 
     public function findChangesRotation($id)
     {
-        $sql = $this->db->query("select id, rotacion, antigua_rotacion, cedula, fecha from cambios where cedula =  '$id' AND nomina = '' AND antigua_nomina = '' AND motivo = '' AND cargo = '' AND antiguo_turno = '' AND  turno = '' AND antiguo_cargo = '' ");
+        $sql = $this->db->query("select id, rotacion, antigua_rotacion, cedula, fecha from cambios where cedula =  '$id'");
         if ($this->db->rows($sql) > 0) {
             while ($data = $this->db->recorrer($sql)) {
                 $respuesta[] = $data;
@@ -39,9 +39,62 @@ class database
         return $respuesta;
     }
 
-    public function deleteRotation($id)
+    public function getRotationAndUpdate($id, $date, $rotation, $cedula) {
+        try {
+            $id = $this->db->real_escape_string($id);
+            $date = $this->db->real_escape_string($date);
+            $rotation = $this->db->real_escape_string($rotation);
+
+            $yearMonth = substr($date, 0, 7); // "YYYY-MM"
+
+            var_dump($yearMonth, $cedula);
+
+            // Consulta SELECT
+            $result = $this->db->query("SELECT * FROM cambios where fecha LIKE '$yearMonth%' AND cedula = '$cedula'");
+
+            if (!$result) {
+                throw new Exception("Error en SELECT: " . $this->db->error);
+            }
+            var_dump($result);
+
+            if ($row = $result->fetch_assoc()) {
+                $rotacion = $row['antigua_rotacion'];
+                $registroId = $row['id'];
+                var_dump($rotacion, $registroId);
+
+                // UPDATE
+                $updateQuery = $this->db->query("
+                UPDATE cambios 
+                SET rotacion = '$rotation' 
+                WHERE id = '$registroId'
+            ");
+                if (!$updateQuery) {
+                    throw new Exception("Error en UPDATE: " . $this->db->error);
+                }
+
+                // DELETE registros posteriores con misma antigua_rotacion
+                $deleteQuery = $this->db->query("
+            DELETE FROM cambios 
+            WHERE fecha > '$date' 
+            AND antigua_rotacion = '$rotacion'
+        ");
+                if (!$deleteQuery) {
+                    throw new Exception("Error en DELETE: " . $this->db->error);
+                }
+            }
+        } catch (Exception $e) {
+            echo "Error en getRotationAndUpdate: " . $e->getMessage();
+        }
+    }
+
+    public function deleteRotation($rangoFechas)
     {
-        $this->db->query("DELETE FROM cambios WHERE id = '$id'");
+        // Separar las fechas del rango
+        $fechas = explode(' / ', $rangoFechas);
+        $fechaInicio = $fechas[0];
+        $fechaFin = $fechas[1];
+        
+        $this->db->query("DELETE FROM cambios WHERE fecha BETWEEN '$fechaInicio' AND '$fechaFin'");
     }
 
     public function queryJustification($id, $date, $justification)

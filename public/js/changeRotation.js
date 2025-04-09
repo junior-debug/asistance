@@ -43,10 +43,23 @@ function findChangesRotation() {
     dataType: 'json',
     data: { id: id },
     success: function (data) {
-      if (Array.isArray(data) && data.length > 0) {
+      const dataTable = procesarRotaciones(data);
+      console.log(dataTable);
+
+      if (Array.isArray(dataTable) && dataTable.length > 0) {
+        // Buscar el índice del último que tiene rotacion y antigua_rotacion
+        let lastIndexWithRotation = -1;
+        for (let i = dataTable.length - 1; i >= 0; i--) {
+          const res = dataTable[i];
+          if (res.rotacion && res.antigua_rotacion) {
+            lastIndexWithRotation = i;
+            break;
+          }
+        }
+
         let tableContent = `
           <table style="width:100%; border-collapse: collapse;">
-            <thead  class="text-center">
+            <thead class="text-center">
               <tr>
                 <th>Cédula</th>
                 <th>Fecha</th>
@@ -58,22 +71,28 @@ function findChangesRotation() {
             </thead>
             <tbody>`;
 
-        data.forEach(res => {
+        dataTable.forEach((res, index) => {
+          const tieneRotacion = res.rotacion && res.antigua_rotacion;
+
           tableContent += `
             <tr class="text-center">
-              <td>${res.cedula}</td>
-              <td>${res.fecha}</td>
-              <td>${res.rotacion}</td>
-              <td>${res.antigua_rotacion}</td>
+              <td>${res.cedula || ''}</td>
+              <td>${res.fecha || ''}</td>
+              <td>${res.rotacion || ''}</td>
+              <td>${res.antigua_rotacion || ''}</td>
               <td class="text-center">
-                  <button class="btn btn-primary btn-sm" onclick="openRotationModal(${res.id})">
+                ${tieneRotacion ? `
+                  <button class="btn btn-primary btn-sm" onclick="openRotationModal('${res.id}')">
                     <img style="width: 33px;" src="https://img.icons8.com/?size=100&id=49&format=png&color=000000"/>
                   </button>
+                ` : ''}
               </td>
               <td class="text-center">
-                <button class="btn btn-danger btn-sm" onclick="openDeleteModal(${res.id})">
-                  <img style="width: 33px;" src="https://img.icons8.com/?size=100&id=43949&format=png&color=000000"/>
-                </button>
+                ${tieneRotacion && index === lastIndexWithRotation ? `
+                  <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${res.fecha}')">
+                    <img style="width: 33px;" src="https://img.icons8.com/?size=100&id=43949&format=png&color=000000"/>
+                  </button>
+                ` : ''}
               </td>
             </tr>`;
         });
@@ -89,6 +108,61 @@ function findChangesRotation() {
       alert('Error al obtener los datos');
     }
   });
+}
+
+function procesarRotaciones(data) {
+  const resultado = [];
+  const registrosPorRotacion = {};
+
+  // Primero recorremos todos los registros y agrupamos por antigua_rotacion
+  data.forEach(({ cedula, fecha, rotacion, antigua_rotacion, id }) => {
+    if (antigua_rotacion && rotacion) {
+      // Si ya hay un cambio, verificamos si ya hay un acumulado previo para esa antigua_rotacion
+      if (registrosPorRotacion[cedula] && registrosPorRotacion[cedula][antigua_rotacion]) {
+        const fechaInicio = registrosPorRotacion[cedula][antigua_rotacion];
+        resultado.push({
+          id: id || "",
+          rotacion,
+          antigua_rotacion,
+          cedula,
+          fecha: `${fechaInicio} / ${fecha}`
+        });
+
+        // Eliminamos ese acumulado ya que se convirtió en cambio
+        delete registrosPorRotacion[cedula][antigua_rotacion];
+      } else {
+        // No hay acumulado, entonces tomamos solo esta fecha
+        resultado.push({
+          id: id || "",
+          rotacion,
+          antigua_rotacion,
+          cedula,
+          fecha: `${fecha} / ${fecha}`
+        });
+      }
+    } else if (antigua_rotacion) {
+      // Acumulamos la fecha de inicio para esa antigua_rotacion por cédula
+      if (!registrosPorRotacion[cedula]) {
+        registrosPorRotacion[cedula] = {};
+      }
+
+      if (!registrosPorRotacion[cedula][antigua_rotacion]) {
+        registrosPorRotacion[cedula][antigua_rotacion] = fecha;
+      }
+    }
+  });
+
+  // Ordenar por fecha de inicio
+  function extraerFecha(obj) {
+    if (obj.fecha.includes("/")) {
+      return obj.fecha.split(" / ")[0]; // Tomar la primera fecha del rango
+    }
+    return obj.fecha;
+  }
+
+  resultado.sort((a, b) => new Date(extraerFecha(a)) - new Date(extraerFecha(b)));
+
+  return resultado;
 }
 
 let deleteId = null;
@@ -146,16 +220,22 @@ document.getElementById("confirmRotation").addEventListener("click", function ()
   }
 });
 
+
+
 function updateRotation(id, rotation) {
+  const date = $('#dayForRotation').val()
+  const cedula = $('#id').val()
+  console.log(cedula)
   $.ajax({
     type: 'POST',
-    url: '?view=sistema&mode=changeOldRotation',
+    url: '?view=sistema&mode=getRotationAndUpdate',
     dataType: 'json',
     data: { id: id ,
-    rotation: rotation
+      date: date,
+      rotation: rotation,
+      cedula: cedula,
     },
     success: function (data) {
-      location.reload()
     },
     error: function () {
       alert('Error al obtener los datos');
@@ -195,22 +275,27 @@ function sendQuery(date, nomina, oldPayroll, cargo, oldPosition, oldTurn, turno,
   })
 }
 
+function formatDateToYYYYMMDD(date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function generateDateRange(hiringDate, dateSelected) {
   let dates = [];
   let [selectedYear, selectedMonth, selectedDay] = dateSelected.split('-').map(Number);
   let [hiringYear, hiringMonth] = hiringDate.split('-').map(Number);
 
   let currentDate = new Date(hiringYear, hiringMonth - 1, selectedDay); // Comienza desde el mes de contratación con el día de dateSelected
-
   while (currentDate.getFullYear() < selectedYear ||
   (currentDate.getFullYear() === selectedYear && currentDate.getMonth() + 1 <= selectedMonth)) {
 
-    let formattedDate = currentDate.toISOString().split('T')[0]; // Formatear YYYY-MM-DD
+    let formattedDate = formatDateToYYYYMMDD(currentDate);
     dates.push(formattedDate);
 
     currentDate.setMonth(currentDate.getMonth() + 1); // Avanzar mes a mes
   }
-
   return dates;
 }
 
@@ -220,11 +305,10 @@ function generateDateRangeWithChanges(lastChangeDate, dateSelected) {
 
   const day = endDate.getDate(); // Tomamos el día de dateSelected
   let currentDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, day); // Siguiente mes después de lastChangeDate
-
   const dateArray = [];
 
   while (currentDate <= endDate) {
-    dateArray.push(currentDate.toISOString().split('T')[0]); // Guardamos la nueva fecha
+    dateArray.push(formatDateToYYYYMMDD(currentDate)); // Guardamos la nueva fecha
     currentDate.setMonth(currentDate.getMonth() + 1); // Avanzamos mes a mes
   }
 
@@ -233,6 +317,7 @@ function generateDateRangeWithChanges(lastChangeDate, dateSelected) {
 
 function validationQuery(haveChanges = null, yearData) {
   let dateSelected = $('#day').val();
+  console.log(dateSelected)
   let dateArray = []
   // Generar todas las fechas desde hiringDate hasta dateSelected
   if (haveChanges) {

@@ -42,6 +42,15 @@ if (isset($_GET['mode'])) {
             echo json_encode($data);
             break;
         #------------------------------------------------------------------------------------
+        case "getRotationAndUpdate":
+            $id = $_POST['id'];
+            $date = $_POST['date'];
+            $rotation = $_POST['rotation'];
+            $cedula = $_POST['cedula'];
+            $data = $conexion->getRotationAndUpdate($id, $date, $rotation, $cedula);
+            echo json_encode($data);
+            break;
+        #------------------------------------------------------------------------------------
         case "queryJustification":
             $id = $_POST['id'];
             $date = $_POST['date'];

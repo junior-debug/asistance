@@ -87,6 +87,10 @@
     </div>
   </div>
 
+    <?php
+    $maxDate = date('Y-m-t');
+    ?>
+
   <div class="modal fade" id="rotationModal" tabindex="-1" aria-labelledby="rotationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -109,7 +113,8 @@
               <option value="M-MI-S">M-MI-S</option>
               <option value="MI-J-V-S-D">MI-J-V-S-D</option>
             </select>
-            <button id="confirmRotation" class="btn btn-primary">Aceptar</button>
+            <input id="dayForRotation" type="date" class="form-control inputData" style="width: 100%;" max="<?= $maxDate ?>">
+            <button id="confirmRotation" class="btn btn-primary" style="margin-top: 8px;">Aceptar</button>
             <button style="margin-top: 6px;" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
           </div>
         </div>
