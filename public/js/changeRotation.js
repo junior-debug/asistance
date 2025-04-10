@@ -73,6 +73,7 @@ function findChangesRotation() {
 
         dataTable.forEach((res, index) => {
           const tieneRotacion = res.rotacion && res.antigua_rotacion;
+          const esUltimo = index === lastIndexWithRotation;
 
           tableContent += `
             <tr class="text-center">
@@ -81,14 +82,14 @@ function findChangesRotation() {
               <td>${res.rotacion || ''}</td>
               <td>${res.antigua_rotacion || ''}</td>
               <td class="text-center">
-                ${tieneRotacion ? `
+                ${tieneRotacion && esUltimo ? `
                   <button class="btn btn-primary btn-sm" onclick="openRotationModal('${res.id}')">
                     <img style="width: 33px;" src="https://img.icons8.com/?size=100&id=49&format=png&color=000000"/>
                   </button>
                 ` : ''}
               </td>
               <td class="text-center">
-                ${tieneRotacion && index === lastIndexWithRotation ? `
+                ${tieneRotacion && esUltimo ? `
                   <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${res.fecha}')">
                     <img style="width: 33px;" src="https://img.icons8.com/?size=100&id=43949&format=png&color=000000"/>
                   </button>
